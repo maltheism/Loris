@@ -186,14 +186,13 @@ class Installer
             return false;
         }
         $DB = Database::singleton();
-        try {
-            $DB->connectAndCreate(
-                $values['dbname'],
-                $values['dbadminuser'],
-                $values['dbadminpassword'],
-                $values['dbhost']
-            );
-        } catch (Exception $e) {
+
+        if ($DB->connectAndCreate(
+            $values['dbname'],
+            $values['dbadminuser'],
+            $values['dbadminpassword'],
+            $values['dbhost']
+        ) == false) {
             if (!empty($DB->lastErr)) {
                 $this->_lastErr = $DB->lastErr;
             } else {
@@ -202,6 +201,7 @@ class Installer
             }
             return false;
         }
+
         return true;
     }
 

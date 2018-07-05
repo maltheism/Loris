@@ -162,14 +162,13 @@ class Database
             $this->PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
             if (!$this->hasPrivilege("*", "*", "CREATE")) {
-                if ($this->databaseExists($database)) {
-                     $this->lastErr = "User does not have create database ".
-                        "privileges but the database `{$database}` already exists.".
-                        "Consider checking the 'use existing database checkbox'.";
-                } else {
-                     $this->lastErr = "User does not have create database "
-                    . "privileges; cannot create `{$database}`";
-                }
+                 $this->lastErr = "User does not have create database "
+                . "privileges; cannot create `{$database}`";
+                return false;
+            }
+            if ($this->databaseExists($database)) {
+                $this->lastErr = "The database `{$database}` already exists.".
+                    "Consider checking the 'use existing database checkbox'.";
                 return false;
             }
             $this->PDO->exec("CREATE DATABASE $database");
