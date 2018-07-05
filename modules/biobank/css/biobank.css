@@ -1,0 +1,281 @@
+#barcode-page, #specimen-page, #container-page {
+  margin-right: 1%;
+  margin-left: 1%;
+  animation: page-load 0.2s linear;
+}
+
+@keyframes page-load {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.table-striped {
+    background-color: #C4E3FE;
+}
+
+.form-inline.form-control.addSpecimen {
+    width: 20%;
+    cursor: auto;
+}
+
+.form-inline.form-control.editSpecimen {
+    width:30%;
+}
+
+.form-inline.form-control.addSpecimenHeader {
+    width: 20%;
+    text-align: center;
+    color: white;
+    cursor: auto;
+}
+
+.upload-status-text-area {
+  width: 95%;
+  height:100px;
+  background: #E8E8E8;
+  resize: vertical;
+  margin-left:30px;
+  padding: 5px;
+}
+
+.align-row {
+  border-top: 2px solid #DDDDDD;                                                
+  padding-top: 15px;                                                            
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  margin: auto 0;
+
+}
+
+.panel-heading {
+  /*font-size: 20px;*/
+}
+
+.action {
+  display: inline-block;
+}
+
+.action > * {
+  margin: 0 5px;
+}
+
+.action-title {
+  font-size: 16px;
+  display: inline;
+}
+
+.action-title > * {
+  margin: 0 5px;
+}
+
+.filter {
+  border: 1px solid #DDD;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.globals {                                                                      
+  width: 25%;
+  height: 650px;
+  border: 2px solid #DDD;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}                                                                               
+
+.globals:hover {                                                                
+  border: 2px solid #A6D3F5;                                                    
+}                                                                               
+
+.globals .list {                                                                
+  padding: 0px 15px;                                                            
+  height: 100%;                                                                 
+
+  display: flex;                                                                
+  flex-direction: column;                                                       
+  justify-content: space-evenly;                                                
+}                                                                               
+
+.globals .item {                                                                
+  display: flex;                                                                
+  flex-direction: row;                                                          
+  align-items: center;                                                          
+  margin: auto 0;                                                               
+}                                                                               
+
+.globals .item:last-child {                                                     
+  border-top: 2px solid #DDDDDD;                                                
+  padding-top: 15px;                                                            
+  margin-top: 0;                                                                
+}                                                                               
+
+.globals .field {                                                               
+  flex-grow: 1;                                                                 
+}                                                                               
+
+.globals .field.link:hover .value {                                             
+  color: #093782;                                                               
+  cursor: pointer;                                                              
+}                                                                               
+
+.globals .value {                                                               
+  font-size: 22px;                                                              
+}                                                                               
+
+.globals .action {                                                              
+  margin-left: auto;                                                            
+}    
+
+.display {
+  height: 500px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+
+.display .row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+  width: 100%;
+}
+
+.display .node {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+
+  background: #FFFFFF;
+  height: 100%;
+  border: 2px solid #DDDDDD;
+  z-index: 2 ; 
+  cursor: default;
+  user-select: none;
+}
+
+.display .node.occupied {
+  border: 2px solid #093782;
+  cursor: pointer;
+}
+
+.display .node.available {
+  border: 2px solid #A6D3F5;
+  cursor: pointer;
+}
+
+.display .occupied:hover, .display .available:hover{
+  border: 2px solid #093782;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.display .load:hover {
+  border: 2px solid #A6D3F5;
+  cursor: pointer;
+}
+
+.action-button .glyphicon {
+  font-size: 20px;
+  top: 0;
+}
+
+.action-button {
+  font-size: 30px;
+  color: #FFFFFF;
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
+  cursor: pointer;
+  user-select: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-button.add {
+  background-color: #0f9d58;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.action-button.pool {
+  background-color: #96398C;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.action-button.search {
+  background-color: #E98430;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.action-button.add:hover, .pool:hover{
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2), 0 8px 22px 0 rgba(0, 0, 0, 0.19);
+}
+
+.action-button.update {
+  background-color: #FFFFFF;
+  color: #DDDDDD;
+  border: 2px solid #DDDDDD;
+}
+
+.action-button.update:hover {
+  border: none;
+  background-color: #093782;
+  color: #FFFFFF;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.lifecycle {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lifecycle-graphic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lifecycle-node {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #FFFFFF;
+  border: 2px solid #A6D3F5;
+  border-radius: 50%;
+  color: #768CAD;
+  height: 45px;
+  width: 45px;
+  z-index: 2;
+  user-select: none;
+}
+
+.lifecycle-node .letter {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.lifecycle-line {
+  background: #A6D3F5;
+  height: 2px;
+  width: 50%;
+  margin: 0px 10px;
+  z-index: 1;
+}
+
+.inline-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
