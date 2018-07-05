@@ -760,6 +760,77 @@ class Database
     }
 
     /**
+     * Runs an SQL select statement as a prepared query and re-indexes
+     * the results using the given unique non-nullable key.
+     *
+     * @param string $query     The SQL SELECT query to be run
+     * @param array  $params    Values to use for binding to the prepared statement
+     * @param string $uniqueKey Key to use when re-indexing, this key must be a
+     *                          single column, must be unique and must not be
+     *                          nullable
+     *
+     * @throws LorisException     If the supplied key is empty or null
+     * @throws DatabaseException  If the key is not part of the query itself
+     * @throws DatabaseException  If the key is not unique within the resulting set
+     *
+     * @return array An array of arrays containing the data. The outermost array is
+     *                  associative and uses the supplied $uniqueKey parameter as
+     *                  a key for each of the sub-arrays with the format
+     *                  rowPrimaryKey=>rowValuesArray. Each nested array represents
+     *                  a row from the returned by the query. Each element in the
+     *                  nested array is an associative array representing the row in
+     *                  the format ColumnName => Value
+     */
+    function pselectWithIndexKey($query, $params, $uniqueKey)
+    {
+        if (is_null($uniqueKey) || empty($uniqueKey)) {
+            throw new LorisException(
+                "The pselectWithIndexKey() function expects the uniqueKey parameter 
+                to not be null or empty. If re-indexing on the primary key is 
+                not necessary please use the pselect() function instead."
+            );
+        }
+
+        $result = $this->pselect($query, $params);
+
+        if (empty($result)) {
+            return $result;
+        }
+
+        $filteredResult = array();
+        // re-order the return array
+        foreach ($result as $row) {
+            // Check first that the row contains the primary key supplied
+            if (!array_key_exists($uniqueKey, $row)) {
+                throw new DatabaseException(
+                    "The query supplied to pselectWithIndexKey() does not contain 
+                    the unique key to re-index on. Make sure to supply the 
+                    appropriate key in the SELECT statement to match the supplied 
+                    parameter of this function",
+                    $query
+                );
+            }
+
+            // Check that the primary key is indeed unique to avoid overriding data
+            // in the result array
+            if (isset($filteredResult[$row[$uniqueKey]])) {
+                throw new DatabaseException(
+                    "The uniqueKey supplied to pselectWithIndexKey() does not appear
+                     to be unique or is nullable. This function expects the key to 
+                     be both UNIQUE and NOT NULL.",
+                    $query
+                );
+            }
+
+            // If you get here, we just need to build the new array
+            $filteredResult[$row[$uniqueKey]] = $row;
+            unset($filteredResult[$row[$uniqueKey]][$uniqueKey]);
+        }
+
+        return $filteredResult;
+    }
+
+    /**
      * Runs a query as a prepared statement and returns the values of the first
      * column in the select statement. If multiple columns are given, only the first
      * will be returned.
