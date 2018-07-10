@@ -13,8 +13,6 @@ var config = [{
     './modules/media/js/mediaIndex.js': './modules/media/jsx/mediaIndex.js',
     './modules/media/js/editFormIndex.js': './modules/media/jsx/editFormIndex.js',
     './modules/biobank/js/biobankIndex.js': './modules/biobank/jsx/biobankIndex.js',
-    './modules/biobank/js/barcodeIndex.js': './modules/biobank/jsx/barcodeIndex.js',
-    './modules/biobank/js/specimenIndex.js': './modules/biobank/jsx/specimenIndex.js',
     './modules/issue_tracker/js/columnFormatter.js': './modules/issue_tracker/jsx/columnFormatter.js',
     './modules/issue_tracker/js/index.js': './modules/issue_tracker/jsx/index.js',
     './modules/candidate_parameters/js/index.js': './modules/candidate_parameters/jsx/index.js',
@@ -80,6 +78,8 @@ var config = [{
       Markdown: 'jsx/Markdown',
       PaginationLinks: 'jsx/PaginationLinks',
       Panel: 'jsx/Panel',
+      Modal: 'jsx/Modal',
+      Loader: 'jsx/Loader',
       ProgressBar: 'jsx/ProgressBar',
       StaticDataTable: 'jsx/StaticDataTable',
       Tabs: 'jsx/Tabs'
