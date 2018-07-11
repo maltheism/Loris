@@ -25,6 +25,8 @@ namespace LORIS\new_profile;
  */
 class New_Profile extends \NDB_Form
 {
+    public $skipTemplate = true;
+
     /**
      * Tie the access to a data_entry permission
      *
@@ -312,6 +314,24 @@ class New_Profile extends \NDB_Form
         }
 
         return $errors;
+    }
+
+    /**
+     * Gathers JS dependencies and merge them with the parent
+     *
+     * @return array of javascript to be inserted
+     */
+    function getJSDependencies()
+    {
+        $factory = \NDB_Factory::singleton();
+        $baseURL = $factory->settings()->getBaseURL();
+        $deps    = parent::getJSDependencies();
+        return array_merge(
+            $deps,
+            array(
+                $baseURL . '/new_profile/js/react.new_profile.js',
+            )
+        );
     }
 
 }
