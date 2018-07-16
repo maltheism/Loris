@@ -334,7 +334,7 @@ class SelectElement extends React.Component {
     let errorMessage = null;
     let emptyOptionHTML = null;
     let requiredHTML = null;
-    let elementClass = 'row form-group';
+    let elementClass = 'form-group col-sm-12';
     let label = null;
 
     // Add required asterix
@@ -350,7 +350,7 @@ class SelectElement extends React.Component {
     // Add error message
     if (this.props.hasError || (this.props.required && this.props.value === "")) {
       errorMessage = <span>{this.props.errorMessage}</span>;
-      elementClass = 'row form-group has-error';
+      elementClass = 'form-group col-sm-12 has-error';
     }
 
     // Default to empty string for regular select and to empty array for 'multiple' select
@@ -358,7 +358,7 @@ class SelectElement extends React.Component {
 
     if (this.props.label) {
       label = (
-        <label className="col-sm-3 control-label" htmlFor={this.props.label}>
+        <label className="col-sm-2 control-label" htmlFor={this.props.label}>
           {this.props.label}
           {requiredHTML}
         </label>
@@ -894,12 +894,12 @@ class DateElement extends React.Component {
     }
 
     return (
-      <div className="row form-group">
-        <label className="col-sm-3 control-label" htmlFor={this.props.label}>
+      <div className="form-group col-sm-12">
+        <label className="col-sm-2" htmlFor={this.props.label}>
           {this.props.label}
           {requiredHTML}
         </label>
-        <div className="col-sm-9">
+        <div className="col-sm-10">
           <input
             type="date"
             className="form-control"
@@ -1313,7 +1313,7 @@ class ButtonElement extends React.Component {
 
   render() {
     return (
-      <div className="row form-group">
+      <div className="form-group col-sm-12">
         <div className={this.props.columnSize}>
           <button
             type={this.props.type}

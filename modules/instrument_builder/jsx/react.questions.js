@@ -90,7 +90,7 @@ var QuestionText = React.createClass({
     }
     return (
       <div className={errorClass}>
-        <label className="col-sm-2 control-label">Question Text: </label>
+        <label className="col-sm-2 control-label" style={{fontWeight: "normal"}}>Question Text: </label>
         <div className="col-sm-6">
           <input className="form-control col-xs-12"
             type="text" id="questionText"
@@ -488,7 +488,7 @@ var ListElements = React.createClass({
   render: function() {
     return (
             <div className="form-group">
-                <label htmlFor="selected-input" className="col-sm-2 control-label">Question Type:</label>
+                <label htmlFor="selected-input" className="col-sm-2 control-label" style={{fontWeight: "normal"}}>Question Type:</label>
                 <div className="col-sm-4">
                     <div className="btn-group">
                         <button id="selected-input" type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
