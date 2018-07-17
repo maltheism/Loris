@@ -248,6 +248,7 @@ class New_Profile extends \NDB_Form
      */
     function _validate($values)
     {
+        print_r($values);
         $errors = array();
         $config =& \NDB_Config::singleton();
         $user   = \User::singleton();
@@ -296,7 +297,7 @@ class New_Profile extends \NDB_Form
                 array('V_PSCID' => $values[PSCID])
             ) > 0
             ) {
-                    $errors['PSCID'] = 'PSCID has already been registered';
+                $errors['PSCID'] = 'PSCID has already been registered';
             }
         }
 

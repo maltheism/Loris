@@ -14,17 +14,28 @@ class NewProfileApp extends React.Component {
 
     this.state = {
       isLoaded: true,
-      dates: {
-        dob1: '',
-        dob2: '',
+      user: {
+        guid: {
+          name: {
+            first: '',
+            middle: '',
+            last: ''
+          },
+          birthday: {
+            date: '',
+            date_confirm: '',
+            city: ''
+          },
+          gender: 'Female'
+        },
+        edc: '',
       },
-      gender: 'Female',
       options: {
         gender: {
-          Male: "Male",
-          Female: "Female",
-          Other: "Other",
-          Unknown: "Unknown"
+          Male: 'Male',
+          Female: 'Female',
+          Other: 'Other',
+          Unknown: 'Unknown'
         }
       },
     };
@@ -35,6 +46,8 @@ class NewProfileApp extends React.Component {
     this.handleDateConfirmChange = this.handleDateConfirmChange.bind(this);
     this.handleGenderChange = this.handleGenderChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.test = this.test.bind(this);
   }
 
   componentDidMount() {
@@ -51,36 +64,44 @@ class NewProfileApp extends React.Component {
   }
 
   handleDateChange(name, value) {
-    this.setState({
-      dates: {
-        dob1: value,
-        dob2: this.state.dates.dob2
-      }
+    this.getState((appState) => {
+      appState.user.guid.birthday.date = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
     });
-    console.log(value);
   }
 
   handleDateConfirmChange(name, value) {
-    console.log('date selected');
-    this.setState({
-      dates: {
-        dob1: this.state.dates.dob1,
-        dob2: value
-      }
+    this.getState((appState) => {
+      appState.user.guid.birthday.date_confirm = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
     });
   }
 
   handleGenderChange(name, value) {
-    this.setState({
-      gender: value
+    this.getState((appState) => {
+      appState.user.guid.gender = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
     });
-    console.log(value);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('hello');
+    console.log('TODO: submit data..');
+    document.getElementById('new_profile').submit();
   }
+
+  getState(callback) {
+    this.setState((prevState) => {
+      callback(prevState);
+    });
+  }
+  test() {
+    console.log('change');
+  }
+
 
   // Render the HTML
   render() {
@@ -104,6 +125,7 @@ class NewProfileApp extends React.Component {
             id="new_profile"
             method="POST"
             class="form-inline"
+            onUserInput={this.test}
           >
             <DateElement
               id="dob1"
@@ -112,7 +134,7 @@ class NewProfileApp extends React.Component {
               max="2020-12-31"
               label="Date of Birth"
               onUserInput={this.handleDateChange}
-              value={this.state.dates.dob1}
+              value={this.state.user.guid.birthday.date}
             />
 
             <DateElement
@@ -120,7 +142,7 @@ class NewProfileApp extends React.Component {
               name="dob2"
               label="Confirm Date of Birth"
               onUserInput={this.handleDateConfirmChange}
-              value={this.state.dates.dob2}
+              value={this.state.user.guid.birthday.date_confirm}
             />
 
             <SelectElement
@@ -131,7 +153,7 @@ class NewProfileApp extends React.Component {
               options={this.state.options.gender}
               required={true}
               hasError={false}
-              value={this.state.gender}
+              value={this.state.user.guid.gender}
               emptyOption={false}
               onUserInput={this.handleGenderChange}
             />
@@ -156,14 +178,23 @@ NewProfileApp.propTypes = {
 NewProfileApp.defaultProps = {
   module: '',
   user: {
-    data: {
-      server: {
-        dob1: '',
-        dob2: '',
-        gender: ''
+    guid: {
+      name: {
+        first: '',
+        middle: '',
+        last: ''
       },
-      client: {}
-    }
+      birthday: {
+        date: '',
+        date_confirm: '',
+        city: ''
+      },
+      gender: ''
+    },
+    edc: {
+      value: '',
+      enabled: false
+    },
   }
 };
 
