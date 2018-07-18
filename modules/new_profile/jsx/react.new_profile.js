@@ -1,5 +1,3 @@
-//import Form from 'jsx/Form'
-
 /**
  *	This is the React class for new_profile
  */
@@ -13,7 +11,7 @@ class NewProfileApp extends React.Component {
     super(props);
 
     this.state = {
-      isLoaded: true,
+      isLoaded: false,
       user: {
         guid: {
           name: {
@@ -21,7 +19,7 @@ class NewProfileApp extends React.Component {
             middle: '',
             last: ''
           },
-          birthday: {
+          dob: {
             date: '',
             date_confirm: '',
             city: ''
@@ -30,14 +28,7 @@ class NewProfileApp extends React.Component {
         },
         edc: '',
       },
-      options: {
-        gender: {
-          Male: 'Male',
-          Female: 'Female',
-          Other: 'Other',
-          Unknown: 'Unknown'
-        }
-      },
+      setup: null,
     };
 
     // Bind component instance to custom methods
@@ -58,7 +49,26 @@ class NewProfileApp extends React.Component {
    * for easy access by columnFormatter.
    */
   fetchData() {
-
+    $.ajax(loris.BaseURL + '/new_profile/ajax/getCandidateOptions.php', {
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+       //let options = data;
+        console.log('ajax (get) - success!');
+        this.getState((appState) => {
+          appState.setup = {
+            data
+          };
+          appState.isLoaded = true
+          this.setState(appState);
+          console.log(JSON.stringify(appState));
+        });
+      }.bind(this),
+      error: function(error) {
+        console.log('ajax (get) - error!');
+        console.log(JSON.stringify(error));
+      }
+    });
   }
 
   handleDateChange(name, value) {
@@ -97,14 +107,15 @@ class NewProfileApp extends React.Component {
     console.log(JSON.stringify(send));
     $.ajax(
       {
-        url: loris.BaseURL = '/new_profile/ajax/createCandidate.php',
+        url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
         type: 'POST',
+        dataType: 'json',
         data: send,
         success: function(data) {
           console.log('success');
           console.log('data is: ' + JSON.stringify(data));
         },
-        error: function(err) {
+        error: function(error) {
           console.log('error');
         }
       }
@@ -116,24 +127,6 @@ class NewProfileApp extends React.Component {
       callback(prevState);
     });
   }
-
-  fetchData() {
-    // $.ajax(loris.BaseURL + '/new_profile/?format=json', {
-    //   method: 'GET',
-    //   dataType: 'json',
-    //   success: function(data) {
-    //     //console.log(JSON.stringify(data));
-    //     // this.setState({
-    //     //   Data: data,
-    //     //   isLoaded: true
-    //     // });
-    //   }.bind(this),
-    //   error: function(error) {
-    //     console.error(error);
-    //   }
-    // });
-  }
-
 
   // Render the HTML
   render() {
@@ -162,19 +155,21 @@ class NewProfileApp extends React.Component {
             <DateElement
               id="dob1"
               name="dob1"
-              min="2007-01-01"
-              max="2020-12-31"
+              min={this.state.setup.data.dob.options.minYear}
+              max={this.state.setup.data.dob.options.maxYear}
               label="Date of Birth"
               onUserInput={this.handleDateChange}
-              value={this.state.user.guid.birthday.date}
+              value={this.state.user.guid.dob.date}
             />
 
             <DateElement
               id="dob2"
               name="dob2"
+              min={this.state.setup.data.dob.options.minYear}
+              max={this.state.setup.data.dob.options.maxYear}
               label="Confirm Date of Birth"
               onUserInput={this.handleDateConfirmChange}
-              value={this.state.user.guid.birthday.date_confirm}
+              value={this.state.user.guid.dob.date_confirm}
             />
 
             <SelectElement
@@ -182,7 +177,7 @@ class NewProfileApp extends React.Component {
               name="gender"
               label="Gender"
               class="form-control input-sm"
-              options={this.state.options.gender}
+              options={this.state.setup.data.gender.options}
               required={true}
               hasError={false}
               value={this.state.user.guid.gender}
@@ -208,26 +203,7 @@ NewProfileApp.propTypes = {
   user: React.PropTypes.object.isRequired
 };
 NewProfileApp.defaultProps = {
-  module: '',
-  user: {
-    guid: {
-      name: {
-        first: '',
-        middle: '',
-        last: ''
-      },
-      birthday: {
-        date: '',
-        date_confirm: '',
-        city: ''
-      },
-      gender: ''
-    },
-    edc: {
-      value: '',
-      enabled: false
-    },
-  }
+  module: ''
 };
 
 /**
