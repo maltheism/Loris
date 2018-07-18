@@ -46,8 +46,6 @@ class NewProfileApp extends React.Component {
     this.handleDateConfirmChange = this.handleDateConfirmChange.bind(this);
     this.handleGenderChange = this.handleGenderChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
-    this.test = this.test.bind(this);
   }
 
   componentDidMount() {
@@ -90,7 +88,27 @@ class NewProfileApp extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log('TODO: submit data..');
-    document.getElementById('new_profile').submit();
+    //document.getElementById('new_profile').submit();
+    const send = {
+      dob1: document.getElementById('dob1').value,
+      dob2: document.getElementById('dob2').value,
+      gender: document.getElementById('gender').value
+    }
+    console.log(JSON.stringify(send));
+    $.ajax(
+      {
+        url: loris.BaseURL = '/new_profile/ajax/createCandidate.php',
+        type: 'POST',
+        data: send,
+        success: function(data) {
+          console.log('success');
+          console.log('data is: ' + JSON.stringify(data));
+        },
+        error: function(err) {
+          console.log('error');
+        }
+      }
+    );
   }
 
   getState(callback) {
@@ -98,8 +116,22 @@ class NewProfileApp extends React.Component {
       callback(prevState);
     });
   }
-  test() {
-    console.log('change');
+
+  fetchData() {
+    // $.ajax(loris.BaseURL + '/new_profile/?format=json', {
+    //   method: 'GET',
+    //   dataType: 'json',
+    //   success: function(data) {
+    //     //console.log(JSON.stringify(data));
+    //     // this.setState({
+    //     //   Data: data,
+    //     //   isLoaded: true
+    //     // });
+    //   }.bind(this),
+    //   error: function(error) {
+    //     console.error(error);
+    //   }
+    // });
   }
 
 
@@ -198,7 +230,6 @@ NewProfileApp.defaultProps = {
   }
 };
 
-
 /**
  * Render NewProfileApp on page load
  */
@@ -208,7 +239,6 @@ window.onload = function() {
       module={'newProfile'}
     />
   );
-
   // Create a wrapper div in which react component will be loaded
   const NewProfileAppDOM = document.createElement('div');
   NewProfileAppDOM.id = 'newProfile';

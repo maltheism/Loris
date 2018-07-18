@@ -105,6 +105,68 @@ class New_Profile extends \NDB_Form
 
         // freeze it, just in case
         $this->form->freeze();
+
+        return json_encode($this->tpl_data);
+    }
+
+    /**
+     * Converts the results of this menu filter to a JSON format to be retrieved
+     * with ?format=json
+     *
+     * @return a json encoded string of the headers and data from this table
+     */
+    function toJSON()
+    {
+        // set up the arguments to Candidate::createNew
+        $user   =& \User::singleton();
+        $config =& \NDB_Config::singleton();
+        $dob    = empty($values['dob1']) ? null : $values['dob1'];
+
+        $edc = null;
+        if ($config->getSetting('useEDC') == "true") {
+            $edc = empty($values['edc1']) ? null : $values['edc1'];
+        }
+
+        // create the candidate
+        $DB        = \Database::singleton();
+        $site_arr  = $user->getData('CenterIDs');
+        $num_sites = count($site_arr);
+
+        if ($num_sites >1) {
+            $candID = \Candidate::createNew(
+                $values['psc'],
+                $dob,
+                $edc,
+                'yolo',
+                $values['PSCID'] ?? null
+            );
+        } else {
+            $centerIDs = $user->getData('CenterIDs');
+            $centerID  = $centerIDs[0];
+            $candID    = \Candidate::createNew(
+                $centerID,
+                $dob,
+                $edc,
+                $values['gender'],
+                $values['PSCID'] ?? null
+            );
+        }
+
+        // get the candidate
+        $candidate =& \Candidate::singleton($candID);
+
+        if ($config->getSetting('useProjects') == "true") {
+            $candidate->setData('ProjectID', $values['ProjectID']);
+
+        }
+
+        //------------------------------------------------------------
+
+        $this->tpl_data['success'] = true;
+        $this->tpl_data['candID']  = $candID;
+        $this->tpl_data['PSCID']   = $candidate->getPSCID();
+
+        return 'hello';
     }
 
     /**
@@ -248,7 +310,6 @@ class New_Profile extends \NDB_Form
      */
     function _validate($values)
     {
-        print_r($values);
         $errors = array();
         $config =& \NDB_Config::singleton();
         $user   = \User::singleton();
