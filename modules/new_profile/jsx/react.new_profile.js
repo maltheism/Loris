@@ -1,9 +1,9 @@
 /**
- *	This is the React class for new_profile
+ *	This is the React class for new_profile.
  */
 
 /**
- * This is the React class for the conflict resolver
+ * This is the React class for the conflict resolver.
  */
 class NewProfileApp extends React.Component {
 
@@ -21,7 +21,7 @@ class NewProfileApp extends React.Component {
           },
           dob: {
             date: '',
-            date_confirm: '',
+            confirmation: '',
             city: ''
           },
           gender: 'Female'
@@ -39,14 +39,15 @@ class NewProfileApp extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * Fetch data when component mounts.
+   */
   componentDidMount() {
     this.fetchData();
   }
 
   /**
-   * Retrieve data from the provided URL and save it in state
-   * Additionally add hiddenHeaders to global loris variable
-   * for easy access by columnFormatter.
+   * Retrieve data from the provided URL and save it in state.
    */
   fetchData() {
     $.ajax(loris.BaseURL + '/new_profile/ajax/getCandidateOptions.php', {
@@ -59,7 +60,7 @@ class NewProfileApp extends React.Component {
           appState.setup = {
             data
           };
-          appState.isLoaded = true
+          appState.isLoaded = true;
           this.setState(appState);
           console.log(JSON.stringify(appState));
         });
@@ -71,6 +72,9 @@ class NewProfileApp extends React.Component {
     });
   }
 
+  /**
+   * Handle the Date_of_Birth (DateElement) change.
+   */
   handleDateChange(name, value) {
     this.getState((appState) => {
       appState.user.guid.dob.date = value;
@@ -79,14 +83,20 @@ class NewProfileApp extends React.Component {
     });
   }
 
+  /**
+   * Handle the Date_of_Birth_Confirmation (DateElement) change.
+   */
   handleDateConfirmChange(name, value) {
     this.getState((appState) => {
-      appState.user.guid.dob.date_confirm = value;
+      appState.user.guid.dob.confirmation = value;
       this.setState(appState);
       console.log(JSON.stringify(appState));
     });
   }
 
+  /**
+   * Handle the Gender (SelectElement) change.
+   */
   handleGenderChange(name, value) {
     this.getState((appState) => {
       appState.user.guid.gender = value;
@@ -95,40 +105,54 @@ class NewProfileApp extends React.Component {
     });
   }
 
+  /**
+   * Handle the Create (Button) click.
+   */
   handleSubmit(e) {
     e.preventDefault();
-    console.log('TODO: submit data..');
-    //document.getElementById('new_profile').submit();
     const send = {
-      dob1: document.getElementById('dob1').value,
-      dob2: document.getElementById('dob2').value,
-      gender: document.getElementById('gender').value
-    }
+      dob1: this.state.user.guid.dob.date,
+      dob2: this.state.user.guid.dob.confirmation,
+      gender: this.state.user.guid.gender
+    };
     console.log(JSON.stringify(send));
-    $.ajax(
-      {
-        url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
-        type: 'POST',
-        dataType: 'json',
-        data: send,
-        success: function(data) {
-          console.log('success');
-          console.log('data is: ' + JSON.stringify(data));
-        },
-        error: function(error) {
-          console.log('error');
+    if (send.dob1 === '' || send.dob2 === '' || send.dob1 !== send.dob2) {
+      // todo: failed dob check
+    }
+    else if (send.gender === '') {
+      // todo: failed gender check
+    }
+    else {
+      $.ajax(
+        {
+          url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
+          type: 'POST',
+          dataType: 'json',
+          data: send,
+          success: function(data) {
+            console.log('success');
+            console.log('data is: ' + JSON.stringify(data));
+          },
+          error: function(error) {
+            console.log('error: ' + JSON.stringify(error));
+          }
         }
-      }
-    );
+      );
+    }
   }
 
+  /**
+   * Retrieve the previous state.
+   */
   getState(callback) {
     this.setState((prevState) => {
       callback(prevState);
     });
   }
 
-  // Render the HTML
+  /**
+   * Render the HTML.
+   */
   render() {
     // Waiting for async data to load
     if (!this.state.isLoaded) {
@@ -139,6 +163,41 @@ class NewProfileApp extends React.Component {
             className="glyphicon glyphicon-refresh glyphicon-refresh-animate">
           </span>
         </button>
+      );
+    }
+
+    // Circumstantial Elements
+    let edc_element = '',
+        psc_element = '',
+        pscid_element = '';
+    if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('edc')) {
+      edc_element = (
+        <div>
+          <DateElement
+
+          />
+          <DateElement
+
+          />
+        </div>
+      );
+    }
+    if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('psc')) {
+      psc_element = (
+        <div>
+          <SelectElement
+
+          />
+        </div>
+      );
+    }
+    if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('PSCID')) {
+      pscid_element = (
+        <div>
+          <TextboxElement
+
+          />
+        </div>
       );
     }
 
@@ -169,7 +228,7 @@ class NewProfileApp extends React.Component {
               max={this.state.setup.data.dob.options.maxYear}
               label="Confirm Date of Birth"
               onUserInput={this.handleDateConfirmChange}
-              value={this.state.user.guid.dob.date_confirm}
+              value={this.state.user.guid.dob.confirmation}
             />
 
             <SelectElement
@@ -185,13 +244,18 @@ class NewProfileApp extends React.Component {
               onUserInput={this.handleGenderChange}
             />
 
+            {edc_element}
+
+            {psc_element}
+
+            {pscid_element}
+
             <ButtonElement
               name="fire_away"
               label="Create"
               type="submit"
               onUserInput={this.handleSubmit}
             />
-
           </FormElement>
         </div>
       </div>
@@ -200,7 +264,6 @@ class NewProfileApp extends React.Component {
 }
 NewProfileApp.propTypes = {
   module: React.PropTypes.string.isRequired,
-  user: React.PropTypes.object.isRequired
 };
 NewProfileApp.defaultProps = {
   module: ''
