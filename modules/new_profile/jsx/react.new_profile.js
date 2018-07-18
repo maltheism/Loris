@@ -1,9 +1,5 @@
 /**
- *	This is the React class for new_profile.
- */
-
-/**
- * This is the React class for the conflict resolver.
+ * This is the React class for the new_profile.
  */
 class NewProfileApp extends React.Component {
 
