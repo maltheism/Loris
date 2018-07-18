@@ -73,7 +73,7 @@ class NewProfileApp extends React.Component {
 
   handleDateChange(name, value) {
     this.getState((appState) => {
-      appState.user.guid.birthday.date = value;
+      appState.user.guid.dob.date = value;
       this.setState(appState);
       console.log(JSON.stringify(appState));
     });
@@ -81,7 +81,7 @@ class NewProfileApp extends React.Component {
 
   handleDateConfirmChange(name, value) {
     this.getState((appState) => {
-      appState.user.guid.birthday.date_confirm = value;
+      appState.user.guid.dob.date_confirm = value;
       this.setState(appState);
       console.log(JSON.stringify(appState));
     });
