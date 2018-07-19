@@ -13,26 +13,35 @@ class NewProfileApp extends React.Component {
           name: {
             first: '',
             middle: '',
-            last: ''
+            last: '',
           },
           dob: {
             date: '',
             confirmation: '',
-            city: ''
+            city: '',
           },
-          gender: 'Female'
+          gender: 'Female',
         },
-        edc: '',
+        psc: '',
+        pscid: '',
+        edc: {
+          value: '',
+          confirmation: ''
+        }
       },
       setup: null,
     };
 
     // Bind component instance to custom methods
-    this.fetchData = this.fetchData.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleDateConfirmChange = this.handleDateConfirmChange.bind(this);
-    this.handleGenderChange = this.handleGenderChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchData                   = this.fetchData.bind(this);
+    this.handleEdcChange             = this.handleEdcChange(this);
+    this.handleEdcConfirmationChange = this.handleEdcConfirmationChange(this);
+    this.handlePscChange             = this.handlePscChange.bind(this);
+    this.handlePscidChange           = this.handlePscidChange.bind(this);
+    this.handleDateChange            = this.handleDateChange.bind(this);
+    this.handleDateConfirmChange     = this.handleDateConfirmChange.bind(this);
+    this.handleGenderChange          = this.handleGenderChange.bind(this);
+    this.handleSubmit                = this.handleSubmit.bind(this);
   }
 
   /**
@@ -50,7 +59,6 @@ class NewProfileApp extends React.Component {
       method: 'GET',
       dataType: 'json',
       success: function(data) {
-       //let options = data;
         console.log('ajax (get) - success!');
         this.getState((appState) => {
           appState.setup = {
@@ -69,9 +77,54 @@ class NewProfileApp extends React.Component {
   }
 
   /**
+   * Handle the EDC (DateElement) change.
+   */
+  handleEdcChange(name, value) {
+    this.getState((appState) => {
+      appState.user.edc.value = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
+    });
+  }
+
+  /**
+   * Handle the EDC_Confirmation (DateElement) change.
+   */
+  handleEdcConfirmationChange(name, value) {
+    this.getState((appState) => {
+      appState.user.edc.confirmation = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
+    });
+  }
+
+  /**
+   * Handle the PSC (SelectElement) change.
+   */
+  handlePscChange(name, value) {
+    this.getState((appState) => {
+      appState.user.psc = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
+    });
+  }
+
+  /**
+   * Handle the PSCID (TextboxElement) change.
+   */
+  handlePscidChange(name, value) {
+    this.getState((appState) => {
+      appState.user.pscid = value;
+      this.setState(appState);
+      console.log(JSON.stringify(appState));
+    });
+  }
+
+  /**
    * Handle the Date_of_Birth (DateElement) change.
    */
   handleDateChange(name, value) {
+    document.getElementById('dob1').setCustomValidity('Date of Birth is required');
     this.getState((appState) => {
       appState.user.guid.dob.date = value;
       this.setState(appState);
@@ -170,10 +223,22 @@ class NewProfileApp extends React.Component {
       edc_element = (
         <div>
           <DateElement
-
+            id="edc1"
+            name="edc1"
+            min={this.state.setup.data.edc.options.minYear}
+            max={this.state.setup.data.edc.options.maxYear}
+            label="Date of Birth"
+            onUserInput={this.handleEdcChange}
+            value={this.state.user.edc.value}
           />
           <DateElement
-
+            id="edc2"
+            name="edc2"
+            min={this.state.setup.data.edc.options.minYear}
+            max={this.state.setup.data.edc.options.maxYear}
+            label="Date of Birth"
+            onUserInput={this.handleEdcConfirmationChange}
+            value={this.state.user.edc.confirmation}
           />
         </div>
       );
@@ -182,7 +247,16 @@ class NewProfileApp extends React.Component {
       psc_element = (
         <div>
           <SelectElement
-
+            id="psc"
+            name="psc"
+            label="Site"
+            class="form-control input-sm"
+            options={this.state.setup.data.psc.options}
+            required={true}
+            hasError={false}
+            value={this.state.user.psc}
+            emptyOption={false}
+            onUserInput={this.handlePscChange}
           />
         </div>
       );
@@ -191,7 +265,11 @@ class NewProfileApp extends React.Component {
       pscid_element = (
         <div>
           <TextboxElement
-
+            id="pscid"
+            name="PSCID"
+            label="PSCID"
+            value=""
+            onUserInput={this.handlePscidChange}
           />
         </div>
       );
@@ -205,7 +283,6 @@ class NewProfileApp extends React.Component {
             id="new_profile"
             method="POST"
             class="form-inline"
-            onUserInput={this.test}
           >
             <DateElement
               id="dob1"
@@ -215,6 +292,7 @@ class NewProfileApp extends React.Component {
               label="Date of Birth"
               onUserInput={this.handleDateChange}
               value={this.state.user.guid.dob.date}
+              required={true}
             />
 
             <DateElement
@@ -225,6 +303,7 @@ class NewProfileApp extends React.Component {
               label="Confirm Date of Birth"
               onUserInput={this.handleDateConfirmChange}
               value={this.state.user.guid.dob.confirmation}
+              required={true}
             />
 
             <SelectElement
