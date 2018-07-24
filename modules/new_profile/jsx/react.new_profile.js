@@ -30,6 +30,30 @@ class NewProfileApp extends React.Component {
         }
       },
       setup: null,
+      div: {
+        input: {
+          dob: {
+            value: document.getElementById('dob1'),
+            confirmation: document.getElementById('dob2')
+          },
+          edc: {
+            value: document.getElementById('edc1'),
+            confirmation: document.getElementById('edc2')
+          }
+        },
+        message: {
+          error: {
+            dob: {
+              value: document.getElementById('dob1_error_message'),
+              confirmation: document.getElementById('dob2_error_message')
+            },
+            edc: {
+              value: document.getElementById('edc1_error_message'),
+              confirmation: document.getElementById('edc2_error_message')
+            }
+          }
+        }
+      }
     };
 
     // Bind component instance to custom methods
@@ -49,6 +73,20 @@ class NewProfileApp extends React.Component {
    */
   componentDidMount() {
     this.fetchData();
+  }
+
+  /**
+   * Post-Render when we can access the DOM.
+   */
+  componentDidUpdate(prevProps, prevState) {
+    this.state.div.input.dob.value = document.getElementById('dob1');
+    this.state.div.input.dob.confirmation = document.getElementById('dob2');
+    this.state.div.input.edc.value = document.getElementById('edc1');
+    this.state.div.input.edc.confirmation = document.getElementById('edc2');
+    this.state.div.message.error.dob.value = document.getElementById('dob1_error_message');
+    this.state.div.message.error.dob.confirmation = document.getElementById('dob2_error_message');
+    this.state.div.message.error.edc.value = document.getElementById('edc1_error_message');
+    this.state.div.message.error.edc.confirmation = document.getElementById('edc2_error_message');
   }
 
   /**
@@ -80,22 +118,30 @@ class NewProfileApp extends React.Component {
    * Handle the EDC (DateElement) change.
    */
   handleEdcChange(name, value) {
-    this.getState((appState) => {
-      appState.user.edc.value = value;
-      this.setState(appState);
-      console.log(JSON.stringify(appState));
-    });
+    let edc1 = this.state.div.input.edc.value;
+    if (edc1) {
+      edc1.checkValidity() ? this.state.div.message.error.edc.value.innerHTML = '' :
+        this.state.div.message.error.edc.value.innerHTML = edc1.validationMessage;
+      this.getState((appState) => {
+        appState.user.edc.value = value;
+        this.setState(appState);
+      });
+    }
   }
 
   /**
    * Handle the EDC_Confirmation (DateElement) change.
    */
   handleEdcConfirmationChange(name, value) {
-    this.getState((appState) => {
-      appState.user.edc.confirmation = value;
-      this.setState(appState);
-      console.log(JSON.stringify(appState));
-    });
+    let edc2 = this.state.div.input.edc.confirmation;
+    if (edc2) {
+      edc2.checkValidity() ? this.state.div.message.error.edc.confirmation.innerHTML = '' :
+        this.state.div.message.error.edc.confirmation.innerHTML = edc2.validationMessage;
+      this.getState((appState) => {
+        appState.user.edc.confirmation = value;
+        this.setState(appState);
+      });
+    }
   }
 
   /**
@@ -105,7 +151,6 @@ class NewProfileApp extends React.Component {
     this.getState((appState) => {
       appState.user.psc = value;
       this.setState(appState);
-      console.log(JSON.stringify(appState));
     });
   }
 
@@ -116,7 +161,6 @@ class NewProfileApp extends React.Component {
     this.getState((appState) => {
       appState.user.pscid = value;
       this.setState(appState);
-      console.log(JSON.stringify(appState));
     });
   }
 
@@ -124,10 +168,12 @@ class NewProfileApp extends React.Component {
    * Handle the Date_of_Birth (DateElement) change.
    */
   handleDateChange(name, value) {
+    let dob1 = this.state.div.input.dob.value;
+    dob1.checkValidity() ? this.state.div.message.error.dob.value.innerHTML = '' :
+      this.state.div.message.error.dob.value.innerHTML = dob1.validationMessage;
     this.getState((appState) => {
       appState.user.guid.dob.value = value;
       this.setState(appState);
-      console.log(JSON.stringify(appState));
     });
   }
 
@@ -135,10 +181,12 @@ class NewProfileApp extends React.Component {
    * Handle the Date_of_Birth_Confirmation (DateElement) change.
    */
   handleDateConfirmChange(name, value) {
+    let dob2 = this.state.div.input.dob.confirmation;
+    dob2.checkValidity() ? this.state.div.message.error.dob.confirmation.innerHTML = '' :
+      this.state.div.message.error.dob.confirmation.innerHTML = dob2.validationMessage;
     this.getState((appState) => {
       appState.user.guid.dob.confirmation = value;
       this.setState(appState);
-      console.log(JSON.stringify(appState));
     });
   }
 
@@ -149,7 +197,6 @@ class NewProfileApp extends React.Component {
     this.getState((appState) => {
       appState.user.guid.gender = value;
       this.setState(appState);
-      console.log(JSON.stringify(appState));
     });
   }
 
@@ -232,6 +279,7 @@ class NewProfileApp extends React.Component {
             onUserInput={this.handleEdcChange}
             value={this.state.user.edc.value}
           />
+          <div id="edc1_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
           <DateElement
             id="edc2"
             name="edc2"
@@ -241,6 +289,7 @@ class NewProfileApp extends React.Component {
             onUserInput={this.handleEdcConfirmationChange}
             value={this.state.user.edc.confirmation}
           />
+          <div id="edc2_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
         </div>
       );
     }
@@ -295,7 +344,7 @@ class NewProfileApp extends React.Component {
               value={this.state.user.guid.dob.value}
               required={true}
             />
-
+            <div id="dob1_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
             <DateElement
               id="dob2"
               name="dob2"
@@ -306,6 +355,7 @@ class NewProfileApp extends React.Component {
               value={this.state.user.guid.dob.confirmation}
               required={true}
             />
+            <div id="dob2_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
 
             <SelectElement
               id="gender"
@@ -332,6 +382,9 @@ class NewProfileApp extends React.Component {
               type="submit"
               onUserInput={this.handleSubmit}
             />
+
+            <div id="invalid_data_submission"></div>
+
           </FormElement>
         </div>
       </div>
