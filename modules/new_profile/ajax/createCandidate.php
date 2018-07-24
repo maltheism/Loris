@@ -49,11 +49,20 @@ function processValidity($values)
         return json_encode(array('error'=>'birth confirmation mismatch'));
     }
     $config =& \NDB_Config::singleton();
-    if ($config->getSetting('useEDC') == 'true') {
-        $values['edc1'] = empty($values['edc1']) ? null : $values['edc1'];
+    if ($config->getSetting('useEDC') == 'true' && is_array($values['edc1']) && is_array($values['edc2'])) {
+        if (strlen(implode($values['edc1'])) > 2
+            && !\Utility::_checkDate($values['edc1'])
+        ) {
+            $errors['edc1'] = 'EDC is not a valid date';
+        }
+        if ($values['edc1'] != $values['edc2']) {
+            $errors['edc1'] = 'Estimated Due date fields must match.';
+        }
     } else {
-        $values['edc1'] = empty($values['edc1']) ? null : null;
+        $values['edc1'] = null;
     }
+
+
 }
 
 /**

@@ -16,7 +16,7 @@ class NewProfileApp extends React.Component {
             last: '',
           },
           dob: {
-            date: '',
+            value: '',
             confirmation: '',
             city: '',
           },
@@ -124,9 +124,8 @@ class NewProfileApp extends React.Component {
    * Handle the Date_of_Birth (DateElement) change.
    */
   handleDateChange(name, value) {
-    document.getElementById('dob1').setCustomValidity('Date of Birth is required');
     this.getState((appState) => {
-      appState.user.guid.dob.date = value;
+      appState.user.guid.dob.value = value;
       this.setState(appState);
       console.log(JSON.stringify(appState));
     });
@@ -160,7 +159,7 @@ class NewProfileApp extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const send = {
-      dob1: this.state.user.guid.dob.date,
+      dob1: this.state.user.guid.dob.value,
       dob2: this.state.user.guid.dob.confirmation,
       gender: this.state.user.guid.gender
     };
@@ -203,7 +202,7 @@ class NewProfileApp extends React.Component {
    * Render the HTML.
    */
   render() {
-    // Waiting for async data to load
+    // Waiting for async data to load.
     if (!this.state.isLoaded) {
       return (
         <button className="btn-info has-spinner">
@@ -215,12 +214,14 @@ class NewProfileApp extends React.Component {
       );
     }
 
-    // Circumstantial Elements
-    let edc_element = '',
-        psc_element = '',
-        pscid_element = '';
+    // Circumstantial Elements.
+    let element = {
+      edc: '',
+      psc: '',
+      pscid: ''
+    };
     if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('edc')) {
-      edc_element = (
+      element.edc = (
         <div>
           <DateElement
             id="edc1"
@@ -244,7 +245,7 @@ class NewProfileApp extends React.Component {
       );
     }
     if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('psc')) {
-      psc_element = (
+      element.psc = (
         <div>
           <SelectElement
             id="psc"
@@ -262,7 +263,7 @@ class NewProfileApp extends React.Component {
       );
     }
     if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('PSCID')) {
-      pscid_element = (
+      element.pscid = (
         <div>
           <TextboxElement
             id="pscid"
@@ -291,7 +292,7 @@ class NewProfileApp extends React.Component {
               max={this.state.setup.data.dob.options.maxYear}
               label="Date of Birth"
               onUserInput={this.handleDateChange}
-              value={this.state.user.guid.dob.date}
+              value={this.state.user.guid.dob.value}
               required={true}
             />
 
@@ -319,11 +320,11 @@ class NewProfileApp extends React.Component {
               onUserInput={this.handleGenderChange}
             />
 
-            {edc_element}
+            {element.edc}
 
-            {psc_element}
+            {element.psc}
 
-            {pscid_element}
+            {element.pscid}
 
             <ButtonElement
               name="fire_away"
@@ -345,7 +346,7 @@ NewProfileApp.defaultProps = {
 };
 
 /**
- * Render NewProfileApp on page load
+ * Render NewProfileApp on page load.
  */
 window.onload = function() {
   const newProfile = (
@@ -353,11 +354,11 @@ window.onload = function() {
       module={'newProfile'}
     />
   );
-  // Create a wrapper div in which react component will be loaded
+  // Create a wrapper div in which react component will be loaded.
   const NewProfileAppDOM = document.createElement('div');
   NewProfileAppDOM.id = 'newProfile';
 
-  // Append wrapper div to page content
+  // Append wrapper div to page content.
   const rootDOM = document.getElementById('lorisworkspace');
   rootDOM.appendChild(NewProfileAppDOM);
 
