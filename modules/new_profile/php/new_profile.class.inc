@@ -332,6 +332,7 @@ class New_Profile extends \NDB_Form
             $deps,
             array(
                 $baseURL . '/new_profile/js/react.new_profile.js',
+                $baseURL . '/new_profile/js/react.new_profile.js',
             )
         );
     }

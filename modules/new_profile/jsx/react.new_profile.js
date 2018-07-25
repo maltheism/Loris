@@ -221,11 +221,9 @@ class NewProfileApp extends React.Component {
     };
     console.log(JSON.stringify(send));
     if (send.dob1 === '' || send.dob2 === '' || send.dob1 !== send.dob2) {
-      // todo: failed dob check
       this.state.div.message.error.submission.innerHTML = 'Please correct the Date of Birth.';
     }
     else if (send.gender === '') {
-      // todo: failed gender check
       this.state.div.message.error.submission.innerHTML = 'Please select a valid Gender';
     }
     else {
@@ -238,6 +236,9 @@ class NewProfileApp extends React.Component {
           success: function(data) {
             console.log('success');
             console.log('data is: ' + JSON.stringify(data));
+            if (data.error) {
+              document.getElementById('submission_error_message').innerHTML = data.error;
+            }
           },
           error: function(error) {
             console.log('error: ' + JSON.stringify(error));

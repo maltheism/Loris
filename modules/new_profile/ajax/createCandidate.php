@@ -32,11 +32,11 @@ if (!$user->hasPermission('data_entry')) {
 $data = processValidity($_POST);
 
 /**
- * Create Candidate if valid data,
- * (json) response to user, 'error' or 'success' key
+ * Create Candidate if valid data from user,
+ * (json) response sent to user: 'error' or 'success' key
  * depending on result.
  */
-return array_key_exists('error', $data)
+echo array_key_exists('error', $data)
     ? json_encode($data)
     : createCandidate($data);
 
