@@ -10,13 +10,14 @@
  * PHP Version 7
  *
  * @category Loris
- * @package  new_profile
+ * @package  New_Profile
  * @author   Alizée Wickenheiser <alizee.wickenheiser@mcin.ca>
  * @license  Loris license
  * @link     https://github.com/aces/Loris-Trunk
  */
 
 $user =& User::singleton();
+
 /**
  * User permission verification.
  */
@@ -26,72 +27,138 @@ if (!$user->hasPermission('data_entry')) {
 }
 
 /**
- * POST Data Validity Controller
+ * POST Data Validity.
  */
 $data = processValidity($_POST);
 
 /**
- * Processes the values and saves to database
- *
- * @param array $values form values
- *
- * @return void
+ * Create Candidate if valid data,
+ * (json) response to user, 'error' or 'success' key
+ * depending on result.
  */
-function processValidity($values)
-{
-    if (!isset($values['dob1']) ||
-        !isset($values['dob2']) ||
-        !isset($values['gender']))
-    {
-        return json_encode(array('error'=>'incomplete data'));
-    }
-    else if ($values['dob1'] != $values['dob2']) {
-        return json_encode(array('error'=>'birth confirmation mismatch'));
-    }
-    $config =& \NDB_Config::singleton();
-    if ($config->getSetting('useEDC') == 'true' && is_array($values['edc1']) && is_array($values['edc2'])) {
-        if (strlen(implode($values['edc1'])) > 2
-            && !\Utility::_checkDate($values['edc1'])
-        ) {
-            $errors['edc1'] = 'EDC is not a valid date';
-        }
-        if ($values['edc1'] != $values['edc2']) {
-            $errors['edc1'] = 'Estimated Due date fields must match.';
-        }
-    } else {
-        $values['edc1'] = null;
-    }
-
-
-}
+return array_key_exists('error', $data)
+    ? json_encode($data)
+    : createCandidate($data);
 
 /**
  * Processes the values and saves to database
  *
- * @param array $values form values
+ * @param array $values the user data received..
  *
- * @return void
+ * @return array
+ * @throws LorisException
+ */
+function processValidity($values)
+{
+    // Validate (dob1, dob2, gender) not set.
+    if (!isset($values['dob1'])
+        || !isset($values['dob2'])
+        || !isset($values['gender'])
+    ) {
+        return array('error' => 'Incomplete candidate fields.');
+    }
+    // Validate dob.
+    if (strlen(implode($values['dob1'])) > 2
+        && !\Utility::_checkDate($values['dob2'])
+    ) {
+        return array('error' => 'Birth date is not a valid date.');
+    } else if ($values['dob1'] != $values['dob2']) {
+        // Validate (dob1 & dob2) are not equal.
+        return array('error' => 'Birth date confirmation mismatch.');
+    }
+    $config =& \NDB_Config::singleton();
+    // Validate edc.
+    if ($config->getSetting('useEDC') == 'true'
+        && is_array($values['edc1'])
+        && is_array($values['edc2'])
+    ) {
+        if (strlen(implode($values['edc1'])) > 2
+            && !\Utility::_checkDate($values['edc1'])
+        ) {
+            return array('error' => 'EDC is not a valid date.');
+        } else if ($values['edc1'] != $values['edc2']) {
+            return array('error' => 'Estimated Due date fields must match.');
+        }
+    } else {
+        $values['edc1'] = null;
+        $values['edc2'] = null;
+    }
+    // Validate Gender.
+    if ($values['gender'] != 'Male'
+        || $values['gender' != 'Female'
+        || $values['gender'] != 'Other'
+        || $values['gender'] != 'Unknown']
+    ) {
+        return array('error' => 'Invalid gender option.');
+    }
+    // Validate PSCID.
+    $pscidSettings = $config->getSetting('PSCID');
+    $user          =& \User::singleton();
+    if ($pscidSettings['generation'] == 'user') {
+        // Setup Database object.
+        $db = \Database::singleton();
+        if (empty($values['psc'])) { // user is in only one site.
+            $centerIDs = $user->getData('CenterIDs');
+            $centerID  = $centerIDs[0];
+            $site      =& \Site::singleton($centerID);
+        } else {
+            // user has multiple sites, so validate
+            // PSCID against the Site selected.
+            $site =& \Site::singleton($values['psc']);
+        }
+        if (empty($values['PSCID'])) {
+            return array('error' => 'PSCID must be specified.');
+        } else if (!\Candidate::validatePSCID(
+            $values['PSCID'],
+            $site->getSiteAlias()
+        )
+        ) {
+            return array('error' => 'PSCID does not match the required structure.');
+        } else if ($db->pselectOne(
+            "SELECT count(PSCID) FROM candidate WHERE PSCID=:V_PSCID",
+            array('V_PSCID' => $values['PSCID'])
+        ) > 0
+        ) {
+            return array('error' => 'PSCID has already been registered.');
+        }
+    }
+    // Validate site.
+    $site = $values['psc'];
+    $user_list_of_sites = $user->getData('CenterIDs');
+    $num_sites          = count($user_list_of_sites);
+    if ($num_sites > 1 && (empty($site) || !$user->hasCenter($site))) {
+        return ['error' => 'Site must be selected from the available dropdown.'];
+    }
+    $useProjects = $config->getSetting('useProjects');
+    if ($useProjects === 'true' && empty($values['ProjectID'])) {
+        return array('error' => 'Project is required.');
+    }
+    return $values;
+}
+
+/**
+ * Create the candidate and saves to database.
+ *
+ * @param array $values verified form data from user.
+ *
+ * @return string
  * @throws DatabaseException
  * @throws LorisException
  */
 function createCandidate($values)
 {
-    // set up the arguments to Candidate::createNew
+    // Setup the arguments for Candidate
     $user   =& \User::singleton();
     $config =& \NDB_Config::singleton();
-    $dob    = empty($values['dob1']) ? null : $values['dob1'];
-
-    $edc = null;
-    if ($config->getSetting('useEDC') == "true") {
-        $edc = empty($values['edc1']) ? null : $values['edc1'];
+    $dob    = $values['dob1'];
+    $edc    = null;
+    if ($config->getSetting('useEDC') == 'true') {
+        $edc = $values['edc1'];
     }
-
-    // create the candidate
-    $DB        = \Database::singleton();
+    // Create the candidate
     $site_arr  = $user->getData('CenterIDs');
     $num_sites = count($site_arr);
-
-    if ($num_sites >1) {
+    if ($num_sites > 1) {
         $candID = \Candidate::createNew(
             $values['psc'],
             $dob,
@@ -110,23 +177,17 @@ function createCandidate($values)
             $values['PSCID'] ?? null
         );
     }
-
-    // get the candidate
+    // Get the candidate
     $candidate =& \Candidate::singleton($candID);
-
-    if ($config->getSetting('useProjects') == "true") {
+    if ($config->getSetting('useProjects') == 'true') {
         $candidate->setData('ProjectID', $values['ProjectID']);
-
     }
 
-    //------------------------------------------------------------
-
-    $this->tpl_data['success'] = true;
-    $this->tpl_data['candID']  = $candID;
-    $this->tpl_data['PSCID']   = $candidate->getPSCID();
-
-    // freeze it, just in case
-    $this->form->freeze();
-
-    return json_encode($this->tpl_data);
+    $success = array(
+                'success' => array(
+                              'candID' => $candID,
+                              'PSCID'  => $candidate->getPSCID(),
+                             ),
+               );
+    return json_encode($success);
 }

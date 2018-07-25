@@ -50,7 +50,8 @@ class NewProfileApp extends React.Component {
             edc: {
               value: document.getElementById('edc1_error_message'),
               confirmation: document.getElementById('edc2_error_message')
-            }
+            },
+            submission: document.getElementById('submission_error_message')
           }
         }
       }
@@ -87,6 +88,7 @@ class NewProfileApp extends React.Component {
     this.state.div.message.error.dob.confirmation = document.getElementById('dob2_error_message');
     this.state.div.message.error.edc.value = document.getElementById('edc1_error_message');
     this.state.div.message.error.edc.confirmation = document.getElementById('edc2_error_message');
+    this.state.div.message.error.submission = document.getElementById('submission_error_message');
   }
 
   /**
@@ -118,6 +120,7 @@ class NewProfileApp extends React.Component {
    * Handle the EDC (DateElement) change.
    */
   handleEdcChange(name, value) {
+    this.resetSubmissionError();
     let edc1 = this.state.div.input.edc.value;
     if (edc1) {
       edc1.checkValidity() ? this.state.div.message.error.edc.value.innerHTML = '' :
@@ -133,6 +136,7 @@ class NewProfileApp extends React.Component {
    * Handle the EDC_Confirmation (DateElement) change.
    */
   handleEdcConfirmationChange(name, value) {
+    this.resetSubmissionError();
     let edc2 = this.state.div.input.edc.confirmation;
     if (edc2) {
       edc2.checkValidity() ? this.state.div.message.error.edc.confirmation.innerHTML = '' :
@@ -148,6 +152,7 @@ class NewProfileApp extends React.Component {
    * Handle the PSC (SelectElement) change.
    */
   handlePscChange(name, value) {
+    this.resetSubmissionError();
     this.getState((appState) => {
       appState.user.psc = value;
       this.setState(appState);
@@ -158,6 +163,7 @@ class NewProfileApp extends React.Component {
    * Handle the PSCID (TextboxElement) change.
    */
   handlePscidChange(name, value) {
+    this.resetSubmissionError();
     this.getState((appState) => {
       appState.user.pscid = value;
       this.setState(appState);
@@ -168,6 +174,7 @@ class NewProfileApp extends React.Component {
    * Handle the Date_of_Birth (DateElement) change.
    */
   handleDateChange(name, value) {
+    this.resetSubmissionError();
     let dob1 = this.state.div.input.dob.value;
     dob1.checkValidity() ? this.state.div.message.error.dob.value.innerHTML = '' :
       this.state.div.message.error.dob.value.innerHTML = dob1.validationMessage;
@@ -181,6 +188,7 @@ class NewProfileApp extends React.Component {
    * Handle the Date_of_Birth_Confirmation (DateElement) change.
    */
   handleDateConfirmChange(name, value) {
+    this.resetSubmissionError();
     let dob2 = this.state.div.input.dob.confirmation;
     dob2.checkValidity() ? this.state.div.message.error.dob.confirmation.innerHTML = '' :
       this.state.div.message.error.dob.confirmation.innerHTML = dob2.validationMessage;
@@ -194,6 +202,7 @@ class NewProfileApp extends React.Component {
    * Handle the Gender (SelectElement) change.
    */
   handleGenderChange(name, value) {
+    this.resetSubmissionError();
     this.getState((appState) => {
       appState.user.guid.gender = value;
       this.setState(appState);
@@ -213,9 +222,11 @@ class NewProfileApp extends React.Component {
     console.log(JSON.stringify(send));
     if (send.dob1 === '' || send.dob2 === '' || send.dob1 !== send.dob2) {
       // todo: failed dob check
+      this.state.div.message.error.submission.innerHTML = 'Please correct the Date of Birth.';
     }
     else if (send.gender === '') {
       // todo: failed gender check
+      this.state.div.message.error.submission.innerHTML = 'Please select a valid Gender';
     }
     else {
       $.ajax(
@@ -233,6 +244,13 @@ class NewProfileApp extends React.Component {
           }
         }
       );
+    }
+  }
+
+  resetSubmissionError() {
+    let submission = this.state.div.message.error.submission;
+    if (submission) {
+      this.state.div.message.error.submission.innerHTML = '';
     }
   }
 
@@ -383,7 +401,7 @@ class NewProfileApp extends React.Component {
               onUserInput={this.handleSubmit}
             />
 
-            <div id="invalid_data_submission"></div>
+            <div id="submission_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
 
           </FormElement>
         </div>
