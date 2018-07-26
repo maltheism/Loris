@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <script type='text/javascript' src='./bundle.js'></script>
+
+
+  <script>
+
+    function setup() {
+      console.log('setup() has ran..');
+
+      let id = new osi.OpenScienceIdentity(
+        {
+            "gender": 'Male',
+            "first_name": 'Pierre',
+            "middle_name": 'Tiberius',
+            "last_name": 'Rioux',
+            "birth_day": '1901-01-02',
+            "city_of_birth": 'Longueuil'
+        }
+      );
+
+      let sig = '99e391f4efeb041a03f310e159ffaa36583d9ee91691333def6b387048868343';
+
+      console.log("KEY=" + id.signatureKey() + "");
+
+      if (! id.valid()) {
+        console.log(" => INVALID. expected " + sig);
+        console.log('id is not valid');
+      }
+
+      let realsig = '';
+      try {
+        realsig = id.toSignature();
+      } catch (exception) {
+        console.log("  => EXCEPTION, expected: " + sig);
+      }
+
+      if (realsig !== sig) {
+        console.log("  => SIGNATURE MISMATCH,\ngot:\n" + realsig + "\nexpected:\n" + sig);
+      } else {
+        console.log( " => SIGNATURE OK, got " + realsig);
+      }
+    }
+  </script>
+
+</head>
+
+<body onload='setup();''>
+
+test
+
+</body>
+
+</html>

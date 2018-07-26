@@ -796,7 +796,7 @@ class TextboxElement extends React.Component {
     let required = this.props.required ? 'required' : null;
     let errorMessage = null;
     let requiredHTML = null;
-    let elementClass = 'row form-group';
+    let elementClass = 'form-group col-sm-12';
     let label = null;
 
     // Add required asterix
@@ -812,7 +812,7 @@ class TextboxElement extends React.Component {
 
     if (this.props.label) {
       label = (
-        <label className="col-sm-3 control-label" htmlFor={this.props.id}>
+        <label className="col-sm-2" htmlFor={this.props.id}>
           {this.props.label}
           {requiredHTML}
         </label>
@@ -861,7 +861,7 @@ TextboxElement.defaultProps = {
   disabled: false,
   required: false,
   errorMessage: '',
-  inputClass: 'col-sm-9',
+  inputClass: 'col-sm-10',
   onUserInput: function() {
     console.warn('onUserInput() callback is not set');
   },

@@ -59,15 +59,16 @@ class NewProfileApp extends React.Component {
     };
 
     // Bind component instance to custom methods
-    this.fetchData                   = this.fetchData.bind(this);
-    this.handleEdcChange             = this.handleEdcChange(this);
-    this.handleEdcConfirmationChange = this.handleEdcConfirmationChange(this);
-    this.handlePscChange             = this.handlePscChange.bind(this);
-    this.handlePscidChange           = this.handlePscidChange.bind(this);
-    this.handleDateChange            = this.handleDateChange.bind(this);
-    this.handleDateConfirmChange     = this.handleDateConfirmChange.bind(this);
-    this.handleGenderChange          = this.handleGenderChange.bind(this);
-    this.handleSubmit                = this.handleSubmit.bind(this);
+    this.fetchData                    = this.fetchData.bind(this);
+    this.handlePersonalIdentification = this.handlePersonalIdentification.bind(this);
+    this.handleEdcChange              = this.handleEdcChange(this);
+    this.handleEdcConfirmationChange  = this.handleEdcConfirmationChange(this);
+    this.handlePscChange              = this.handlePscChange.bind(this);
+    this.handlePscidChange            = this.handlePscidChange.bind(this);
+    this.handleDateChange             = this.handleDateChange.bind(this);
+    this.handleDateConfirmChange      = this.handleDateConfirmChange.bind(this);
+    this.handleGenderChange           = this.handleGenderChange.bind(this);
+    this.handleSubmit                 = this.handleSubmit.bind(this);
   }
 
   /**
@@ -115,6 +116,34 @@ class NewProfileApp extends React.Component {
         console.log(JSON.stringify(error));
       }
     });
+  }
+
+  /**
+   * Handle the Personal Identification change.
+   */
+  handlePersonalIdentification(name, value) {
+    this.resetSubmissionError();
+    if (name === 'guid_first_name') {
+      this.getState((appState) => {
+        this.state.user.guid.name.first = value;
+        this.setState(appState);
+      });
+    } else if (name === 'guid_middle_name') {
+      this.getState((appState) => {
+        this.state.user.guid.name.middle = value;
+        this.setState(appState);
+      });
+    } else if (name === 'guid_last_name') {
+      this.getState((appState) => {
+        this.state.user.guid.name.last = value;
+        this.setState(appState);
+      });
+    } else if (name === 'guid_city_of_birth') {
+      this.getState((appState) => {
+        this.state.user.guid.dob.city = value;
+        this.setState(appState);
+      });
+    }
   }
 
   /**
@@ -228,6 +257,10 @@ class NewProfileApp extends React.Component {
       this.state.div.message.error.submission.innerHTML = 'Please select a valid Gender';
     }
     else {
+      console.log('~~~~~~~~~~~~~~~~~~~~~');
+      console.log(JSON.stringify(this.state.user.guid));
+      console.log('~~~~~~~~~~~~~~~~~~~~~');
+
       $.ajax(
         {
           url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
@@ -306,7 +339,7 @@ class NewProfileApp extends React.Component {
             name="edc1"
             min={this.state.setup.data.edc.options.minYear}
             max={this.state.setup.data.edc.options.maxYear}
-            label="Date of Birth"
+            label="Expected Date of Confinement"
             onUserInput={this.handleEdcChange}
             value={this.state.user.edc.value}
           />
@@ -316,7 +349,7 @@ class NewProfileApp extends React.Component {
             name="edc2"
             min={this.state.setup.data.edc.options.minYear}
             max={this.state.setup.data.edc.options.maxYear}
-            label="Date of Birth"
+            label="Confirm EDC"
             onUserInput={this.handleEdcConfirmationChange}
             value={this.state.user.edc.confirmation}
           />
@@ -370,64 +403,114 @@ class NewProfileApp extends React.Component {
 
           {element.candidate}
 
-          <FormElement
-            name="new_profile"
-            id="new_profile"
-            method="POST"
-            class="form-inline"
-          >
-            <DateElement
-              id="dob1"
-              name="dob1"
-              min={this.state.setup.data.dob.options.minYear}
-              max={this.state.setup.data.dob.options.maxYear}
-              label="Date of Birth"
-              onUserInput={this.handleDateChange}
-              value={this.state.user.guid.dob.value}
-              required={true}
-            />
-            <div id="dob1_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
-            <DateElement
-              id="dob2"
-              name="dob2"
-              min={this.state.setup.data.dob.options.minYear}
-              max={this.state.setup.data.dob.options.maxYear}
-              label="Confirm Date of Birth"
-              onUserInput={this.handleDateConfirmChange}
-              value={this.state.user.guid.dob.confirmation}
-              required={true}
-            />
-            <div id="dob2_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
+          <div id="new_profile">
 
-            <SelectElement
-              id="gender"
-              name="gender"
-              label="Gender"
-              class="form-control input-sm"
-              options={this.state.setup.data.gender.options}
-              required={true}
-              hasError={false}
-              value={this.state.user.guid.gender}
-              emptyOption={false}
-              onUserInput={this.handleGenderChange}
-            />
+            <h2 style={{color: '#064785'}}>Personal Identification:</h2>
 
-            {element.edc}
+            <FormElement
+              id="private_info_form"
+              name="private_info_form"
+              class="form-inline"
+            >
+              <TextboxElement
+                id="guid_first_name"
+                name="guid_first_name"
+                label="First name"
+                required={true}
+                value={this.state.user.guid.name.first}
+                onUserInput={this.handlePersonalIdentification}
+              />
+              <TextboxElement
+                id="guid_middle_name"
+                name="guid_middle_name"
+                label="Middle name"
+                required={true}
+                value={this.state.user.guid.name.middle}
+                onUserInput={this.handlePersonalIdentification}
+              />
+              <TextboxElement
+                id="guid_last_name"
+                name="guid_last_name"
+                label="Last name"
+                required={true}
+                value={this.state.user.guid.name.last}
+                onUserInput={this.handlePersonalIdentification}
+              />
+              <TextboxElement
+                id="guid_city_of_birth"
+                name="guid_city_of_birth"
+                label="City of birth"
+                required={true}
+                value={this.state.user.guid.dob.city}
+                onUserInput={this.handlePersonalIdentification}
+              />
+            </FormElement>
 
-            {element.psc}
+            <br/>
 
-            {element.pscid}
+            <h2 style={{color: '#850608'}}>Information Saved:</h2>
 
-            <ButtonElement
-              name="fire_away"
-              label="Create"
-              type="submit"
-              onUserInput={this.handleSubmit}
-            />
+            <FormElement
+              name="new_profile_form"
+              id="new_profile_form"
+              method="POST"
+              class="form-inline"
+            >
+              <DateElement
+                id="dob1"
+                name="dob1"
+                min={this.state.setup.data.dob.options.minYear}
+                max={this.state.setup.data.dob.options.maxYear}
+                label="Date of Birth"
+                onUserInput={this.handleDateChange}
+                value={this.state.user.guid.dob.value}
+                required={true}
+              />
+              <div id="dob1_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
+              <DateElement
+                id="dob2"
+                name="dob2"
+                min={this.state.setup.data.dob.options.minYear}
+                max={this.state.setup.data.dob.options.maxYear}
+                label="Confirm Date of Birth"
+                onUserInput={this.handleDateConfirmChange}
+                value={this.state.user.guid.dob.confirmation}
+                required={true}
+              />
+              <div id="dob2_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
 
-            <div id="submission_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
+              <SelectElement
+                id="gender"
+                name="gender"
+                label="Gender"
+                class="form-control input-sm"
+                options={this.state.setup.data.gender.options}
+                required={true}
+                hasError={false}
+                value={this.state.user.guid.gender}
+                emptyOption={false}
+                onUserInput={this.handleGenderChange}
+              />
 
-          </FormElement>
+              {element.edc}
+
+              {element.psc}
+
+              {element.pscid}
+
+              <ButtonElement
+                name="fire_away"
+                label="Create"
+                type="submit"
+                onUserInput={this.handleSubmit}
+              />
+
+              <div id="submission_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>
+
+            </FormElement>
+
+          </div>
+
         </div>
       </div>
     );
