@@ -1,0 +1,1 @@
+ALTER TABLE candidate ADD `Identification` varchar(64) DEFAULT '';

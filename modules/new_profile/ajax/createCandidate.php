@@ -54,6 +54,7 @@ function processValidity($values)
     if (!isset($values['dob1'])
         || !isset($values['dob2'])
         || !isset($values['gender'])
+        || !isset($values['identification'])
     ) {
         return array('error' => 'Incomplete candidate fields.');
     }
@@ -147,7 +148,7 @@ function processValidity($values)
  */
 function createCandidate($values)
 {
-    // Setup the arguments for Candidate
+    // Setup the arguments for Candidate.
     $user   =& \User::singleton();
     $config =& \NDB_Config::singleton();
     $dob    = $values['dob1'];
@@ -155,7 +156,7 @@ function createCandidate($values)
     if ($config->getSetting('useEDC') == 'true') {
         $edc = $values['edc1'];
     }
-    // Create the candidate
+    // Create the candidate.
     $site_arr  = $user->getData('CenterIDs');
     $num_sites = count($site_arr);
     if ($num_sites > 1) {
@@ -177,12 +178,25 @@ function createCandidate($values)
             $values['PSCID'] ?? null
         );
     }
-    // Get the candidate
+    // Get the candidate.
     $candidate =& \Candidate::singleton($candID);
     if ($config->getSetting('useProjects') == 'true') {
         $candidate->setData('ProjectID', $values['ProjectID']);
     }
 
+    // Store the identification to the candidate.
+    $factory = NDB_Factory::singleton();
+    $db      = $factory->database();
+    $statement = $db->prepare(
+        'UPDATE candidate SET Identification=? WHERE CandID=?'
+    );
+    if ($statement) {
+        $statement->bindParam(1, $values['identification'], PDO::PARAM_STR);
+        $statement->bindParam(2, $candID, PDO::PARAM_INT);
+        $status = $statement->execute();
+    }
+
+    // The success response.
     $success = array(
                 'success' => array(
                               'candID' => $candID,

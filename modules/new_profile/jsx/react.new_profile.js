@@ -248,7 +248,7 @@ class NewProfileApp extends React.Component {
       dob1: this.state.user.guid.dob.value,
       dob2: this.state.user.guid.dob.confirmation,
       gender: this.state.user.guid.gender,
-      signature: ''
+      identification: ''
     };
     console.log(JSON.stringify(send));
     if (send.dob1 === '' || send.dob2 === '' || send.dob1 !== send.dob2) {
@@ -269,7 +269,7 @@ class NewProfileApp extends React.Component {
       if (!id.valid()) {
         this.state.div.message.error.submission.innerHTML = 'Personal Identification has incomplete or invalid field(s)!';
       } else {
-        send.signature = id.toSignature();
+        send.identification = id.toSignature();
         $.ajax(
           {
             url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
