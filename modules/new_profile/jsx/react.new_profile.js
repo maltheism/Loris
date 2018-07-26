@@ -258,11 +258,6 @@ class NewProfileApp extends React.Component {
       this.state.div.message.error.submission.innerHTML = 'Please select a valid Gender';
     }
     else {
-      console.log('~~~~~~~~~~~~~~~~~~~~~');
-      console.log(JSON.stringify(this.state.user.guid));
-      console.log('~~~~~~~~~~~~~~~~~~~~~');
-      // TODO add guid here
-
       let id = new osi.OpenScienceIdentity({
         gender: this.state.user.guid.gender,
         first_name: this.state.user.guid.name.first,
@@ -271,45 +266,39 @@ class NewProfileApp extends React.Component {
         birth_day: this.state.user.guid.dob.value,
         city_of_birth: this.state.user.guid.dob.city
       });
-
       if (!id.valid()) {
-        console.log('id is not valid!');
+        this.state.div.message.error.submission.innerHTML = 'Personal Identification has incomplete or invalid field(s)!';
       } else {
-        console.log('id is valid!');
-      }
+        send.signature = id.toSignature();
+        $.ajax(
+          {
+            url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
+            type: 'POST',
+            dataType: 'json',
+            data: send,
+            success: function(data) {
+              console.log('success');
+              console.log('data is: ' + JSON.stringify(data));
+              if (data.error) {
+                document.getElementById('submission_error_message').innerHTML = data.error;
+              } else if (data.success) {
+                document.getElementById('new_profile').style.display = 'none';
+                let info = 'New candidate created. DCCID: ' +
+                  data.success.candID + ' PSCID: ' + data.success.PSCID; + '<br>';
+                document.getElementById('candidate_info').innerHTML = info;
+                let access = '<a href="/' + data.success.candID + '/">Access this candidate</a><br>';
+                document.getElementById('candidate_access').innerHTML = access;
+                document.getElementById('another_profile').innerHTML = '<a href="/new_profile/"> Recruit another candidate</a>';
+                document.getElementById('candidate').style.display = 'block';
 
-      send.signature = id.toSignature();
-
-      console.log('signature is: ' + send.signature);
-
-      $.ajax(
-        {
-          url: loris.BaseURL + '/new_profile/ajax/createCandidate.php',
-          type: 'POST',
-          dataType: 'json',
-          data: send,
-          success: function(data) {
-            console.log('success');
-            console.log('data is: ' + JSON.stringify(data));
-            if (data.error) {
-              document.getElementById('submission_error_message').innerHTML = data.error;
-            } else if (data.success) {
-              document.getElementById('new_profile').style.display = 'none';
-              let info = 'New candidate created. DCCID: ' +
-                data.success.candID + ' PSCID: ' + data.success.PSCID; + '<br>';
-              document.getElementById('candidate_info').innerHTML = info;
-              let access = '<a href="/' + data.success.candID + '/">Access this candidate</a><br>';
-              document.getElementById('candidate_access').innerHTML = access;
-              document.getElementById('another_profile').innerHTML = '<a href="/new_profile/"> Recruit another candidate</a>';
-              document.getElementById('candidate').style.display = 'block';
-
+              }
+            },
+            error: function(error) {
+              console.log('error: ' + JSON.stringify(error));
             }
-          },
-          error: function(error) {
-            console.log('error: ' + JSON.stringify(error));
           }
-        }
-      );
+        );
+      }
     }
   }
 
