@@ -193,7 +193,7 @@ function createCandidate($values)
     if ($statement) {
         $statement->bindParam(1, $values['identification'], PDO::PARAM_STR);
         $statement->bindParam(2, $candID, PDO::PARAM_INT);
-        $status = $statement->execute();
+        $statement->execute();
     }
 
     // The success response.
