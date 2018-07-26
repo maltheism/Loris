@@ -85,9 +85,9 @@ function processValidity($values)
     }
     // Validate Gender.
     if ($values['gender'] != 'Male'
-        || $values['gender' != 'Female'
-        || $values['gender'] != 'Other'
-        || $values['gender'] != 'Unknown']
+        && $values['gender' != 'Female'
+        && $values['gender'] != 'Other'
+        && $values['gender'] != 'Unknown']
     ) {
         return array('error' => 'Invalid gender option.');
     }

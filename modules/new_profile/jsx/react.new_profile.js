@@ -8,6 +8,7 @@ class NewProfileApp extends React.Component {
 
     this.state = {
       isLoaded: false,
+      showCandidate: false,
       user: {
         guid: {
           name: {
@@ -238,6 +239,16 @@ class NewProfileApp extends React.Component {
             console.log('data is: ' + JSON.stringify(data));
             if (data.error) {
               document.getElementById('submission_error_message').innerHTML = data.error;
+            } else if (data.success) {
+              document.getElementById('new_profile').style.display = 'none';
+              let info = 'New candidate created. DCCID: ' +
+                data.success.candID + ' PSCID: ' + data.success.PSCID; + '<br>';
+              document.getElementById('candidate_info').innerHTML = info;
+              let access = '<a href="/' + data.success.candID + '/">Access this candidate</a><br>';
+              document.getElementById('candidate_access').innerHTML = access;
+              document.getElementById('another_profile').innerHTML = '<a href="/new_profile/"> Recruit another candidate</a>';
+              document.getElementById('candidate').style.display = 'block';
+
             }
           },
           error: function(error) {
@@ -284,7 +295,8 @@ class NewProfileApp extends React.Component {
     let element = {
       edc: '',
       psc: '',
-      pscid: ''
+      pscid: '',
+      candidate: ''
     };
     if (this.state.isLoaded && this.state.setup.data.hasOwnProperty('edc')) {
       element.edc = (
@@ -344,9 +356,20 @@ class NewProfileApp extends React.Component {
       );
     }
 
+    element.candidate = (
+      <div id="candidate" style={{display: 'none'}}>
+        <div id="candidate_info"></div>
+        <div id="candidate_access"></div>
+        <div id="another_profile"></div>
+      </div>
+    );
+
     return (
       <div>
         <div id="lorisworkspace">
+
+          {element.candidate}
+
           <FormElement
             name="new_profile"
             id="new_profile"
