@@ -247,7 +247,8 @@ class NewProfileApp extends React.Component {
     const send = {
       dob1: this.state.user.guid.dob.value,
       dob2: this.state.user.guid.dob.confirmation,
-      gender: this.state.user.guid.gender
+      gender: this.state.user.guid.gender,
+      signature: ''
     };
     console.log(JSON.stringify(send));
     if (send.dob1 === '' || send.dob2 === '' || send.dob1 !== send.dob2) {
@@ -260,6 +261,26 @@ class NewProfileApp extends React.Component {
       console.log('~~~~~~~~~~~~~~~~~~~~~');
       console.log(JSON.stringify(this.state.user.guid));
       console.log('~~~~~~~~~~~~~~~~~~~~~');
+      // TODO add guid here
+
+      let id = new osi.OpenScienceIdentity({
+        gender: this.state.user.guid.gender,
+        first_name: this.state.user.guid.name.first,
+        middle_name: this.state.user.guid.name.middle,
+        last_name: this.state.user.guid.name.last,
+        birth_day: this.state.user.guid.dob.value,
+        city_of_birth: this.state.user.guid.dob.city
+      });
+
+      if (!id.valid()) {
+        console.log('id is not valid!');
+      } else {
+        console.log('id is valid!');
+      }
+
+      send.signature = id.toSignature();
+
+      console.log('signature is: ' + send.signature);
 
       $.ajax(
         {
