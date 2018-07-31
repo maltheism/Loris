@@ -125,22 +125,22 @@ class NewProfileApp extends React.Component {
     this.resetSubmissionError();
     if (name === 'guid_first_name') {
       this.getState((appState) => {
-        this.state.user.guid.name.first = value;
+        appState.user.guid.name.first = value;
         this.setState(appState);
       });
     } else if (name === 'guid_middle_name') {
       this.getState((appState) => {
-        this.state.user.guid.name.middle = value;
+        appState.user.guid.name.middle = value;
         this.setState(appState);
       });
     } else if (name === 'guid_last_name') {
       this.getState((appState) => {
-        this.state.user.guid.name.last = value;
+        appState.user.guid.name.last = value;
         this.setState(appState);
       });
     } else if (name === 'guid_city_of_birth') {
       this.getState((appState) => {
-        this.state.user.guid.dob.city = value;
+        appState.user.guid.dob.city = value;
         this.setState(appState);
       });
     }
@@ -434,7 +434,6 @@ class NewProfileApp extends React.Component {
                 id="guid_middle_name"
                 name="guid_middle_name"
                 label="Middle name"
-                required={true}
                 value={this.state.user.guid.name.middle}
                 onUserInput={this.handlePersonalIdentification}
               />

@@ -38,7 +38,7 @@ $data = processValidity($_POST);
  */
 echo array_key_exists('error', $data)
     ? json_encode($data)
-    : createCandidate($data);
+    : json_encode(createCandidate($data));
 
 /**
  * Processes the values and saves to database
@@ -142,7 +142,7 @@ function processValidity($values)
  *
  * @param array $values verified form data from user.
  *
- * @return string
+ * @return array
  * @throws DatabaseException
  * @throws LorisException
  */
@@ -203,5 +203,5 @@ function createCandidate($values)
                               'PSCID'  => $candidate->getPSCID(),
                              ),
                );
-    return json_encode($success);
+    return $success;
 }
