@@ -2,8 +2,9 @@ import Modal from 'Modal';
 import QuantityField from './quantityField';
 import TemperatureField from './temperatureField';
 import StatusField from './statusField';
-import LocationField from './locationField';
+import CenterField from './centerField';
 import ContainerParentForm from './containerParentForm';
+import { Link } from 'react-router-dom';
 
 /**
  * Biobank Globals Component
@@ -21,17 +22,22 @@ class Globals extends React.Component {
   }
 
   increaseCycle() {
-    let cycle = this.props.specimen.fTCycle;
-    cycle++;
-    this.props.setSpecimen('fTCycle', cycle);
-    this.props.saveSpecimen();
+    this.props.editSpecimen(this.props.data.specimen).then(() => {
+      let cycle = this.props.specimen.fTCycle;
+      cycle++;
+      console.log(cycle);
+      this.props.setSpecimen('fTCycle', cycle);
+      this.props.saveSpecimen();
+    });
   }
 
   decreaseCycle() {
-    let cycle = this.props.specimen.fTCycle;
-    cycle--;
-    this.props.setSpecimen('fTCycle', cycle);
-    this.props.saveSpecimen();
+    this.props.editSpecimen(this.props.data.specimen).then(() => {
+      let cycle = this.props.specimen.fTCycle;
+      cycle--;
+      this.props.setSpecimen('fTCycle', cycle);
+      this.props.saveSpecimen();
+    });
   }
 
   render() {
@@ -82,7 +88,7 @@ class Globals extends React.Component {
             >
               <div                                                                
                 className='action-button update'                                  
-                onClick={() => this.props.edit('quantity')}                       
+                onClick={() => {this.props.edit('quantity'); this.props.editSpecimen(this.props.data.specimen)}}
               >                                                                   
                 <span className='glyphicon glyphicon-chevron-right'/>             
               </div>                                                              
@@ -100,6 +106,7 @@ class Globals extends React.Component {
               Quantity
               <QuantityField
                 specimen={this.props.specimen}
+                errors={this.props.errors.specimen}
                 units={units}
                 close={this.props.close}
                 setSpecimen={this.props.setSpecimen}
@@ -112,7 +119,9 @@ class Globals extends React.Component {
     }
 
     let fTCycleField;
-    if ((this.props.data.specimen||{}).fTCycle !== undefined) {
+    if (this.props.data.specimen && this.props.options.specimenTypes[
+      this.props.data.specimen.typeId
+    ].freezeThaw == 1) {
       let decreaseCycle;
       if (this.props.data.specimen.fTCycle > 0) {
         decreaseCycle = (
@@ -169,7 +178,7 @@ class Globals extends React.Component {
           >                                                                     
             <span                                                               
               className='action-button update'                                  
-              onClick={() => {this.props.edit('temperature')}}                    
+              onClick={() => {this.props.edit('temperature'); this.props.editContainer(this.props.data.container)}}
             >                                                                   
               <span className='glyphicon glyphicon-chevron-right'/>             
             </span>                                                             
@@ -183,6 +192,7 @@ class Globals extends React.Component {
             Temperature                                                         
             <TemperatureField                                                   
               container={this.props.container}                                  
+              errors={this.props.errors.container}
               close={this.props.close}                     
               setContainer={this.props.setContainer}
               saveContainer={this.props.saveContainer}
@@ -202,13 +212,10 @@ class Globals extends React.Component {
               {this.props.options.containerStati[this.props.data.container.statusId].status}
             </div>                                                              
           </div>                                                                
-          <div                                                                  
-            className='action'                                                  
-            title='Update Status'                                               
-          >                                                                     
-            <span                                                               
-              className='action-button update'                                  
-              onClick={() => this.props.edit('status')}                         
+          <div className='action' title='Update Status'>
+            <span
+              className='action-button update'
+              onClick={() => {this.props.edit('status'); this.props.editContainer(this.props.data.container);}}
             >                                                                   
               <span className='glyphicon glyphicon-chevron-right'/>             
             </span>                                                             
@@ -223,6 +230,7 @@ class Globals extends React.Component {
             Status                                                              
             <StatusField                                                        
               container={this.props.container}                                  
+              errors={this.props.errors.container}
               stati={stati}
               close={this.props.close}
               setContainer={this.props.setContainer}                          
@@ -233,14 +241,14 @@ class Globals extends React.Component {
       )                                                                         
     }                                                      
 
-    let locationField;                                                           
-    if (!this.props.editable.location) {                                        
-      locationField = (                                                          
+    let centerField;                                                           
+    if (!this.props.editable.center) {                                        
+      centerField = (                                                          
         <div className="item">                                                  
           <div className='field'>                                               
             Location                                                            
             <div className='value'>                                             
-              {this.props.options.centers[this.props.data.container.locationId]}  
+              {this.props.options.centers[this.props.data.container.centerId]}  
             </div>                                                              
           </div>                                                                
           <div                                                                  
@@ -249,7 +257,7 @@ class Globals extends React.Component {
           >                                                                     
             <span                                                               
               className='action-button update'                                  
-              onClick={() => this.props.edit('location')}                       
+              onClick={() => {this.props.edit('center'); this.props.editContainer(this.props.data.container);}}
             >                                                                   
               <span className='glyphicon glyphicon-chevron-right'/>             
             </span>                                                             
@@ -257,12 +265,13 @@ class Globals extends React.Component {
         </div>                                                                  
       );                                                                         
     } else {                                                                   
-      locationField = (                                                         
+      centerField = (                                                         
         <div className="item">                                                  
           <div className='field'>                                               
             Location                                                            
-            <LocationField                                                      
+            <CenterField                                                      
               container={this.props.container}
+              errors={this.props.errors.container}
               centers={this.props.options.centers}
               close={this.props.close}                        
               setContainer={this.props.setContainer}                          
@@ -296,12 +305,15 @@ class Globals extends React.Component {
     );
 
     let parentSpecimenField;
+    //TODO: allow for multiple parents
     if ((this.props.data.specimen||{}).parentSpecimenId) {
-      let barcode = this.props.data.parentSpecimenContainer.barcode;
+      let barcode = this.props.options.containers[
+        this.props.options.specimens[
+          this.props.data.specimen.parentSpecimenId
+        ].containerId
+      ].barcode;
       let parentSpecimenFieldValue = (
-        <a style={{cursor: 'pointer'}} onClick={()=>this.props.loadSpecimen(barcode)}>
-          {barcode}
-        </a>
+        <Link to={`/barcode=${barcode}`}>{barcode}</Link>
       );
 
       parentSpecimenField = (
@@ -316,16 +328,12 @@ class Globals extends React.Component {
       );
     }
 
-    //checks if parent container exists and returns static element with href      
-    let parentContainerBarcodeValue;                                               
-    if (this.props.data.container.parentContainerId) {                            
-      let barcode = this.props.options.containersNonPrimary[this.props.data.container.parentContainerId].barcode
-      parentContainerBarcodeValue = (                                             
-        <div>                                                                     
-          <a style={{cursor:'pointer'}} onClick={()=>this.props.loadContainer(barcode)}>
-            {barcode}
-          </a>                                                                    
-        </div>                                                                    
+    //checks if parent container exists and returns static element with href
+    let parentContainerBarcodeValue;
+    if (this.props.data.container.parentContainerId) {
+      let barcode = this.props.options.containers[this.props.data.container.parentContainerId].barcode
+      parentContainerBarcodeValue = (
+        <Link to={`/barcode=${barcode}`}>{barcode}</Link>
       );                                                                          
     }                                                                             
 
@@ -345,7 +353,7 @@ class Globals extends React.Component {
         >                                                                         
           <span                                                               
             className='action-button update'                                  
-            onClick={() => {this.props.edit('containerParentForm')}}
+            onClick={() => {this.props.edit('containerParentForm'); this.props.editContainer(this.props.data.container);}}
           >                                                                   
             <span className='glyphicon glyphicon-chevron-right'/>             
           </span>                                                             
@@ -379,7 +387,7 @@ class Globals extends React.Component {
               PSCID                                                             
               <div className='value'>                                           
                 <a href={loris.BaseURL+'/'+this.props.data.specimen.candidateId}>
-                  {this.props.data.candidate.PSCID}                             
+                  {this.props.options.candidates[this.props.data.specimen.candidateId].pscid}                             
                 </a>                                                            
               </div>                                                            
             </div>                                                              
@@ -391,7 +399,7 @@ class Globals extends React.Component {
                   this.props.data.specimen.candidateId+'&sessionID='+
                   this.props.data.specimen.sessionId
                 }>
-                  {this.props.data.session.Visit_label}                         
+                  {this.props.options.sessions[this.props.data.specimen.sessionId].label}
                 </a>                                                            
               </div>                                                            
             </div>                                                              
@@ -407,7 +415,7 @@ class Globals extends React.Component {
         {fTCycleField}
         {temperatureField}
         {statusField}
-        {locationField}
+        {centerField}
         {originField}
         {parentSpecimenField}
         {parentContainerField}

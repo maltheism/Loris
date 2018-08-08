@@ -72,7 +72,7 @@ class SpecimenPreparationForm extends React.Component {
     }
 
     return (
-      <FormEleFormElementment
+      <FormElement
         name="specimenPreparation"
         onSubmit={this.props.saveSpecimen}
         ref="form"
@@ -107,7 +107,7 @@ class SpecimenPreparationForm extends React.Component {
           value={this.props.specimen.preparation.comments}
         />
         {submitButton} 
-      </FormEleFormElementment>
+      </FormElement>
     );
   }
 

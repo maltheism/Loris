@@ -84,19 +84,19 @@ class SpecimenDAO
                          bsc.UnitID as CollectionUnitID, 
                          bsc.CenterID as CollectionCenterID,
                          bsc.Date as CollectionDate, 
-                         bsc.Time as CollectionTime,
+                         DATE_FORMAT(bsc.Time, '%H:%i') as CollectionTime,
                          bsc.Comments as CollectionComments, 
                          bsc.Data as CollectionData,
                          bsp.SpecimenProtocolID, 
                          bsp.CenterID as PreparationCenterID,
                          bsp.Date as PreparationDate,
-                         bsp.Time as PreparationTime,
+                         DATE_FORMAT(bsp.Time, '%H:%i') as PreparationTime,
                          bsp.Comments as PreparationComments,
                          bsp.Data as PreparationData,
                          bsa.SpecimenMethodID,
                          bsa.CenterID as AnalysisCenterID,
                          bsa.Date as AnalysisDate, 
-                         bsa.Time as AnalysisTime,
+                         DATE_FORMAT(bsa.Time, '%H:%i') as AnalysisTime,
                          bsa.Comments as AnalysisComments,
                          bsa.Data as AnalysisData
                   FROM biobank_specimen bs
@@ -117,6 +117,7 @@ class SpecimenDAO
         return $specimen;
     }
    
+    //TODO: This may be deprecated since this is now being done on the front end.
     /**
      * This method loads all specimen contents from the database for a given $barcode.
      *
@@ -140,22 +141,24 @@ class SpecimenDAO
 	 * @param  array $specimenData
 	 * @return array $specimens
 	 */
-    public function selectSpecimens(array $specimenData) {
-        $conditions = $this->db->_implodeWithKeys(' AND ', $specimenData);
-    
-        $query  = "SELECT * FROM biobank_specimen 
-                   WHERE ".$conditions;
+    public function selectSpecimens(array $conditions = null) : array
+    {
+        $query = 'SELECT SpecimenID
+                  FROM biobank_specimen';
+        $query .= $conditions ? ' WHERE '.$this->db->implodeWithKeys(' AND ', $conditions) : '';
+
         $result = $this->db->pselect($query, array());
-    
-		$specimens = array();
-        if(!empty($result)) {
-        	foreach ($result as $row) {
-        		$specimens[] = $this->createSpecimenFromQuery($row);
-        	}
+        $specimens = array();
+        if (!empty($result)) {
+            foreach($result as $row) {
+                $id = $row['SpecimenID'];
+                $specimen = $this->getSpecimenFromId($id);
+                $specimens[$id] = $specimen;
+            }
         }
         
         return $specimens;
-    }	
+    }
 
     /**
      * This function creates an instance of the parent specimen object of the
@@ -185,7 +188,8 @@ class SpecimenDAO
         $query = "SELECT SpecimenTypeID as id,
                          Label as type,
                          ParentSpecimenTypeID as parentTypeId,
-                         FreezeThaw as freezeThaw
+                         FreezeThaw as freezeThaw,
+                         Regex as regex
                   FROM biobank_specimen_type";
         $specimenTypes = $this->db->pselectWithIndexKey($query, array(), 'id');
     
@@ -237,38 +241,6 @@ class SpecimenDAO
         $specimenUnits = $this->db->pselectWithIndexKey($query, array(), 'id');
     
         return $specimenUnits;
-    }
-
-    /** THIS FUNCTION SHOULD BE MOVED TO A CandidateDAO EVENTUALLY
-     * Queries a single row of the candidate table and returns a nested array
-	 * with the CandID field as the index.
-	 *
-	 * @param  int   $candId         Value of the CandID field for the desired Candidate
-	 * @return array $candidateInfo
-	 */
-	public function getCandidateInfo(SpecimenTO $specimen) {
-        $candId = $specimen->getCandidateId();
-        $query  = "SELECT * FROM candidate
-                   WHERE CandID=:i";
-        $candidateInfo = $this->db->pselectrow($query, array('i' => $candId));
-
-        return $candidateInfo;
-    }
-
-   /** THIS FUNCTION SHOULD BE MOVED TO A SessionDAO EVENTUALLY
-    * Queries a single row of the session table and returns a nested array
-    * with the ID field as the index.
-    *
-    * @param  int   $id          Value of the ID field for the desired Session
-    * @return array $sessionInfo
-    */
-    public function getSessionInfo(SpecimenTO $specimen) {
-        $sessionId = $specimen->getSessionId();
-        $query  = "SELECT * FROM session
-                   WHERE ID=:i";
-        $sessionInfo = $this->db->pselectrow($query, array('i' => $sessionId));
-
-        return $sessionInfo;
     }
  
    /**
@@ -560,7 +532,7 @@ class SpecimenDAO
             'SpecimenID' => $specimen->getId(),
             'Quantity'   => $collection['quantity'],
             'UnitID'     => $collection['unitId'],
-            'CenterID'   => $collection['locationId'],
+            'CenterID'   => $collection['centerId'],
             'Date'       => $collection['date'],
             'Time'       => $collection['time'],
             'Comments'   => $collection['comments'],
@@ -572,7 +544,7 @@ class SpecimenDAO
         $preparationData = array(
             'SpecimenID'         => $specimen->getId(),
             'SpecimenProtocolID' => $preparation['protocolId'],
-            'CenterID'           => $preparation['locationId'],
+            'CenterID'           => $preparation['centerId'],
             'Date'               => $preparation['date'],
             'Time'               => $preparation['time'],
             'Comments'           => $preparation['comments'],
@@ -583,7 +555,7 @@ class SpecimenDAO
         $analysisData = array(
             'SpecimenID'       => $specimen->getId(),
             'SpecimenMethodID' => $analysis['methodId'],
-            'CenterID'         => $analysis['locationId'],
+            'CenterID'         => $analysis['centerId'],
             'Date'             => $analysis['date'],
             'Time'             => $analysis['time'],
             'Comments'         => $analysis['comments'],
@@ -644,7 +616,7 @@ class SpecimenDAO
           $collection['unitId']     = $specimenData['CollectionUnitID'];
         }
         if (isset($specimenData['CollectionCenterID'])) {
-          $collection['locationId'] = $specimenData['CollectionCenterID'];
+          $collection['centerId'] = $specimenData['CollectionCenterID'];
         }
         if (isset($specimenData['CollectionDate'])) {
           $collection['date']       = $specimenData['CollectionDate'];
@@ -669,7 +641,7 @@ class SpecimenDAO
           $preparation['protocolId'] = $specimenData['SpecimenProtocolID'];
         }
         if (isset($specimenData['PreparationCenterID'])) {
-          $preparation['locationId']  = $specimenData['PreparationCenterID'];
+          $preparation['centerId']  = $specimenData['PreparationCenterID'];
         }
         if (isset($specimenData['PreparationDate'])) {
           $preparation['date']       = $specimenData['PreparationDate'];
@@ -694,7 +666,7 @@ class SpecimenDAO
           $analysis['methodId'] = $specimenData['SpecimenMethodID'];
         }
         if (isset($specimenData['AnalysisCenterID'])) {
-          $analysis['locationId'] = $specimenData['AnalysisCenterID'];
+          $analysis['centerId'] = $specimenData['AnalysisCenterID'];
         }
         if (isset($specimenData['AnalysisDate'])) {
           $analysis['date']         = $specimenData['AnalysisDate'];

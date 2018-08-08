@@ -1,36 +1,34 @@
 /**
- * Biobank Container Location Field
+ * Biobank Container Center Field
  *
  * @author Henri Rabalais
  * @version 1.0.0
  *
  * */
 
-class LocationField extends React.Component {
+class CenterField extends React.Component {
   render() {
     return (
-      <div className={this.props.className}>
-        <div className='col-xs-6'> 
+      <div className='inline-field'>
+        <div style={{flex: '1 0 25%', minWidth: '90px'}}> 
             <SelectElement
-              name='locationId'
+              name='centerId'
               options={this.props.centers}
-              labelClass='col-xl-0'
-              inputClass='col-lg-12'
+              inputClass='col-lg-11'
               onUserInput={this.props.setContainer}
-              value={this.props.container.locationId}
+              value={this.props.container.centerId}
+              errorMessage={this.props.errors.centerId}
             />  
         </div>
-        <div className='col-xs-3'> 
+        <div style={{flex: '0 1 15%', margin: '0 1%'}}> 
           <ButtonElement
             label="Update"
             onUserInput={this.props.saveContainer}
-            columnSize= 'col-lg-12'
+            columnSize= 'col-lg-11'
           />
         </div>
-        <div className='col-xs-3'> 
-          <a
-            onClick={this.props.close}
-          >
+        <div style={{flex: '0 1 15%', margin: '0 1%'}}> 
+          <a onClick={this.props.close} style={{cursor:'pointer'}}>
             Cancel
           </a>
         </div>
@@ -39,7 +37,7 @@ class LocationField extends React.Component {
   }
 }
 
-LocationField.propTypes = {
+CenterField.propTypes = {
   setContainer: React.PropTypes.func.isRequired,
   close: React.PropTypes.func.isRequired,
   centerIds: React.PropTypes.object.isRequired,
@@ -48,4 +46,4 @@ LocationField.propTypes = {
   className: React.PropTypes.string
 };
 
-export default LocationField;
+export default CenterField;

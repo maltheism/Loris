@@ -135,11 +135,11 @@ class Biobank extends \NDB_Menu_Filter
 		        'bc1.Barcode',
 		        'bst.Label as Type',
 		        'CONCAT(bs1.Quantity, " ", bu.Label) as Quantity',
-		        'bc2.Barcode as ParentBarcode',
-		        'bc3.Barcode as ContainerBarcode',
 		        'c.PSCID',
 		        's.Visit_label',
 		        'bcs.Label as Status',
+		        'bc2.Barcode as ParentBarcode',
+		        'bc3.Barcode as ContainerBarcode',
         );
 
         $this->query = $query;
@@ -147,11 +147,11 @@ class Biobank extends \NDB_Menu_Filter
             'Barcode',
             'Type',
             'Quantity',
-            'Parent Barcode',
-            'Container Barcode',
             'PSCID',
             'Visit Label',
             'Status',
+            'Parent Barcode',
+            'Container Barcode',
         ];
 
         return true;
@@ -184,9 +184,7 @@ class Biobank extends \NDB_Menu_Filter
         $deps    = parent::getCSSDependencies();
         return array_merge(
             $deps,
-            [$baseURL . "/biobank/css/biobank.css"],
-            [$baseURL . '/biobank/css/specimen.css'],
-            [$baseURL . '/biobank/css/container.css']
+            [$baseURL . "/biobank/css/biobank.css"]
         );
     }
 
