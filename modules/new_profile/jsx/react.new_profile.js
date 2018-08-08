@@ -286,8 +286,7 @@ class NewProfileApp extends React.Component {
                 let info = 'New candidate created. DCCID: ' +
                   data.success.candID + ' PSCID: ' + data.success.PSCID; + '<br>';
                 document.getElementById('candidate_info').innerHTML = info;
-                let access = '<a href="/' + data.success.candID + '/">Access this candidate</a><br>';
-                document.getElementById('candidate_access').innerHTML = access;
+                document.getElementById('candidate_access').innerHTML = '<a href="/' + data.success.candID + '/">Access this candidate</a><br>';
                 document.getElementById('another_profile').innerHTML = '<a href="/new_profile/"> Recruit another candidate</a>';
                 document.getElementById('candidate').style.display = 'block';
 
