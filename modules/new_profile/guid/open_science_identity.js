@@ -15,6 +15,7 @@ function OpenScienceIdentity(attributes = []){
   this.IDENTITY_ATTRIBUTES = [
     'gender',
     'first_name',
+    'middle_name',
     'last_name',
     'birth_day',
     'city_of_birth',
@@ -47,9 +48,9 @@ OpenScienceIdentity.prototype.cleanGender = function() {
 OpenScienceIdentity.prototype.cleanFirstName = function() {
   return this.plainAlpha(this.first_name);
 };
-OpenScienceIdentity.prototype.cleanMiddleName = function() {
-  return this.plainAlpha(this.middle_name);
-};
+// OpenScienceIdentity.prototype.cleanMiddleName = function() {
+//   return this.plainAlpha(this.middle_name);
+// };
 OpenScienceIdentity.prototype.cleanLastName = function() {
   return this.plainAlpha(this.last_name);
 };
@@ -66,6 +67,9 @@ OpenScienceIdentity.prototype.valid = function() {
     this.bad_attributes.push('first name');
   }
   // No check for middle name because it's optional
+  if (! this.cleanMiddleName()) {
+    this.bad_attributes.push('middle name');
+  }
   if (! this.cleanLastName()) {
     this.bad_attributes.push('last name');
   }

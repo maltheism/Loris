@@ -59,7 +59,7 @@ function processValidity($values)
         return array('error' => 'Incomplete candidate fields.');
     }
     // Validate dob.
-    if (strlen(implode($values['dob1'])) > 2
+    if (strlen($values['dob1']) > 2
         && !\Utility::_checkDate($values['dob2'])
     ) {
         return array('error' => 'Birth date is not a valid date.');
@@ -86,9 +86,9 @@ function processValidity($values)
     }
     // Validate Gender.
     if ($values['gender'] != 'Male'
-        && $values['gender' != 'Female'
+        && $values['gender'] != 'Female'
         && $values['gender'] != 'Other'
-        && $values['gender'] != 'Unknown']
+        && $values['gender'] != 'Unknown'
     ) {
         return array('error' => 'Invalid gender option.');
     }
@@ -124,7 +124,7 @@ function processValidity($values)
         }
     }
     // Validate site.
-    $site = $values['psc'];
+    $site = $values['psc'] ?? null;
     $user_list_of_sites = $user->getData('CenterIDs');
     $num_sites          = count($user_list_of_sites);
     if ($num_sites > 1 && (empty($site) || !$user->hasCenter($site))) {
