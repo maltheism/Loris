@@ -69,6 +69,42 @@ class NewProfileApp extends React.Component {
     this.handleDateConfirmChange      = this.handleDateConfirmChange.bind(this);
     this.handleGenderChange           = this.handleGenderChange.bind(this);
     this.handleSubmit                 = this.handleSubmit.bind(this);
+    this.fetchGooglePublicAPIKey      = this.fetchGooglePublicAPIKey(this);
+    this.googlePlacesSetup            = this.googlePlacesSetup(this);
+  }
+
+  googlePlacesSetup() {
+
+  }
+
+  /**
+   * Fetch google api key and load APIs dynamically.
+   */
+  fetchGooglePublicAPIKey() {
+    $.ajax(loris.BaseURL + '/new_profile/ajax/getGooglePublicAPIKey.php', {
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        console.log('ajax (get) - success!');
+        console.log(JSON.stringify(data));
+
+        // Create script for loading google places APIs
+        let head = document.getElementsByTagName('head')[0];
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?key='+ data.key +'&callback=initMap&libraries=places';
+
+        // Bind event to googlePlacesSetup()
+        script.onreadystatechange = this.googlePlacesSetup;
+        script.onload = this.googlePlacesSetup;
+        // Start the loading...
+        head.appendChild(script);
+
+      }.bind(this),
+      error: function(error) {
+        console.log('ajax (get) - error!');
+      }
+    });
   }
 
   /**
