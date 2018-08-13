@@ -335,7 +335,7 @@ class SelectElement extends React.Component {
     let errorMessage = null;
     let emptyOptionHTML = null;
     let requiredHTML = null;
-    let elementClass = 'row form-group';
+    let elementClass = 'form-group col-sm-12';
 
     // Add required asterix
     if (required) {
@@ -350,7 +350,7 @@ class SelectElement extends React.Component {
     // Add error message
     if (this.props.hasError || (this.props.required && this.props.value === "")) {
       errorMessage = <span>{this.props.errorMessage}</span>;
-      elementClass = 'row form-group has-error';
+      elementClass = 'form-group col-sm-12 has-error';
     }
 
     // Default to empty string for regular select and to empty array for 'multiple' select
@@ -358,11 +358,11 @@ class SelectElement extends React.Component {
 
     return (
       <div className={elementClass}>
-        <label className="col-sm-3 control-label" htmlFor={this.props.label}>
+        <label className="col-sm-2 control-label" htmlFor={this.props.label}>
           {this.props.label}
           {requiredHTML}
         </label>
-        <div className="col-sm-9">
+        <div className="col-sm-10">
           <select
             name={this.props.name}
             multiple={multiple}
@@ -788,7 +788,7 @@ class TextboxElement extends React.Component {
     let required = this.props.required ? 'required' : null;
     let errorMessage = null;
     let requiredHTML = null;
-    let elementClass = 'row form-group';
+    let elementClass = 'form-group col-sm-12';
 
     // Add required asterix
     if (required) {
@@ -803,11 +803,11 @@ class TextboxElement extends React.Component {
 
     return (
       <div className={elementClass}>
-        <label className="col-sm-3 control-label" htmlFor={this.props.id}>
+        <label className="col-sm-2 control-label" htmlFor={this.props.id}>
           {this.props.label}
           {requiredHTML}
         </label>
-        <div className="col-sm-9">
+        <div className="col-sm-10">
           <input
             type="text"
             className="form-control"
@@ -878,12 +878,12 @@ class DateElement extends React.Component {
     }
 
     return (
-      <div className="row form-group">
-        <label className="col-sm-3 control-label" htmlFor={this.props.label}>
+      <div className="form-group col-sm-12">
+        <label className="col-sm-2 control-label" htmlFor={this.props.label}>
           {this.props.label}
           {requiredHTML}
         </label>
-        <div className="col-sm-9">
+        <div className="col-sm-10">
           <input
             type="date"
             className="form-control"
@@ -944,9 +944,9 @@ class TimeElement extends React.Component {
   }
 
   render() {
-    var disabled = this.props.disabled ? 'disabled' : null;
-    var required = this.props.required ? 'required' : null;
-    var requiredHTML = null;
+    let disabled = this.props.disabled ? 'disabled' : null;
+    let required = this.props.required ? 'required' : null;
+    let requiredHTML = null;
 
     // Add required asterix
     if (required) {
@@ -955,11 +955,11 @@ class TimeElement extends React.Component {
 
     return (
       <div className="row form-group">
-        <label className="col-sm-3 control-label" htmlFor={this.props.label}>
+        <label className="col-sm-2 control-label" htmlFor={this.props.label}>
           {this.props.label}
           {requiredHTML}
         </label>
-        <div className="col-sm-9">
+        <div className="col-sm-10">
           <input
             type="time"
             className="form-control"
@@ -1225,11 +1225,11 @@ class StaticElement extends React.Component {
 
   render() {
     return (
-      <div className="row form-group">
-        <label className="col-sm-3 control-label">
+      <div className="form-group col-sm-12">
+        <label className="col-sm-2 control-label">
           {this.props.label}
         </label>
-        <div className="col-sm-9">
+        <div className="col-sm-10">
           <p className="form-control-static">{this.props.text}</p>
         </div>
       </div>
@@ -1301,7 +1301,7 @@ class ButtonElement extends React.Component {
 
   render() {
     return (
-      <div className="row form-group">
+      <div className="row form-group col-sm-12">
         <div className={this.props.columnSize}>
           <button
             type={this.props.type}
@@ -1326,7 +1326,7 @@ ButtonElement.defaultProps = {
   label: 'Submit',
   type: 'submit',
   buttonClass: 'btn btn-primary',
-  columnSize: 'col-sm-9 col-sm-offset-3',
+  columnSize: 'col-sm-10 col-sm-offset-2',
   onUserInput: function() {
     console.warn('onUserInput() callback is not set');
   }

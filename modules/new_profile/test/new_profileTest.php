@@ -74,7 +74,7 @@ class NewProfileTestIntegrationTest extends LorisIntegrationTest
      * Tests that with useProjects turned off, project related fields do not
      * appear on the page
      *
-     * @return void
+     * @return none
      */
     function testNewProfileLoadsWithoutProjects()
     {
@@ -98,7 +98,7 @@ class NewProfileTestIntegrationTest extends LorisIntegrationTest
      * Tests that with useEDC turned off, edc related fields do not appear
      * on the page.
      *
-     * @return void
+     * @return none
      */
     function testNewProfileLoadsWithoutEDC()
     {
@@ -126,7 +126,7 @@ class NewProfileTestIntegrationTest extends LorisIntegrationTest
     /**
      * Tests that page returns error if the dates dont match
      *
-     * @return void
+     * @return none
      */
     function testNewProfileCheckDateError()
     {
@@ -165,7 +165,7 @@ class NewProfileTestIntegrationTest extends LorisIntegrationTest
     /**
      * Tests that page returns error if DoB dates dont match
      *
-     * @return void
+     * @return none
      */
     function testNewProfileDoBDateError()
     {
@@ -193,7 +193,7 @@ class NewProfileTestIntegrationTest extends LorisIntegrationTest
     /**
      * Tests that candidate is created
      *
-     * @return void
+     * @return none
      */
     function testNewProfileCreateCandidate()
     {
@@ -221,7 +221,7 @@ class NewProfileTestIntegrationTest extends LorisIntegrationTest
     /**
      * Tests that candidate is created
      *
-     * @return void
+     * @return none
      */
     function testNewProfilePSCIDSequential()
     {
