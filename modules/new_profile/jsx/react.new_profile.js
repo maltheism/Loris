@@ -547,6 +547,7 @@ class NewProfileApp extends React.Component {
                 label="Create"
                 type="submit"
                 onUserInput={this.handleSubmit}
+                buttonClass={"btn btn-primary col-sm-offset-2 col-sm-2"}
               />
 
               <div id="submission_error_message" className="form-group col-sm-12" style={{color:'red'}}></div>

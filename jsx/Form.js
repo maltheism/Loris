@@ -1301,7 +1301,7 @@ class ButtonElement extends React.Component {
 
   render() {
     return (
-      <div className="row form-group col-sm-12">
+      <div className="form-group col-sm-12">
         <div className={this.props.columnSize}>
           <button
             type={this.props.type}
@@ -1319,14 +1319,15 @@ class ButtonElement extends React.Component {
 ButtonElement.propTypes = {
   label: React.PropTypes.string,
   type: React.PropTypes.string,
-  onUserInput: React.PropTypes.func
+  onUserInput: React.PropTypes.func,
+  buttonClass: React.PropTypes.string
 };
 
 ButtonElement.defaultProps = {
   label: 'Submit',
   type: 'submit',
   buttonClass: 'btn btn-primary',
-  columnSize: 'col-sm-10 col-sm-offset-2',
+  columnSize: 'col-sm-12',
   onUserInput: function() {
     console.warn('onUserInput() callback is not set');
   }
