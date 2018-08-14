@@ -18,14 +18,18 @@
 // Load the config file.
 $factory = NDB_Factory::singleton();
 $config = $factory->config($configFile);
+$gPublicKey = '';
+try {
+    $gPublicKey = $config->getSetting('GooglePlacesPublicKey');
+} catch (Exception $e) {
 
-$googlePlacesPublicKey = $config->getSetting('googlePlacesPublicKey');
+}
 
 /**
  * Send the data in JSON format.
  */
 echo json_encode(
     array(
-        'key' => 'AIzaSyCxy41BXs6lpdQUrna7Ah8_kkmuG9Qxpfk'
+        'key' => $gPublicKey
     )
 );
