@@ -802,6 +802,19 @@ class NDB_Page implements RequestHandlerInterface
     }
 
     /**
+     * Returns an ordered list of META tags dependencies that this page depends
+     * on.  These will get loaded into the template in order, so that
+     * interdependent files can be included in the correct order.
+     *
+     * @return array of strings with URLs to retrieve Meta tags resources
+     */
+    function getMETADependencies()
+    {
+        return [];
+    }
+
+
+    /**
      * Does any setup required for this page. This is generally overridden
      * by NDB_Page subtypes to add form elements.
      *

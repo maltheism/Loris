@@ -7,13 +7,15 @@ use \Psr\Http\Server\{MiddlewareInterface, RequestHandlerInterface};
 class UserPageDecorationMiddleware implements MiddlewareInterface {
     protected $JSFiles;
     protected $CSSFiles;
+    protected $METATags;
     protected $Config;
     protected $BaseURL;
     protected $PageName;
 
-    public function __construct(\User $user, string $baseurl, string $pagename, \NDB_Config $config, array $JS, array $CSS) {
+    public function __construct(\User $user, string $baseurl, string $pagename, \NDB_Config $config, array $JS, array $CSS, array $META) {
         $this->JSFiles = $JS;
         $this->CSSFiles = $CSS;
+        $this->METATags = $META;
         $this->Config = $config;
         $this->BaseURL = $baseurl;
         $this->PageName = $pagename;
@@ -185,6 +187,7 @@ class UserPageDecorationMiddleware implements MiddlewareInterface {
         $tpl_data += array(
                       'jsfiles'   => $this->JSFiles,
                       'cssfiles'  => $this->CSSFiles,
+                      'metatags'  => $this->METATags,
                       'workspace' => $undecorated->getBody(),
                      );
 
@@ -200,6 +203,7 @@ class UserPageDecorationMiddleware implements MiddlewareInterface {
         $tpl_data += array(
             'jsfiles'   => $this->JSFiles,
             'cssfiles'  => $this->CSSFiles,
+            'metatags'  => $this->METATags,
             'workspace' => $undecorated->getBody(),
         );
 

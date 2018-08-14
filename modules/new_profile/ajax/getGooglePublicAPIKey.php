@@ -29,7 +29,5 @@ try {
  * Send the data in JSON format.
  */
 echo json_encode(
-    array(
-        'key' => $gPublicKey
-    )
+    array('key' => $gPublicKey)
 );

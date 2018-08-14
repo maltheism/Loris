@@ -13,6 +13,11 @@
         <script language="javascript" type="text/javascript">
         var loris = new LorisHelper({$jsonParams}, {$userPerms|json_encode}, {$studyParams|json_encode});
         </script>
+
+        {section name=metatags loop=$metatags}
+            {$metatags[metatags]}
+        {/section}
+
         {section name=jsfile loop=$jsfiles}
             <script src="{$jsfiles[jsfile]}" type="text/javascript"></script>
         {/section}

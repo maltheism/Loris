@@ -8,12 +8,14 @@ use \Psr\Http\Server\RequestHandlerInterface;
 class AnonymousPageDecorationMiddleware implements MiddlewareInterface {
     protected $JSFiles;
     protected $CSSFiles;
+    protected $METATags;
     protected $Config;
     protected $BaseURL;
 
-    public function __construct(string $baseurl, \NDB_Config $config, array $JS, array $CSS) {
+    public function __construct(string $baseurl, \NDB_Config $config, array $JS, array $CSS, array $META) {
         $this->JSFiles = $JS;
         $this->CSSFiles = $CSS;
+        $this->METATags = $META;
         $this->Config = $config;
         $this->BaseURL = $baseurl;
     }
@@ -57,6 +59,7 @@ class AnonymousPageDecorationMiddleware implements MiddlewareInterface {
         $tpl_data += array(
             'jsfiles'   => $this->JSFiles,
             'cssfiles'  => $this->CSSFiles,
+            'metatags'  => $this->METATags,
             'workspace' => $undecorated->getBody(),
         );
 

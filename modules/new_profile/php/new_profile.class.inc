@@ -49,6 +49,22 @@ class New_Profile extends \NDB_Form
     }
 
     /**
+     * Include additional CSS files:
+     *
+     * @return array of javascript to be inserted
+     */
+    function getMETADependencies()
+    {
+        $deps    = parent::getMETADependencies();
+        return array_merge(
+            $deps,
+            [
+                '<meta http-equiv="Content-Security-Policy" content="default-src *; style-src \'self\' \'unsafe-inline\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://maps.googleapis.com ">'
+            ]
+        );
+    }
+
+    /**
      * Gathers JS dependencies and merge them with the parent
      *
      * @return array of javascript to be inserted

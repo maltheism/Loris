@@ -185,6 +185,7 @@ try {
     if (isset($caller->page)) {
         $tpl_data['jsfiles']  = $caller->page->getJSDependencies();
         $tpl_data['cssfiles'] = $caller->page->getCSSDependencies();
+        $tpl_data['metatags'] = $caller->page->getMETADependencies();
 
         if (!$anonymous) {
             $tpl_data['breadcrumbs'] = $caller->page->getBreadcrumbs();
@@ -231,6 +232,7 @@ try {
         $page = (new NDB_Page(new Module('', ''), '', '', '', ''));
         $tpl_data['jsfiles']  = $page->getJSDependencies();
         $tpl_data['cssfiles'] = $page->getCSSDependencies();
+        $tpl_data['metatags'] = $page->getMETADependencies();
     }
 }
 
