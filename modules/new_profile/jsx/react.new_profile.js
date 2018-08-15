@@ -1,3 +1,4 @@
+
 /**
  * This is the React class for the new_profile.
  */
@@ -70,11 +71,7 @@ class NewProfileApp extends React.Component {
     this.handleGenderChange           = this.handleGenderChange.bind(this);
     this.handleSubmit                 = this.handleSubmit.bind(this);
     this.fetchGooglePublicAPIKey      = this.fetchGooglePublicAPIKey(this);
-    this.googlePlacesSetup            = this.googlePlacesSetup(this);
-  }
-
-  googlePlacesSetup() {
-
+    // this.googlePlacesSetup            = this.googlePlacesSetup(this);
   }
 
   /**
@@ -92,11 +89,7 @@ class NewProfileApp extends React.Component {
         let head = document.getElementsByTagName('head')[0];
         let script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src = 'https://maps.googleapis.com/maps/api/js?key='+ data.key +'&callback=initMap&libraries=places';
-
-        // Bind event to googlePlacesSetup()
-        script.onreadystatechange = this.googlePlacesSetup;
-        script.onload = this.googlePlacesSetup;
+        script.src = 'https://maps.googleapis.com/maps/api/js?key='+ data.key +'&libraries=places';
         // Start the loading...
         head.appendChild(script);
 
@@ -127,6 +120,23 @@ class NewProfileApp extends React.Component {
     this.state.div.message.error.edc.value = document.getElementById('edc1_error_message');
     this.state.div.message.error.edc.confirmation = document.getElementById('edc2_error_message');
     this.state.div.message.error.submission = document.getElementById('submission_error_message');
+    let count = 0;
+    let timeout = setTimeout(function() {
+      if (count === 50 || google !== undefined) {
+        let options = {
+          types: ['(cities)']
+        };
+        let autocomplete = new google.maps.places.Autocomplete(document.getElementById('guid_city_of_birth'), options);
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+          let place = autocomplete.getPlace();
+          if (place.geometry) {
+            document.getElementById('guid_city_of_birth').value = place.name;
+          }
+          console.log(place);
+        });
+        clearTimeout(timeout)
+      }
+    },500);
   }
 
   /**

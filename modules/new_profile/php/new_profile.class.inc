@@ -59,7 +59,7 @@ class New_Profile extends \NDB_Form
         return array_merge(
             $deps,
             [
-                '<meta http-equiv="Content-Security-Policy" content="default-src *; style-src \'self\' \'unsafe-inline\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' https://maps.googleapis.com ">'
+                '<meta http-equiv="Content-Security-Policy" content="script-src \'self\' \'unsafe-inline\' https://*.googleapis.com https://maps.gstatic.com \'unsafe-eval\'">'
             ]
         );
     }
@@ -78,7 +78,7 @@ class New_Profile extends \NDB_Form
             $deps,
             array(
                 $baseURL . '/new_profile/js/react.new_profile.js',
-                $baseURL . '/new_profile/js/guid.bundle.js',
+                $baseURL . '/new_profile/js/guid.bundle.js'
             )
         );
     }
