@@ -104,13 +104,19 @@ class NDB_Client
         if (empty($config_additions)) {
             $config_additions = "";
         }
-        $CaptchaDomains ="";
+        $CaptchaDomains = "";
         // Get reCATPCHA keys
         $reCAPTCHAPrivate = $config->getSetting('reCAPTCHAPrivate');
         $reCAPTCHAPublic  = $config->getSetting('reCAPTCHAPublic');
         // Display reCAPTCHA if both private and public keys are set
         if ($reCAPTCHAPrivate && $reCAPTCHAPublic) {
             $CaptchaDomains ="www.google.com  www.gstatic.com";
+        }
+        // Get Google Places Public key
+        $GoogleDomains = '';
+        $gPublicKey = $config->getSetting('GooglePlacesPublicKey');
+        if ($gPublicKey) {
+            $GoogleDomains = 'https://*.googleapis.com https://maps.gstatic.com';
         }
 
         // Content-Security policy for LORIS
@@ -128,11 +134,9 @@ class NDB_Client
             "Content-Security-Policy: "
             . "default-src 'self' 'unsafe-inline'; "
             . "script-src 'self' 'unsafe-inline' 'unsafe-eval' $CaptchaDomains "
-            . "https://*.googleapis.com https://maps.gstatic.com;"
+            . "$GoogleDomains;"
             . "font-src 'self' data:; "
-            . "img-src 'self' data: "
-            . "https://*.googleapis.com https://maps.gstatic.com"
-            . "; "
+            . "img-src 'self' data: $GoogleDomains; "
             . $config_additions
         );
         // start php session
