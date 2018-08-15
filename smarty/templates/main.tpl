@@ -14,8 +14,8 @@
         var loris = new LorisHelper({$jsonParams}, {$userPerms|json_encode}, {$studyParams|json_encode});
         </script>
 
-        {section name=metatags loop=$metatags}
-            {$metatags[metatags]}
+        {section name=metatag loop=$metatags}
+            {$metatags[metatag]}
         {/section}
 
         {section name=jsfile loop=$jsfiles}
