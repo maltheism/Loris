@@ -17,7 +17,7 @@
 
 // Load the config file.
 $factory = NDB_Factory::singleton();
-$config = $factory->config($configFile);
+$config = $factory->config('../project/config.xml');
 $gPublicKey = '';
 try {
     $gPublicKey = $config->getSetting('GooglePlacesPublicKey');
