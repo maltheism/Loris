@@ -3,3 +3,4 @@
     <h3>{$message}</h3>
     <a href="{$baseurl}">Go to login page</a></div>
 </div>
+

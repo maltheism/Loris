@@ -4,12 +4,12 @@
 <meta itemprop="commentID" context="{$commentID}">
 
 <body>
-  <div class ="panel-wrapper" id="bvl_feedback_menu">
-    <div id ="panel_content"></div>
-  </div><!-- /panel -->
+<div class="panel-wrapper" id="bvl_feedback_menu">
+    <div id="panel_content"></div>
+</div><!-- /panel -->
 </body>
 
-<script type="text/javascript" src ="{$baseurl}/bvl_feedback/js/bvl_feedback_panel_jquery.js"></script>
+<script type="text/javascript" src="{$baseurl}/bvl_feedback/js/bvl_feedback_panel_jquery.js"></script>
 <script type="text/javascript" src="{$baseurl}/bvl_feedback/js/react.behavioural_feedback_panel.js"></script>
 <script type="text/javascript">
   var feedback_level = {$feedback_level|@json_encode};
@@ -31,4 +31,5 @@
   });
   ReactDOM.render(bvl_panel, document.getElementById("panel_content"));
 </script>
+
 

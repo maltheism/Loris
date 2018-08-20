@@ -577,8 +577,8 @@ h2.statsH2 {
 /* DQG jQuery things */
 .selected {
    /* background-color:#064785; */
-   background-color:#5874Ab; */
-   color:white;
+   background-color:#5874Ab;
+   color: white;
    cursor: pointer;
 }
 
@@ -641,7 +641,6 @@ top:800px;
 height: 3em;
 width: 100%;
 font-size: 14px;
-font-color #000000: 
 color: #000;
 text-align: center;
 vertical-align: bottom;

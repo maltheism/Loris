@@ -3,10 +3,10 @@
    template in order to customize the review page *}
 <table class="instrument_review" width="75%" align="center">
     <thead>
-        <tr>
-            <th>Question</th>
-            <th>Response</th>
-        </tr>
+    <tr>
+        <th>Question</th>
+        <th>Response</th>
+    </tr>
     </thead>
     <tbody>
     {foreach item=row from=$questions}
