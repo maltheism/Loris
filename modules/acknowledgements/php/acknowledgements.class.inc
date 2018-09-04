@@ -17,7 +17,7 @@ namespace LORIS\acknowledgements;
  * This class provides the code to create the menu filter form that allows
  * for data entry of entities that should be acknowledged in publications
  *
- * PHP Version 5
+ * PHP Version 7
  *
  * @category Behavioural
  * @package  Main
@@ -221,6 +221,7 @@ class Acknowledgements extends \NDB_Menu_Filter_Form
             array(
              $baseurl . '/acknowledgements/js/acknowledgements_helper.js',
              $baseurl . '/acknowledgements/js/columnFormatter.js',
+             $baseurl . '/acknowledgements/js/react.acknowledgements.js'
             )
         );
 
