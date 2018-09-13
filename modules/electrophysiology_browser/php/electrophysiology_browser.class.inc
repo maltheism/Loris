@@ -130,8 +130,8 @@ class Electrophysiology_Browser extends \NDB_Menu_Filter {
             "c.CandID AS dccid",
             "s.Visit_label AS visit_label",
             "MIN(pf.AcquisitionTime) AS acquisition_time",
-            "FROM_UNIXTIME(MIN(pf.InsertTime), '%Y-%m-%d') AS insert_time",
-            "GROUP_CONCAT(DISTINCT pot.OutputType) AS links",
+            "MIN(pf.InsertTime) AS insert_time",
+            "GROUP_CONCAT(DISTINCT pot.OutputTypeName) AS links",
             "s.ID AS session_id",
         );
 
