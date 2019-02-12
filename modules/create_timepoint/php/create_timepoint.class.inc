@@ -25,6 +25,9 @@ namespace LORIS\create_timepoint;
 
 class Create_Timepoint extends \NDB_Form
 {
+
+    public $skipTemplate = true; // stops from looking for a smarty template
+
     /**
      * This timepoint's candidate
      *
@@ -38,11 +41,12 @@ class Create_Timepoint extends \NDB_Form
     var $subprojectID;
 
     /**
-     * Check user permissions
+     * Determine whether the user has permission to view this page
      *
      * @param \User $user The user whose access is being checked
      *
      * @return bool
+     * @throws \LorisException
      */
     function _hasAccess(\User $user) : bool
     {
@@ -66,6 +70,7 @@ class Create_Timepoint extends \NDB_Form
      * @param array $values form values
      *
      * @return void
+     * @throws \DatabaseException
      */
     function _process($values)
     {
@@ -218,6 +223,7 @@ class Create_Timepoint extends \NDB_Form
      * @param array $val array of form values
      *
      * @return array
+     * @throws \LorisException
      */
     function _validate(array $val)
     {
@@ -271,5 +277,25 @@ class Create_Timepoint extends \NDB_Form
             )
         );
     }
+
+    /**
+     * Get js Dependencies
+     *
+     * @return array
+     */
+    function getJSDependencies()
+    {
+        $depends = parent::getJSDependencies();
+        $factory = \NDB_Factory::singleton();
+        $baseurl = $factory->settings()->getBaseURL();
+        $depends = array_merge(
+            $depends,
+            array(
+                $baseurl . '/create_timepoint/js/create_timepoint.js',
+            )
+        );
+        return $depends;
+    }
+
 }
 
