@@ -16,18 +16,38 @@ class CreateTimepoint extends React.Component {
     super(props);
 
     this.state = {
+      data: {
+        pscid: '',
+        dccid: '',
+        visit: '',
+        options: {
+          control: 'control',
+          experiment: 'experiment',
+        },
+        form: '',
+      },
+      form: {
+        subproject: 'experiment',
+      },
+      psc: null,
+      errors: null,
     };
 
     // Bind component instance to custom methods
-    this.fetchData = this.fetchData.bind(this);
     this.collectParams = this.collectParams.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.setForm = this.setForm.bind(this);
   }
   /**
    * Executes after component mounts.
    */
   componentDidMount() {
     console.log('componentDidMount');
-    this.fetchData();
+    // this.fetchData();
+    this.setState({
+      isLoaded: true,
+    });
   }
   /**
    * Retrieve params from the browser URL and save it in state.
@@ -59,36 +79,104 @@ class CreateTimepoint extends React.Component {
     });
   }
   /**
+   * Set the form data based on state values of child elements/components
+   *
+   * @param {string} formElement - name of the selected element
+   * @param {string} value - selected value for corresponding form element
+   */
+  setForm(formElement, value) {
+    this.state.form.subproject = value;
+    this.setState(this.state);
+  }
+
+  /**
+   * Handle form submission
+   * @param {object} e - Form submission event
+   */
+  handleSubmit(e) {
+
+  }
+  /**
    * @return {DOMRect}
    */
   render() {
-    // Waiting for async data to load
+    // Waiting for async data to load.
     if (!this.state.isLoaded) {
       return <Loader/>;
     }
+    // Include form errors.
+    const errors = this.state.errors ? (
+      <div className='col-sm-12'>
+        <label className='error col-sm-12'>
+          todo
+        </label>
+      </div>
+    ) : '';
+    // Include psc label.
+    const psc = this.state.psc ? (
+      <StaticElement
+        label='PSCID'
+        text={this.state.data.pscid}
+      />
+    ) : '';
+    console.log('success');
+
     return (
       <div>
-        <form method='post' name='create_timepoint' id='create_timepoint'>
+        {errors}
+        <div>
           <h3>Create Time Point</h3>
-        </form>
+          <FormElement
+            name={'timepointInfo'}
+            fileUpload={false}
+            ref={'form'}
+            class={'form-group col-sm-12'}
+            onSubmit={this.handleSubmit}
+          >
+            <StaticElement
+              label={'DCCID'}
+              text={this.state.data.dccid}
+            />
+            <SelectElement
+              id={'subproject'}
+              name={'subproject'}
+              ref={'subproject'}
+              label={'Subproject'}
+              value={this.state.form.subproject}
+              options={this.state.data.options}
+              onUserInput={this.setForm}
+              emptyOption={false}
+              disabled={false}
+              required={true}
+            />
+            {psc}
+            <StaticElement
+              label={'Visit'}
+              text={this.state.data.visit}
+            />
+            <ButtonElement
+              label={'Create Time Point'}
+              type={'submit'}
+            />
+          </FormElement>
+        </div>
       </div>
     );
   }
 }
 CreateTimepoint.propTypes = {
-  pscid: PropTypes.string,
-  children: PropTypes.string,
+  Module: PropTypes.string,
+  DataURL: PropTypes.string,
 };
 
 /**
  * Render create_timepoint on page load.
  */
 window.onload = function() {
-  const dataURL = loris.BaseURL + '/create_timepoint/?format=json';
   const createTimepoint = (
     <CreateTimepoint
       Module='create_timepoint'
-      DataURL={dataURL}
+      DataURL={loris.BaseURL + '/create_timepoint/AddTimepoint/?format=json'}
     />
   );
 

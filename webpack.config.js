@@ -121,6 +121,7 @@ const config = [{
       }),
     ],
   },
+  mode: 'development',
 }];
 
 // Support project overrides
