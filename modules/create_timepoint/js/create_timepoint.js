@@ -261,20 +261,25 @@ var CreateTimepoint = function (_React$Component) {
         options: {
           control: 'control',
           experiment: 'experiment'
-        },
-        form: ''
+        }
       },
       form: {
-        subproject: 'experiment'
+        subproject: 'control'
       },
       psc: null,
-      errors: null
+      errors: null,
+      url: {
+        params: {
+          candID: '',
+          identifier: ''
+        }
+      }
     };
 
     // Bind component instance to custom methods
+    _this.fetchInitializerData = _this.fetchInitializerData.bind(_this);
     _this.collectParams = _this.collectParams.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
-    _this.fetchData = _this.fetchData.bind(_this);
     _this.setForm = _this.setForm.bind(_this);
     return _this;
   }
@@ -286,10 +291,8 @@ var CreateTimepoint = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       console.log('componentDidMount');
-      // this.fetchData();
-      this.setState({
-        isLoaded: true
-      });
+      this.collectParams();
+      this.fetchInitializerData();
     }
     /**
      * Retrieve params from the browser URL and save it in state.
@@ -298,32 +301,47 @@ var CreateTimepoint = function (_React$Component) {
   }, {
     key: 'collectParams',
     value: function collectParams() {
+      var url = new URL(window.location.href);
       this.state.url.params = {
         candID: url.searchParams.get('candID'),
         identifier: url.searchParams.get('identifier')
       };
+      this.state.data.dccid = this.state.url.params.candID;
+      this.setState(this.state);
     }
     /**
      * Retrieve data from the provided URL and save it in state.
      */
 
   }, {
-    key: 'fetchData',
-    value: function fetchData() {
-      $.ajax(this.props.DataURL, {
-        method: 'GET',
+    key: 'fetchInitializerData',
+    value: function fetchInitializerData() {
+      var send = {
+        command: 'initialize',
+        candID: this.state.url.params.candID,
+        identifier: this.state.url.params.identifier,
+        subprojectID: this.state.form.subproject
+      };
+      var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
+      console.log(url);
+      $.ajax(url, {
+        method: 'POST',
         dataType: 'json',
+        data: send,
         success: function (data) {
-          console.log('success');
-          this.setState({
-            Data: data,
-            isLoaded: true
-          });
+          console.log('ajax - success');
+          console.log('data is: ' + JSON.stringify(data));
+          // this.setState({
+          //   isLoaded: true,
+          // });
         }.bind(this),
-        error: function error(_error) {
-          console.log('error');
-          console.error(_error);
-        }
+        error: function (error) {
+          console.log('ajax - error');
+          console.error(error);
+          // this.setState({
+          //   isLoaded: true,
+          // });
+        }.bind(this)
       });
     }
     /**
@@ -347,7 +365,36 @@ var CreateTimepoint = function (_React$Component) {
 
   }, {
     key: 'handleSubmit',
-    value: function handleSubmit(e) {}
+    value: function handleSubmit(e) {
+      console.log('submit fired!');
+      var send = {
+        command: 'create',
+        candID: this.state.url.params.candID,
+        identifier: this.state.url.params.identifier,
+        subprojectID: this.state.form.subproject
+      };
+      var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
+      console.log(url);
+      $.ajax(url, {
+        method: 'POST',
+        dataType: 'json',
+        data: send,
+        success: function (data) {
+          console.log('ajax - success');
+          console.log('data is: ' + JSON.stringify(data));
+          this.setState({
+            isLoaded: true
+          });
+        }.bind(this),
+        error: function (error) {
+          console.log('ajax - error');
+          console.error(error);
+          this.setState({
+            isLoaded: true
+          });
+        }.bind(this)
+      });
+    }
     /**
      * @return {DOMRect}
      */
@@ -366,7 +413,6 @@ var CreateTimepoint = function (_React$Component) {
         label: 'PSCID',
         text: this.state.data.pscid
       }) : '';
-      console.log('success');
 
       return _react2.default.createElement('div', null, errors, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), _react2.default.createElement(FormElement, {
         name: 'timepointInfo',
@@ -412,7 +458,7 @@ CreateTimepoint.propTypes = {
 window.onload = function () {
   var createTimepoint = _react2.default.createElement(CreateTimepoint, {
     Module: 'create_timepoint',
-    DataURL: loris.BaseURL + '/create_timepoint/AddTimepoint/?format=json'
+    DataURL: loris.BaseURL
   });
 
   // Create a wrapper div in which React component will be loaded

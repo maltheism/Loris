@@ -24,19 +24,24 @@ class CreateTimepoint extends React.Component {
           control: 'control',
           experiment: 'experiment',
         },
-        form: '',
       },
       form: {
-        subproject: 'experiment',
+        subproject: 'control',
       },
       psc: null,
       errors: null,
+      url: {
+        params: {
+          candID: '',
+          identifier: '',
+        },
+      },
     };
 
     // Bind component instance to custom methods
+    this.fetchInitializerData = this.fetchInitializerData.bind(this);
     this.collectParams = this.collectParams.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.fetchData = this.fetchData.bind(this);
     this.setForm = this.setForm.bind(this);
   }
   /**
@@ -44,38 +49,51 @@ class CreateTimepoint extends React.Component {
    */
   componentDidMount() {
     console.log('componentDidMount');
-    // this.fetchData();
-    this.setState({
-      isLoaded: true,
-    });
+    this.collectParams();
+    this.fetchInitializerData();
   }
   /**
    * Retrieve params from the browser URL and save it in state.
    */
   collectParams() {
+    const url = new URL(window.location.href);
     this.state.url.params = {
       candID: url.searchParams.get('candID'),
       identifier: url.searchParams.get('identifier'),
     };
+    this.state.data.dccid = this.state.url.params.candID;
+    this.setState(this.state);
   }
   /**
    * Retrieve data from the provided URL and save it in state.
    */
-  fetchData() {
-    $.ajax(this.props.DataURL, {
-      method: 'GET',
+  fetchInitializerData() {
+    const send = {
+      command: 'initialize',
+      candID: this.state.url.params.candID,
+      identifier: this.state.url.params.identifier,
+      subprojectID: this.state.form.subproject,
+    };
+    const url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
+    console.log(url);
+    $.ajax(url, {
+      method: 'POST',
       dataType: 'json',
+      data: send,
       success: function(data) {
-        console.log('success');
-        this.setState({
-          Data: data,
-          isLoaded: true,
-        });
+        console.log('ajax - success');
+        console.log('data is: ' + JSON.stringify(data));
+        // this.setState({
+        //   isLoaded: true,
+        // });
       }.bind(this),
       error: function(error) {
-        console.log('error');
+        console.log('ajax - error');
         console.error(error);
-      },
+        // this.setState({
+        //   isLoaded: true,
+        // });
+      }.bind(this),
     });
   }
   /**
@@ -94,7 +112,34 @@ class CreateTimepoint extends React.Component {
    * @param {object} e - Form submission event
    */
   handleSubmit(e) {
-
+    console.log('submit fired!');
+    const send = {
+      command: 'create',
+      candID: this.state.url.params.candID,
+      identifier: this.state.url.params.identifier,
+      subprojectID: this.state.form.subproject,
+    };
+    const url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
+    console.log(url);
+    $.ajax(url, {
+      method: 'POST',
+      dataType: 'json',
+      data: send,
+      success: function(data) {
+        console.log('ajax - success');
+        console.log('data is: ' + JSON.stringify(data));
+        this.setState({
+          isLoaded: true,
+        });
+      }.bind(this),
+      error: function(error) {
+        console.log('ajax - error');
+        console.error(error);
+        this.setState({
+          isLoaded: true,
+        });
+      }.bind(this),
+    });
   }
   /**
    * @return {DOMRect}
@@ -119,7 +164,6 @@ class CreateTimepoint extends React.Component {
         text={this.state.data.pscid}
       />
     ) : '';
-    console.log('success');
 
     return (
       <div>
@@ -176,7 +220,7 @@ window.onload = function() {
   const createTimepoint = (
     <CreateTimepoint
       Module='create_timepoint'
-      DataURL={loris.BaseURL + '/create_timepoint/AddTimepoint/?format=json'}
+      DataURL={loris.BaseURL}
     />
   );
 
