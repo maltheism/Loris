@@ -21,15 +21,27 @@ class CreateTimepoint extends React.Component {
         dccid: '',
         visit: '',
         options: {
-          control: 'control',
-          experiment: 'experiment',
+          subproject: {
+            control: 'control',
+            experiment: 'experiment',
+          },
+          visit: {},
+          psc: {},
         },
       },
       form: {
-        subproject: 'control',
+        display: {
+          subproject: false,
+          visit: false,
+          psc: false,
+        },
+        value: {
+          subproject: 'control',
+          visit: '',
+          psc: '',
+        },
       },
-      psc: null,
-      errors: null,
+      errors: false,
       url: {
         params: {
           candID: '',
@@ -78,16 +90,37 @@ class CreateTimepoint extends React.Component {
     $.ajax(url, {
       method: 'POST',
       dataType: 'json',
+      async: true,
       data: send,
       success: function(data) {
         console.log('ajax - success');
         console.log('data is: ' + JSON.stringify(data));
+        // Populate the form errors.
         if (data.errors && data.errors.length > 0) {
           this.setState({errors: data.errors});
         }
-        if (data.psc) {
-          this.setState({psc: data.psc});
+        // Populate the select options for subproject.
+        if (data.subproject) {
+          this.state.data.options.subproject = data.subproject;
+          this.state.form.value.subproject = data.subproject[0];
+          this.state.form.display.subproject = true;
+          this.setState(this.state);
         }
+        // Populate the select options for visit.
+        if (data.visit) {
+          this.state.data.options.visit = data.visit;
+          this.state.form.value.visit = data.visit[0];
+          this.state.form.display.visit = true;
+          this.setState(this.state);
+        }
+        // Populate the select options for psc.
+        if (data.psc) {
+          this.state.data.options.psc = data.psc;
+          this.state.form.value.psc = data.psc[0];
+          this.state.form.display.psc = true;
+          this.setState(this.state);
+        }
+        // Display form to user.
         this.setState({isLoaded: true});
       }.bind(this),
       error: function(error) {
@@ -177,11 +210,48 @@ class CreateTimepoint extends React.Component {
         </label>
       </div>
     ) : '';
-    // Include psc label.
+    const subproject = this.state.subproject ? (
+      <SelectElement
+        id={'subproject'}
+        name={'subproject'}
+        ref={'subproject'}
+        label={'Subproject'}
+        value={this.state.form.subproject}
+        options={this.state.data.options.subproject}
+        onUserInput={this.setForm}
+        emptyOption={false}
+        disabled={false}
+        required={true}
+      />
+    ) : '';
+    // Include psc select.
     const psc = this.state.psc ? (
-      <StaticElement
-        label='PSCID'
-        text={this.state.data.pscid}
+      <SelectElement
+        id={'psc'}
+        name={'psc'}
+        ref={'psc'}
+        label={'Site'}
+        value={this.state.form.psc}
+        options={this.state.data.options.psc}
+        onUserInput={this.setForm}
+        emptyOption={false}
+        disabled={false}
+        required={true}
+      />
+    ) : '';
+    // Include visit select.
+    const visit = this.state.visit ? (
+      <SelectElement
+        id={'visit'}
+        name={'visit'}
+        ref={'visit'}
+        label={'Visit label'}
+        value={this.state.form.visit}
+        options={this.state.data.options.visit}
+        onUserInput={this.setForm}
+        emptyOption={false}
+        disabled={false}
+        required={true}
       />
     ) : '';
 
@@ -201,23 +271,9 @@ class CreateTimepoint extends React.Component {
               label={'DCCID'}
               text={this.state.data.dccid}
             />
-            <SelectElement
-              id={'subproject'}
-              name={'subproject'}
-              ref={'subproject'}
-              label={'Subproject'}
-              value={this.state.form.subproject}
-              options={this.state.data.options}
-              onUserInput={this.setForm}
-              emptyOption={false}
-              disabled={false}
-              required={true}
-            />
+            {subproject}
             {psc}
-            <StaticElement
-              label={'Visit'}
-              text={this.state.data.visit}
-            />
+            {visit}
             <ButtonElement
               label={'Create Time Point'}
               type={'submit'}

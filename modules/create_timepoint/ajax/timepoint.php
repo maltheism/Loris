@@ -113,6 +113,9 @@ function initializeSetup($values)
     $candidate      =& \Candidate::singleton($values['identifier']);
     $allSubprojects = \Utility::getSubprojectList();
 
+    // Frontend needs for select element.
+    $values['select_subproject'] = $allSubprojects;
+
     // All subprojects from config file (error).
     if (empty($allSubprojects)) {
         $errors['subprojectID'] = 'No subprojects have been defined 
@@ -157,6 +160,7 @@ function initializeSetup($values)
             foreach ($items as $item) {
                 $labelOptions[$item['@']['value']] = $item['#'];
             }
+            $values['select_visit'] = $labelOptions;
             $visitLabelAdded = true;
         }
     }
@@ -179,9 +183,9 @@ function initializeSetup($values)
                 $psc_labelOptions[$siteID] = $center['Name'];
             }
         }
-        $values['psc'] = $psc_labelOptions;
+        $values['select_psc'] = $psc_labelOptions;
     }
-    $values['errors'] = $errors;
+    $values['select_errors'] = $errors;
 
     return $values;
 }
