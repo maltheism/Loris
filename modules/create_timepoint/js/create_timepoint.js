@@ -335,9 +335,9 @@ var CreateTimepoint = function (_React$Component) {
         subprojectID: this.state.form.subproject
       };
       var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
-      $.ajax(url, {
-        method: 'POST',
-        dataType: 'json',
+      $.ajax({
+        url: url,
+        type: 'POST',
         async: true,
         data: send,
         success: function (data) {
@@ -371,9 +371,10 @@ var CreateTimepoint = function (_React$Component) {
           // Display form to user.
           this.setState({ isLoaded: true });
         }.bind(this),
-        error: function (error) {
+        error: function (e, error) {
           console.log('ajax - error');
           console.error(error);
+          console.log(e);
           this.setState({ isLoaded: true });
         }.bind(this)
       });

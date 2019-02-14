@@ -32,6 +32,7 @@ if (!$user->hasPermission('data_entry')
     header('HTTP/1.1 403 Forbidden');
     exit;
 }
+header('Content-Type: application/json; charset=UTF-8');
 
 /**
  * Sanitize $_POST data.
@@ -41,7 +42,10 @@ $_POST = sanitizer($_POST);
 /**
  * Retrieve response and reply to the client.
  */
-echo json_encode(processRequest($_POST));
+$response = processRequest($_POST);
+$test = array();
+$test = 'hi';
+echo json_encode($test);
 
 /**
  * Sanitize the $_POST data.
@@ -80,6 +84,7 @@ function processRequest($values)
 {
     if (isset($values['command']) && $values['command'] == 'initialize') {
         $response = initializeSetup($values);
+        //$response['status'] = 'success';
     } else if (isset($values['command']) && $values['command'] == 'create') {
         \TimePoint::createNew(
             $values['identifier'],
@@ -114,7 +119,7 @@ function initializeSetup($values)
     $allSubprojects = \Utility::getSubprojectList();
 
     // Frontend needs for select element.
-    $values['select_subproject'] = $allSubprojects;
+    //$values['subproject'] = $allSubprojects;
 
     // All subprojects from config file (error).
     if (empty($allSubprojects)) {
@@ -160,7 +165,7 @@ function initializeSetup($values)
             foreach ($items as $item) {
                 $labelOptions[$item['@']['value']] = $item['#'];
             }
-            $values['select_visit'] = $labelOptions;
+            //$values['visit'] = $labelOptions;
             $visitLabelAdded = true;
         }
     }
@@ -183,9 +188,11 @@ function initializeSetup($values)
                 $psc_labelOptions[$siteID] = $center['Name'];
             }
         }
-        $values['select_psc'] = $psc_labelOptions;
+        $values['psc'] = $psc_labelOptions;
     }
-    $values['select_errors'] = $errors;
+    if (!empty($errors)) {
+        $values['errors'] = $errors;
+    }
 
     return $values;
 }
