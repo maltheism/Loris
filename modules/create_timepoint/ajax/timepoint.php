@@ -1,6 +1,6 @@
 <?php
 /**
- * ajax timepoint methods.
+ * Ajax timepoint methods.
  *
  * Used to retrieve info & create timepoint by the create_timepoint form.
  * Ensures the user can create timepoint before processing
@@ -9,7 +9,7 @@
  * PHP Version 7
  *
  * @category Loris
- * @package  create_timepoint
+ * @package  Create_Timepoint
  * @author   Alizée Wickenheiser <alizee.wickenheiser@mcin.ca>
  * @license  Loris license
  * @link     https://github.com/aces/Loris-Trunk
@@ -20,11 +20,11 @@ namespace LORIS\create_timepoint;
 /**
  * User permission verification.
  */
-$user =& \User::singleton();
+$user       =& \User::singleton();
 $identifier = isset($_POST['identifier']) ? $_POST['identifier'] : '';
-$candidate =& \Candidate::singleton($identifier);
-if (!$user->hasPermission('data_entry') &&
-    !(in_array(
+$candidate  =& \Candidate::singleton($identifier);
+if (!$user->hasPermission('data_entry')
+    && !(in_array(
         $candidate->getData('RegistrationCenterID'),
         $user->getData('CenterIDs')
     ))
@@ -105,8 +105,8 @@ function processRequest($values)
  * @throws \DeprecatedException
  * @throws \LorisException
  */
-function initializeSetup($values) {
-
+function initializeSetup($values)
+{
     // Setup variables
     $errors         = array(); // form errors.
     $config         =& \NDB_Config::singleton();
@@ -167,9 +167,9 @@ function initializeSetup($values) {
         $user_list_of_sites = $user->getData('CenterIDs');
         $num_sites          = count($user->getData('CenterIDs'));
         $psc_labelOptions   = array();
-        if ($num_sites >1) {
+        if ($num_sites > 1) {
             $values['pscLabelAdded'] = true;
-            $psc_labelOptions = array(null => '');
+            $psc_labelOptions        = array(null => '');
             foreach ($user_list_of_sites as $key => $siteID) {
                 $center = $DB->pselectRow(
                     "SELECT CenterID as ID, Name FROM psc 

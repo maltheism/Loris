@@ -75,7 +75,6 @@ class CreateTimepoint extends React.Component {
       subprojectID: this.state.form.subproject,
     };
     const url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
-    console.log(url);
     $.ajax(url, {
       method: 'POST',
       dataType: 'json',
@@ -83,16 +82,18 @@ class CreateTimepoint extends React.Component {
       success: function(data) {
         console.log('ajax - success');
         console.log('data is: ' + JSON.stringify(data));
-        // this.setState({
-        //   isLoaded: true,
-        // });
+        if (data.errors && data.errors.length > 0) {
+          this.setState({errors: data.errors});
+        }
+        if (data.psc) {
+          this.setState({psc: data.psc});
+        }
+        this.setState({isLoaded: true});
       }.bind(this),
       error: function(error) {
         console.log('ajax - error');
         console.error(error);
-        // this.setState({
-        //   isLoaded: true,
-        // });
+        this.setState({isLoaded: true});
       }.bind(this),
     });
   }
@@ -108,6 +109,26 @@ class CreateTimepoint extends React.Component {
   }
 
   /**
+   * Populate the elements of errors to display.
+   *
+   * @param {array} values - for individual form element.
+   * @return {object} errors
+   */
+  populateErrors(values) {
+    let errors = '';
+    for (value of values) {
+      errors = errors + (
+        <div className='col-sm-12'>
+          <label className='error col-sm-12'>
+            {value}
+          </label>
+        </div>
+      );
+    }
+    return errors;
+  }
+
+  /**
    * Handle form submission
    * @param {object} e - Form submission event
    */
@@ -120,7 +141,6 @@ class CreateTimepoint extends React.Component {
       subprojectID: this.state.form.subproject,
     };
     const url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
-    console.log(url);
     $.ajax(url, {
       method: 'POST',
       dataType: 'json',
@@ -169,7 +189,7 @@ class CreateTimepoint extends React.Component {
       <div>
         {errors}
         <div>
-          <h3>Create Time Point</h3>
+          <h3>Create Time Point</h3> <br />
           <FormElement
             name={'timepointInfo'}
             fileUpload={false}

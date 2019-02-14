@@ -323,7 +323,6 @@ var CreateTimepoint = function (_React$Component) {
         subprojectID: this.state.form.subproject
       };
       var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
-      console.log(url);
       $.ajax(url, {
         method: 'POST',
         dataType: 'json',
@@ -331,16 +330,18 @@ var CreateTimepoint = function (_React$Component) {
         success: function (data) {
           console.log('ajax - success');
           console.log('data is: ' + JSON.stringify(data));
-          // this.setState({
-          //   isLoaded: true,
-          // });
+          if (data.errors && data.errors.length > 0) {
+            this.setState({ errors: data.errors });
+          }
+          if (data.psc) {
+            this.setState({ psc: data.psc });
+          }
+          this.setState({ isLoaded: true });
         }.bind(this),
         error: function (error) {
           console.log('ajax - error');
           console.error(error);
-          // this.setState({
-          //   isLoaded: true,
-          // });
+          this.setState({ isLoaded: true });
         }.bind(this)
       });
     }
@@ -359,6 +360,45 @@ var CreateTimepoint = function (_React$Component) {
     }
 
     /**
+     * Populate the elements of errors to display.
+     *
+     * @param {array} values - for individual form element.
+     * @return {object} errors
+     */
+
+  }, {
+    key: 'populateErrors',
+    value: function populateErrors(values) {
+      var errors = '';
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = values[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          value = _step.value;
+
+          errors = errors + _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('label', { className: 'error col-sm-12' }, value));
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return errors;
+    }
+
+    /**
      * Handle form submission
      * @param {object} e - Form submission event
      */
@@ -374,7 +414,6 @@ var CreateTimepoint = function (_React$Component) {
         subprojectID: this.state.form.subproject
       };
       var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
-      console.log(url);
       $.ajax(url, {
         method: 'POST',
         dataType: 'json',
@@ -414,7 +453,7 @@ var CreateTimepoint = function (_React$Component) {
         text: this.state.data.pscid
       }) : '';
 
-      return _react2.default.createElement('div', null, errors, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), _react2.default.createElement(FormElement, {
+      return _react2.default.createElement('div', null, errors, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), ' ', _react2.default.createElement('br', null), _react2.default.createElement(FormElement, {
         name: 'timepointInfo',
         fileUpload: false,
         ref: 'form',
