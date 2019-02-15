@@ -290,6 +290,7 @@ var CreateTimepoint = function (_React$Component) {
 
     // Bind component instance to custom methods
     _this.fetchInitializerData = _this.fetchInitializerData.bind(_this);
+    _this.populateErrors = _this.populateErrors.bind(_this);
     _this.collectParams = _this.collectParams.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.setForm = _this.setForm.bind(_this);
@@ -350,21 +351,22 @@ var CreateTimepoint = function (_React$Component) {
           // Populate the select options for subproject.
           if (data.subproject) {
             this.state.data.options.subproject = data.subproject;
-            this.state.form.value.subproject = data.subproject[0];
+            this.state.form.value.subproject = Object.keys(data.subproject)[0];
+            console.log(this.state.form.value.subproject);
             this.state.form.display.subproject = true;
             this.setState(this.state);
           }
           // Populate the select options for visit.
           if (data.visit) {
             this.state.data.options.visit = data.visit;
-            this.state.form.value.visit = data.visit[0];
+            this.state.form.value.visit = Object.keys(data.visit)[0];
             this.state.form.display.visit = true;
             this.setState(this.state);
           }
           // Populate the select options for psc.
           if (data.psc) {
             this.state.data.options.psc = data.psc;
-            this.state.form.value.psc = data.psc[0];
+            this.state.form.value.psc = Object.keys(data.psc)[0];
             this.state.form.display.psc = true;
             this.setState(this.state);
           }
@@ -372,9 +374,7 @@ var CreateTimepoint = function (_React$Component) {
           this.setState({ isLoaded: true });
         }.bind(this),
         error: function (e, error) {
-          console.log('ajax - error');
-          console.error(error);
-          console.log(e);
+          this.populateErrors({ message: 'Server error.' });
           this.setState({ isLoaded: true });
         }.bind(this)
       });
@@ -389,47 +389,25 @@ var CreateTimepoint = function (_React$Component) {
   }, {
     key: 'setForm',
     value: function setForm(formElement, value) {
-      this.state.form.subproject = value;
+      this.state.form.value.subproject = value;
       this.setState(this.state);
     }
 
     /**
      * Populate the elements of errors to display.
      *
-     * @param {array} values - for individual form element.
-     * @return {object} errors
+     * @param {object} values - for individual form element.
      */
 
   }, {
     key: 'populateErrors',
     value: function populateErrors(values) {
-      var errors = '';
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = values[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          value = _step.value;
-
-          errors = errors + _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('label', { className: 'error col-sm-12' }, value));
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return errors;
+      var errors = [];
+      Object.keys(values).forEach(function (key) {
+        // console.log(key, values[key]);
+        errors.push(_react2.default.createElement('div', { className: 'col-xs-12 col-sm-12 col-md-12' }, _react2.default.createElement('label', { className: 'error form-group' }, values[key])));
+      });
+      this.setState({ errors: errors });
     }
 
     /**
@@ -445,8 +423,11 @@ var CreateTimepoint = function (_React$Component) {
         command: 'create',
         candID: this.state.url.params.candID,
         identifier: this.state.url.params.identifier,
-        subprojectID: this.state.form.subproject
+        subproject: this.state.form.value.subproject,
+        visit: this.state.form.value.visit,
+        psc: this.state.form.value.psc
       };
+      console.log(send);
       var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
       $.ajax(url, {
         method: 'POST',
@@ -455,16 +436,15 @@ var CreateTimepoint = function (_React$Component) {
         success: function (data) {
           console.log('ajax - success');
           console.log('data is: ' + JSON.stringify(data));
-          this.setState({
-            isLoaded: true
-          });
+          if (data.status === 'error') {
+            // Populate the form errors.
+            if (data.errors) {
+              this.populateErrors(data.errors);
+            }
+          }
         }.bind(this),
         error: function (error) {
-          console.log('ajax - error');
-          console.error(error);
-          this.setState({
-            isLoaded: true
-          });
+          this.populateErrors({ message: 'Server error.' });
         }.bind(this)
       });
     }
@@ -480,13 +460,14 @@ var CreateTimepoint = function (_React$Component) {
         return _react2.default.createElement(_Loader2.default, null);
       }
       // Include form errors.
-      var errors = this.state.errors ? _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('label', { className: 'error col-sm-12' }, 'todo')) : '';
-      var subproject = this.state.subproject ? _react2.default.createElement(SelectElement, {
+      var errors = this.state.errors;
+      // Include subproject select.
+      var subproject = this.state.form.display.subproject ? _react2.default.createElement(SelectElement, {
         id: 'subproject',
         name: 'subproject',
         ref: 'subproject',
         label: 'Subproject',
-        value: this.state.form.subproject,
+        value: this.state.form.value.subproject,
         options: this.state.data.options.subproject,
         onUserInput: this.setForm,
         emptyOption: false,
@@ -499,7 +480,7 @@ var CreateTimepoint = function (_React$Component) {
         name: 'psc',
         ref: 'psc',
         label: 'Site',
-        value: this.state.form.psc,
+        value: this.state.form.value.psc,
         options: this.state.data.options.psc,
         onUserInput: this.setForm,
         emptyOption: false,
@@ -512,7 +493,7 @@ var CreateTimepoint = function (_React$Component) {
         name: 'visit',
         ref: 'visit',
         label: 'Visit label',
-        value: this.state.form.visit,
+        value: this.state.form.value.visit,
         options: this.state.data.options.visit,
         onUserInput: this.setForm,
         emptyOption: false,
@@ -520,7 +501,7 @@ var CreateTimepoint = function (_React$Component) {
         required: true
       }) : '';
 
-      return _react2.default.createElement('div', null, errors, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), ' ', _react2.default.createElement('br', null), _react2.default.createElement(FormElement, {
+      return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), ' ', _react2.default.createElement('br', null), errors, _react2.default.createElement(FormElement, {
         name: 'timepointInfo',
         fileUpload: false,
         ref: 'form',

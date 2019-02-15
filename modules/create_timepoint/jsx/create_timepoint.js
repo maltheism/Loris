@@ -52,6 +52,7 @@ class CreateTimepoint extends React.Component {
 
     // Bind component instance to custom methods
     this.fetchInitializerData = this.fetchInitializerData.bind(this);
+    this.populateErrors = this.populateErrors.bind(this);
     this.collectParams = this.collectParams.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
@@ -102,21 +103,22 @@ class CreateTimepoint extends React.Component {
         // Populate the select options for subproject.
         if (data.subproject) {
           this.state.data.options.subproject = data.subproject;
-          this.state.form.value.subproject = data.subproject[0];
+          this.state.form.value.subproject = Object.keys(data.subproject)[0];
+          console.log(this.state.form.value.subproject);
           this.state.form.display.subproject = true;
           this.setState(this.state);
         }
         // Populate the select options for visit.
         if (data.visit) {
           this.state.data.options.visit = data.visit;
-          this.state.form.value.visit = data.visit[0];
+          this.state.form.value.visit = Object.keys(data.visit)[0];
           this.state.form.display.visit = true;
           this.setState(this.state);
         }
         // Populate the select options for psc.
         if (data.psc) {
           this.state.data.options.psc = data.psc;
-          this.state.form.value.psc = data.psc[0];
+          this.state.form.value.psc = Object.keys(data.psc)[0];
           this.state.form.display.psc = true;
           this.setState(this.state);
         }
@@ -124,9 +126,7 @@ class CreateTimepoint extends React.Component {
         this.setState({isLoaded: true});
       }.bind(this),
       error: function(e, error) {
-        console.log('ajax - error');
-        console.error(error);
-        console.log(e);
+        this.populateErrors({message: 'Server error.'});
         this.setState({isLoaded: true});
       }.bind(this),
     });
@@ -138,28 +138,28 @@ class CreateTimepoint extends React.Component {
    * @param {string} value - selected value for corresponding form element
    */
   setForm(formElement, value) {
-    this.state.form.subproject = value;
+    this.state.form.value.subproject = value;
     this.setState(this.state);
   }
 
   /**
    * Populate the elements of errors to display.
    *
-   * @param {array} values - for individual form element.
-   * @return {object} errors
+   * @param {object} values - for individual form element.
    */
   populateErrors(values) {
-    let errors = '';
-    for (value of values) {
-      errors = errors + (
-        <div className='col-sm-12'>
-          <label className='error col-sm-12'>
-            {value}
+    let errors = [];
+    Object.keys(values).forEach(function(key) {
+      // console.log(key, values[key]);
+      errors.push(
+        <div className='col-xs-12 col-sm-12 col-md-12'>
+          <label className='error form-group'>
+            {values[key]}
           </label>
         </div>
       );
-    }
-    return errors;
+    });
+    this.setState({errors: errors});
   }
 
   /**
@@ -172,8 +172,11 @@ class CreateTimepoint extends React.Component {
       command: 'create',
       candID: this.state.url.params.candID,
       identifier: this.state.url.params.identifier,
-      subprojectID: this.state.form.subproject,
+      subproject: this.state.form.value.subproject,
+      visit: this.state.form.value.visit,
+      psc: this.state.form.value.psc,
     };
+    console.log(send);
     const url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
     $.ajax(url, {
       method: 'POST',
@@ -182,16 +185,15 @@ class CreateTimepoint extends React.Component {
       success: function(data) {
         console.log('ajax - success');
         console.log('data is: ' + JSON.stringify(data));
-        this.setState({
-          isLoaded: true,
-        });
+        if (data.status === 'error') {
+          // Populate the form errors.
+          if (data.errors) {
+            this.populateErrors(data.errors);
+          }
+        }
       }.bind(this),
       error: function(error) {
-        console.log('ajax - error');
-        console.error(error);
-        this.setState({
-          isLoaded: true,
-        });
+        this.populateErrors({message: 'Server error.'});
       }.bind(this),
     });
   }
@@ -204,20 +206,15 @@ class CreateTimepoint extends React.Component {
       return <Loader/>;
     }
     // Include form errors.
-    const errors = this.state.errors ? (
-      <div className='col-sm-12'>
-        <label className='error col-sm-12'>
-          todo
-        </label>
-      </div>
-    ) : '';
-    const subproject = this.state.subproject ? (
+    const errors = this.state.errors;
+    // Include subproject select.
+    const subproject = this.state.form.display.subproject ? (
       <SelectElement
         id={'subproject'}
         name={'subproject'}
         ref={'subproject'}
         label={'Subproject'}
-        value={this.state.form.subproject}
+        value={this.state.form.value.subproject}
         options={this.state.data.options.subproject}
         onUserInput={this.setForm}
         emptyOption={false}
@@ -232,7 +229,7 @@ class CreateTimepoint extends React.Component {
         name={'psc'}
         ref={'psc'}
         label={'Site'}
-        value={this.state.form.psc}
+        value={this.state.form.value.psc}
         options={this.state.data.options.psc}
         onUserInput={this.setForm}
         emptyOption={false}
@@ -247,7 +244,7 @@ class CreateTimepoint extends React.Component {
         name={'visit'}
         ref={'visit'}
         label={'Visit label'}
-        value={this.state.form.visit}
+        value={this.state.form.value.visit}
         options={this.state.data.options.visit}
         onUserInput={this.setForm}
         emptyOption={false}
@@ -258,9 +255,9 @@ class CreateTimepoint extends React.Component {
 
     return (
       <div>
-        {errors}
         <div>
           <h3>Create Time Point</h3> <br />
+          {errors}
           <FormElement
             name={'timepointInfo'}
             fileUpload={false}

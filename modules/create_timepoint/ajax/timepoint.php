@@ -32,6 +32,9 @@ if (!$user->hasPermission('data_entry')
     header('HTTP/1.1 403 Forbidden');
     exit;
 }
+/**
+ * Set Content-Type Header for reply..
+ */
 header('Content-Type: application/json; charset=UTF-8');
 
 /**
@@ -42,10 +45,7 @@ $_POST = sanitizer($_POST);
 /**
  * Retrieve response and reply to the client.
  */
-$response = processRequest($_POST);
-$test = array();
-$test = 'hi';
-echo json_encode($test);
+echo json_encode(processRequest($_POST));
 
 /**
  * Sanitize the $_POST data.
@@ -54,11 +54,11 @@ echo json_encode($test);
  *
  * @return array
  */
-function sanitizer($values)
+function sanitizer(array $values)
 {
     // Verify subprojectID.
-    if (!empty($values['subprojectID']) && is_numeric($values['subprojectID'])) {
-        $values['subprojectID'] = '';
+    if (!empty($values['subproject']) && is_numeric($values['subproject'])) {
+        // $values['subproject'] = '';
     }
     // Verify cand ID.
     $values['identifier'] = isset($values['identifier']) ?
@@ -80,19 +80,25 @@ function sanitizer($values)
  * @throws \DeprecatedException
  * @throws \LorisException
  */
-function processRequest($values)
+function processRequest(array $values)
 {
     if (isset($values['command']) && $values['command'] == 'initialize') {
         $response = initializeSetup($values);
         //$response['status'] = 'success';
     } else if (isset($values['command']) && $values['command'] == 'create') {
-        \TimePoint::createNew(
-            $values['identifier'],
-            $values['subprojectID'],
-            $values['visitLabel'],
-            $values['psc']
-        );
-        $response['status'] = 'success';
+        $errors = validate($values);
+        if (!$errors) {
+            \TimePoint::createNew(
+                $values['identifier'],
+                $values['subprojectID'],
+                $values['visitLabel'],
+                $values['psc']
+            );
+            $response['status'] = 'success';
+        } else {
+            $response['status'] = 'error';
+            $response['errors'] = $errors;
+        }
     } else {
         $response['status'] = 'error';
     }
@@ -110,7 +116,7 @@ function processRequest($values)
  * @throws \DeprecatedException
  * @throws \LorisException
  */
-function initializeSetup($values)
+function initializeSetup(array $values)
 {
     // Setup variables
     $errors         = array(); // form errors.
@@ -119,7 +125,7 @@ function initializeSetup($values)
     $allSubprojects = \Utility::getSubprojectList();
 
     // Frontend needs for select element.
-    //$values['subproject'] = $allSubprojects;
+    $values['subproject'] = $allSubprojects;
 
     // All subprojects from config file (error).
     if (empty($allSubprojects)) {
@@ -149,7 +155,7 @@ function initializeSetup($values)
     foreach (
         \Utility::associativeToNumericArray($visitLabelSettings) as $visitLabel
     ) {
-        if ($visitLabel['@']['subprojectID'] == $values['subprojectID']) {
+        if (!empty($values['subprojectID']) && $visitLabel['@']['subprojectID'] == $values['subprojectID']) {
             if (isset($visitLabel['generation'])
                 && $visitLabel['generation'] !== 'sequence'
             ) {
@@ -165,7 +171,7 @@ function initializeSetup($values)
             foreach ($items as $item) {
                 $labelOptions[$item['@']['value']] = $item['#'];
             }
-            //$values['visit'] = $labelOptions;
+            $values['visit'] = $labelOptions;
             $visitLabelAdded = true;
         }
     }
@@ -195,4 +201,40 @@ function initializeSetup($values)
     }
 
     return $values;
+}
+
+/**
+ * Validate the post data,
+ * from user user form selection.
+ *
+ * @param array $values the form values.
+ *
+ * @return array
+ * @throws \LorisException
+ */
+function validate(array $values)
+{
+    $user = \User::singleton();
+
+    $errors = array();
+
+    // validate site entered
+    $site = $values['psc'] ?? '';
+    $user_list_of_sites = $user->getData('CenterIDs');
+    $num_sites          = count($user_list_of_sites);
+    if ($num_sites > 1 && (empty($site) || !$user->hasCenter($site))) {
+        $errors['psc'] = 'Site must be selected from the available dropdown.';
+    }
+
+    $candid       = intval($values['identifier']);
+    $subprojectID = intval($values['subproject']);
+    $visitLabel   = $values['visit'] ?? '';
+
+    try {
+        \TimePoint::isValidVisitLabel($candid, $subprojectID, $visitLabel);
+    } catch ( \LorisException $e) {
+        $errors['visitLabel'] = $e->getMessage();
+    }
+
+    return $errors;
 }
