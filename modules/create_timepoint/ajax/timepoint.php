@@ -35,7 +35,7 @@ if (!$user->hasPermission('data_entry')
 /**
  * Set Content-Type Header for reply..
  */
-header('Content-Type: application/json; charset=UTF-8');
+header('Content-Type: application/json');
 
 /**
  * Sanitize $_POST data.
