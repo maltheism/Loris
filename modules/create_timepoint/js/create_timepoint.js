@@ -391,6 +391,7 @@ var CreateTimepoint = function (_React$Component) {
     value: function setForm(formElement, value) {
       this.state.form.value.subproject = value;
       this.setState(this.state);
+      // todo - Set visit label.
     }
 
     /**

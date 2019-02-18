@@ -140,6 +140,7 @@ class CreateTimepoint extends React.Component {
   setForm(formElement, value) {
     this.state.form.value.subproject = value;
     this.setState(this.state);
+    // todo - Set visit label.
   }
 
   /**
