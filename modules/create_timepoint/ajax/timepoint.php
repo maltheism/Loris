@@ -56,10 +56,6 @@ echo json_encode(processRequest($_POST));
  */
 function sanitizer(array $values)
 {
-    // Verify subprojectID.
-    if (!empty($values['subproject']) && is_numeric($values['subproject'])) {
-        // $values['subproject'] = '';
-    }
     // Verify cand ID.
     $values['identifier'] = isset($values['identifier']) ?
         htmlentities(
