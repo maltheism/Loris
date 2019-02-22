@@ -2,7 +2,7 @@
 /**
  * This file contains the NDB_Form_create_timepoint class
  *
- * PHP Version 5
+ * PHP Version 7
  *
  * @category Loris
  * @package  Create_Timepoint
@@ -29,18 +29,6 @@ class Create_Timepoint extends \NDB_Form
     public $skipTemplate = true; // stops from looking for a smarty template
 
     /**
-     * This timepoint's candidate
-     *
-     * @var \Candidate
-     */
-    protected $candidate;
-
-    /**
-     * The subprojectID being created
-     */
-    var $subprojectID;
-
-    /**
      * Determine whether the user has permission to view this page
      *
      * @param \User $user The user whose access is being checked
@@ -64,27 +52,15 @@ class Create_Timepoint extends \NDB_Form
     }
 
     /**
-     * Does the setup required for this page.
-     * Particularly creates all the form elements.
-     *
-     * @return void
-     */
-    function setup()
-    {
-        parent::setup();
-    }
-
-    /**
      * Generate a breadcrumb trail for this page.
      *
      * @return \LORIS\BreadcrumbTrail
      */
     public function getBreadcrumbs(): \LORIS\BreadcrumbTrail
     {
-        $candid = 897255;
-        $pscid = 897255;
-        // $candid = $this->candidate->getCandID();
-        // $pscid  = $this->candidate->getPSCID();
+        $candidate =& \Candidate::singleton($this->identifier);
+        $candid    = $candidate->getCandID();
+        $pscid     = $candidate->getPSCID();
 
         return new \LORIS\BreadcrumbTrail(
             new \LORIS\Breadcrumb(
@@ -115,11 +91,10 @@ class Create_Timepoint extends \NDB_Form
         $depends = array_merge(
             $depends,
             array(
-                $baseurl . '/create_timepoint/js/create_timepoint.js',
+             $baseurl . '/create_timepoint/js/create_timepoint.js',
             )
         );
         return $depends;
     }
 
 }
-

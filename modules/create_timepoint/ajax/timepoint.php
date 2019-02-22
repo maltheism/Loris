@@ -84,7 +84,6 @@ function processRequest(array $values)
 {
     if (isset($values['command']) && $values['command'] == 'initialize') {
         $response = initializeSetup($values);
-        //$response['status'] = 'success';
     } else if (isset($values['command']) && $values['command'] == 'create') {
         $errors = validate($values);
         if (!$errors) {
@@ -150,9 +149,8 @@ function initializeSetup(array $values)
     }
 
     // Retrieve visit labels.
-    $visit_options       = array(); // TODO return to user.
+    $visit_options      = array();
     $visitLabelSettings = $config->getSetting('visitLabel');
-    $visitLabelAdded    = false;
     foreach (
         \Utility::associativeToNumericArray($visitLabelSettings) as $visitLabel
     ) {
@@ -172,8 +170,8 @@ function initializeSetup(array $values)
             foreach ($items as $item) {
                 $labelOptions[$item['@']['value']] = $item['#'];
             }
-            $visit_options[$visitLabel['@']['subprojectID']] = array_filter($labelOptions);
-            // array_push($visit_options, $visit_options_details);
+            $visit_options[$visitLabel['@']['subprojectID']]
+                = array_filter($labelOptions);
         }
     }
     $values['visit'] = $visit_options;
@@ -185,8 +183,7 @@ function initializeSetup(array $values)
         $num_sites          = count($user->getData('CenterIDs'));
         $psc_labelOptions   = array();
         if ($num_sites > 1) {
-            //$values['pscLabelAdded'] = true;
-            $psc_labelOptions        = array(null => '');
+            $psc_labelOptions = array(null => '');
             foreach ($user_list_of_sites as $key => $siteID) {
                 $center = $DB->pselectRow(
                     "SELECT CenterID as ID, Name FROM psc 
