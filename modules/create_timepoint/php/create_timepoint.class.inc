@@ -74,42 +74,6 @@ class Create_Timepoint extends \NDB_Form
         parent::setup();
     }
 
-
-    /**
-     * Validates user form selection
-     *
-     * @param array $val array of form values
-     *
-     * @return array
-     * @throws \LorisException
-     */
-    function _validate(array $val)
-    {
-        $user = \User::singleton();
-
-        $errors = array();
-
-        // validate site entered
-        $site = $val['psc'] ?? '';
-        $user_list_of_sites = $user->getData('CenterIDs');
-        $num_sites          = count($user_list_of_sites);
-        if ($num_sites > 1 && (empty($site) || !$user->hasCenter($site))) {
-            $errors['psc'] = "Site must be selected from the available dropdown.";
-        }
-
-        $candid       = $this->identifier;
-        $subprojectID = $val['subprojectID'];
-        $visitLabel   = $val['visitLabel'] ?? '';
-
-        try {
-            \TimePoint::isValidVisitLabel($candid, $subprojectID, $visitLabel);
-        } catch ( \LorisException $e) {
-            $errors['visitLabel'] = $e->getMessage();
-        }
-
-        return $errors;
-    }
-
     /**
      * Generate a breadcrumb trail for this page.
      *

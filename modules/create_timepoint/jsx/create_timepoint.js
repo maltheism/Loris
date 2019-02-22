@@ -20,6 +20,13 @@ class CreateTimepoint extends React.Component {
         pscid: '',
         dccid: '',
         visit: '',
+      },
+      form: {
+        display: {
+          subproject: false,
+          visit: false,
+          psc: false,
+        },
         options: {
           subproject: {
             control: 'control',
@@ -28,18 +35,14 @@ class CreateTimepoint extends React.Component {
           visit: {},
           psc: {},
         },
-      },
-      form: {
-        display: {
-          subproject: false,
-          visit: false,
-          psc: false,
-        },
         value: {
           subproject: 'control',
           visit: '',
           psc: '',
         },
+      },
+      storage: {
+        visit: {},
       },
       errors: false,
       url: {
@@ -48,10 +51,12 @@ class CreateTimepoint extends React.Component {
           identifier: '',
         },
       },
+      success: false,
     };
 
     // Bind component instance to custom methods
     this.fetchInitializerData = this.fetchInitializerData.bind(this);
+    this.handleVisitLabel = this.handleVisitLabel.bind(this);
     this.populateErrors = this.populateErrors.bind(this);
     this.collectParams = this.collectParams.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -102,25 +107,24 @@ class CreateTimepoint extends React.Component {
         }
         // Populate the select options for subproject.
         if (data.subproject) {
-          this.state.data.options.subproject = data.subproject;
+          this.state.form.options.subproject = data.subproject;
           this.state.form.value.subproject = Object.keys(data.subproject)[0];
-          console.log(this.state.form.value.subproject);
           this.state.form.display.subproject = true;
-          this.setState(this.state);
-        }
-        // Populate the select options for visit.
-        if (data.visit) {
-          this.state.data.options.visit = data.visit;
-          this.state.form.value.visit = Object.keys(data.visit)[0];
-          this.state.form.display.visit = true;
           this.setState(this.state);
         }
         // Populate the select options for psc.
         if (data.psc) {
-          this.state.data.options.psc = data.psc;
+          this.state.form.options.psc = data.psc;
           this.state.form.value.psc = Object.keys(data.psc)[0];
           this.state.form.display.psc = true;
           this.setState(this.state);
+        }
+        // Populate the select options for visit.
+        if (data.visit) {
+          // Store the (complete) visit selection information.
+          this.state.storage.visit = data.visit;
+          // Handle visit selection.
+          this.handleVisitLabel();
         }
         // Display form to user.
         this.setState({isLoaded: true});
@@ -132,15 +136,31 @@ class CreateTimepoint extends React.Component {
     });
   }
   /**
+   * Visit Labels refreshes when Subproject changes.
+   *
+   */
+  handleVisitLabel() {
+    this.state.form.options.visit = this.state.storage.visit[
+      this.state.form.value.subproject
+    ];
+    this.state.form.value.visit = Object.keys(this.state.storage.visit[
+      this.state.form.value.subproject
+    ])[0];
+    this.state.form.display.visit = true;
+    this.setState(this.state);
+  }
+  /**
    * Set the form data based on state values of child elements/components
    *
    * @param {string} formElement - name of the selected element
    * @param {string} value - selected value for corresponding form element
    */
   setForm(formElement, value) {
-    this.state.form.value.subproject = value;
+    this.state.form.value[formElement] = value;
     this.setState(this.state);
-    // todo - Set visit label.
+    if (formElement === 'subproject') {
+      this.handleVisitLabel();
+    }
   }
 
   /**
@@ -168,16 +188,15 @@ class CreateTimepoint extends React.Component {
    * @param {object} e - Form submission event
    */
   handleSubmit(e) {
-    console.log('submit fired!');
+    console.log('handleSubmit fired.');
     const send = {
       command: 'create',
       candID: this.state.url.params.candID,
       identifier: this.state.url.params.identifier,
       subproject: this.state.form.value.subproject,
-      visit: this.state.form.value.visit,
       psc: this.state.form.value.psc,
+      visit: this.state.form.value.visit,
     };
-    console.log(send);
     const url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
     $.ajax(url, {
       method: 'POST',
@@ -191,6 +210,9 @@ class CreateTimepoint extends React.Component {
           if (data.errors) {
             this.populateErrors(data.errors);
           }
+        } else {
+          this.state.success = true;
+          this.setState(this.state);
         }
       }.bind(this),
       error: function(error) {
@@ -216,7 +238,7 @@ class CreateTimepoint extends React.Component {
         ref={'subproject'}
         label={'Subproject'}
         value={this.state.form.value.subproject}
-        options={this.state.data.options.subproject}
+        options={this.state.form.options.subproject}
         onUserInput={this.setForm}
         emptyOption={false}
         disabled={false}
@@ -224,14 +246,14 @@ class CreateTimepoint extends React.Component {
       />
     ) : '';
     // Include psc select.
-    const psc = this.state.psc ? (
+    const psc = this.state.form.display.psc ? (
       <SelectElement
         id={'psc'}
         name={'psc'}
         ref={'psc'}
         label={'Site'}
         value={this.state.form.value.psc}
-        options={this.state.data.options.psc}
+        options={this.state.form.options.psc}
         onUserInput={this.setForm}
         emptyOption={false}
         disabled={false}
@@ -239,14 +261,14 @@ class CreateTimepoint extends React.Component {
       />
     ) : '';
     // Include visit select.
-    const visit = this.state.visit ? (
+    const visit = this.state.form.display.visit ? (
       <SelectElement
         id={'visit'}
         name={'visit'}
         ref={'visit'}
         label={'Visit label'}
         value={this.state.form.value.visit}
-        options={this.state.data.options.visit}
+        options={this.state.form.options.visit}
         onUserInput={this.setForm}
         emptyOption={false}
         disabled={false}
@@ -254,33 +276,46 @@ class CreateTimepoint extends React.Component {
       />
     ) : '';
 
-    return (
-      <div>
+    if (!this.state.success) {
+      return (
         <div>
-          <h3>Create Time Point</h3> <br />
-          {errors}
-          <FormElement
-            name={'timepointInfo'}
-            fileUpload={false}
-            ref={'form'}
-            class={'form-group col-sm-12'}
-            onSubmit={this.handleSubmit}
-          >
-            <StaticElement
-              label={'DCCID'}
-              text={this.state.data.dccid}
-            />
-            {subproject}
-            {psc}
-            {visit}
-            <ButtonElement
-              label={'Create Time Point'}
-              type={'submit'}
-            />
-          </FormElement>
+          <div>
+            <h3>Create Time Point</h3> <br/>
+            {errors}
+            <FormElement
+              name={'timepointInfo'}
+              fileUpload={false}
+              ref={'form'}
+              class={'form-group col-sm-12'}
+              onSubmit={this.handleSubmit}
+            >
+              <StaticElement
+                label={'DCCID'}
+                text={this.state.data.dccid}
+              />
+              {subproject}
+              {psc}
+              {visit}
+              <ButtonElement
+                label={'Create Time Point'}
+                type={'submit'}
+              />
+            </FormElement>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <div>
+            <h3>New time point successfully registered.</h3>
+            <a href={'/' + this.state.url.params.candID}>
+              Click here to continue.
+            </a>
+          </div>
+        </div>
+      );
+    }
   }
 }
 CreateTimepoint.propTypes = {

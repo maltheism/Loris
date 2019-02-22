@@ -90,8 +90,8 @@ function processRequest(array $values)
         if (!$errors) {
             \TimePoint::createNew(
                 $values['identifier'],
-                $values['subprojectID'],
-                $values['visitLabel'],
+                $values['subproject'],
+                $values['visit'],
                 $values['psc']
             );
             $response['status'] = 'success';
@@ -149,13 +149,14 @@ function initializeSetup(array $values)
         }
     }
 
-    // Handle if requiring visit label.
+    // Retrieve visit labels.
+    $visit_options       = array(); // TODO return to user.
     $visitLabelSettings = $config->getSetting('visitLabel');
     $visitLabelAdded    = false;
     foreach (
         \Utility::associativeToNumericArray($visitLabelSettings) as $visitLabel
     ) {
-        if (!empty($values['subprojectID']) && $visitLabel['@']['subprojectID'] == $values['subprojectID']) {
+        if (!empty($values['subproject'])) {
             if (isset($visitLabel['generation'])
                 && $visitLabel['generation'] !== 'sequence'
             ) {
@@ -171,11 +172,12 @@ function initializeSetup(array $values)
             foreach ($items as $item) {
                 $labelOptions[$item['@']['value']] = $item['#'];
             }
-            $values['visit'] = $labelOptions;
-            $visitLabelAdded = true;
+            $visit_options[$visitLabel['@']['subprojectID']] = array_filter($labelOptions);
+            // array_push($visit_options, $visit_options_details);
         }
     }
-    if ($visitLabelAdded) {
+    $values['visit'] = $visit_options;
+    if (!empty($visit_options)) {
         // List of sites for the user.
         $user = \User::singleton();
         $DB   = \Database::singleton();
@@ -183,7 +185,7 @@ function initializeSetup(array $values)
         $num_sites          = count($user->getData('CenterIDs'));
         $psc_labelOptions   = array();
         if ($num_sites > 1) {
-            $values['pscLabelAdded'] = true;
+            //$values['pscLabelAdded'] = true;
             $psc_labelOptions        = array(null => '');
             foreach ($user_list_of_sites as $key => $siteID) {
                 $center = $DB->pselectRow(
@@ -194,7 +196,7 @@ function initializeSetup(array $values)
                 $psc_labelOptions[$siteID] = $center['Name'];
             }
         }
-        $values['psc'] = $psc_labelOptions;
+        $values['psc'] = array_filter($psc_labelOptions);
     }
     if (!empty($errors)) {
         $values['errors'] = $errors;

@@ -257,15 +257,7 @@ var CreateTimepoint = function (_React$Component) {
       data: {
         pscid: '',
         dccid: '',
-        visit: '',
-        options: {
-          subproject: {
-            control: 'control',
-            experiment: 'experiment'
-          },
-          visit: {},
-          psc: {}
-        }
+        visit: ''
       },
       form: {
         display: {
@@ -273,11 +265,22 @@ var CreateTimepoint = function (_React$Component) {
           visit: false,
           psc: false
         },
+        options: {
+          subproject: {
+            control: 'control',
+            experiment: 'experiment'
+          },
+          visit: {},
+          psc: {}
+        },
         value: {
           subproject: 'control',
           visit: '',
           psc: ''
         }
+      },
+      storage: {
+        visit: {}
       },
       errors: false,
       url: {
@@ -285,11 +288,13 @@ var CreateTimepoint = function (_React$Component) {
           candID: '',
           identifier: ''
         }
-      }
+      },
+      success: false
     };
 
     // Bind component instance to custom methods
     _this.fetchInitializerData = _this.fetchInitializerData.bind(_this);
+    _this.handleVisitLabel = _this.handleVisitLabel.bind(_this);
     _this.populateErrors = _this.populateErrors.bind(_this);
     _this.collectParams = _this.collectParams.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
@@ -350,25 +355,24 @@ var CreateTimepoint = function (_React$Component) {
           }
           // Populate the select options for subproject.
           if (data.subproject) {
-            this.state.data.options.subproject = data.subproject;
+            this.state.form.options.subproject = data.subproject;
             this.state.form.value.subproject = Object.keys(data.subproject)[0];
-            console.log(this.state.form.value.subproject);
             this.state.form.display.subproject = true;
-            this.setState(this.state);
-          }
-          // Populate the select options for visit.
-          if (data.visit) {
-            this.state.data.options.visit = data.visit;
-            this.state.form.value.visit = Object.keys(data.visit)[0];
-            this.state.form.display.visit = true;
             this.setState(this.state);
           }
           // Populate the select options for psc.
           if (data.psc) {
-            this.state.data.options.psc = data.psc;
+            this.state.form.options.psc = data.psc;
             this.state.form.value.psc = Object.keys(data.psc)[0];
             this.state.form.display.psc = true;
             this.setState(this.state);
+          }
+          // Populate the select options for visit.
+          if (data.visit) {
+            // Store the (complete) visit selection information.
+            this.state.storage.visit = data.visit;
+            // Handle visit selection.
+            this.handleVisitLabel();
           }
           // Display form to user.
           this.setState({ isLoaded: true });
@@ -380,6 +384,19 @@ var CreateTimepoint = function (_React$Component) {
       });
     }
     /**
+     * Visit Labels refreshes when Subproject changes.
+     *
+     */
+
+  }, {
+    key: 'handleVisitLabel',
+    value: function handleVisitLabel() {
+      this.state.form.options.visit = this.state.storage.visit[this.state.form.value.subproject];
+      this.state.form.value.visit = Object.keys(this.state.storage.visit[this.state.form.value.subproject])[0];
+      this.state.form.display.visit = true;
+      this.setState(this.state);
+    }
+    /**
      * Set the form data based on state values of child elements/components
      *
      * @param {string} formElement - name of the selected element
@@ -389,9 +406,11 @@ var CreateTimepoint = function (_React$Component) {
   }, {
     key: 'setForm',
     value: function setForm(formElement, value) {
-      this.state.form.value.subproject = value;
+      this.state.form.value[formElement] = value;
       this.setState(this.state);
-      // todo - Set visit label.
+      if (formElement === 'subproject') {
+        this.handleVisitLabel();
+      }
     }
 
     /**
@@ -419,16 +438,15 @@ var CreateTimepoint = function (_React$Component) {
   }, {
     key: 'handleSubmit',
     value: function handleSubmit(e) {
-      console.log('submit fired!');
+      console.log('handleSubmit fired.');
       var send = {
         command: 'create',
         candID: this.state.url.params.candID,
         identifier: this.state.url.params.identifier,
         subproject: this.state.form.value.subproject,
-        visit: this.state.form.value.visit,
-        psc: this.state.form.value.psc
+        psc: this.state.form.value.psc,
+        visit: this.state.form.value.visit
       };
-      console.log(send);
       var url = this.props.DataURL + '/create_timepoint/ajax/timepoint.php';
       $.ajax(url, {
         method: 'POST',
@@ -442,6 +460,9 @@ var CreateTimepoint = function (_React$Component) {
             if (data.errors) {
               this.populateErrors(data.errors);
             }
+          } else {
+            this.state.success = true;
+            this.setState(this.state);
           }
         }.bind(this),
         error: function (error) {
@@ -469,52 +490,56 @@ var CreateTimepoint = function (_React$Component) {
         ref: 'subproject',
         label: 'Subproject',
         value: this.state.form.value.subproject,
-        options: this.state.data.options.subproject,
+        options: this.state.form.options.subproject,
         onUserInput: this.setForm,
         emptyOption: false,
         disabled: false,
         required: true
       }) : '';
       // Include psc select.
-      var psc = this.state.psc ? _react2.default.createElement(SelectElement, {
+      var psc = this.state.form.display.psc ? _react2.default.createElement(SelectElement, {
         id: 'psc',
         name: 'psc',
         ref: 'psc',
         label: 'Site',
         value: this.state.form.value.psc,
-        options: this.state.data.options.psc,
+        options: this.state.form.options.psc,
         onUserInput: this.setForm,
         emptyOption: false,
         disabled: false,
         required: true
       }) : '';
       // Include visit select.
-      var visit = this.state.visit ? _react2.default.createElement(SelectElement, {
+      var visit = this.state.form.display.visit ? _react2.default.createElement(SelectElement, {
         id: 'visit',
         name: 'visit',
         ref: 'visit',
         label: 'Visit label',
         value: this.state.form.value.visit,
-        options: this.state.data.options.visit,
+        options: this.state.form.options.visit,
         onUserInput: this.setForm,
         emptyOption: false,
         disabled: false,
         required: true
       }) : '';
 
-      return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), ' ', _react2.default.createElement('br', null), errors, _react2.default.createElement(FormElement, {
-        name: 'timepointInfo',
-        fileUpload: false,
-        ref: 'form',
-        'class': 'form-group col-sm-12',
-        onSubmit: this.handleSubmit
-      }, _react2.default.createElement(StaticElement, {
-        label: 'DCCID',
-        text: this.state.data.dccid
-      }), subproject, psc, visit, _react2.default.createElement(ButtonElement, {
-        label: 'Create Time Point',
-        type: 'submit'
-      }))));
+      if (!this.state.success) {
+        return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'Create Time Point'), ' ', _react2.default.createElement('br', null), errors, _react2.default.createElement(FormElement, {
+          name: 'timepointInfo',
+          fileUpload: false,
+          ref: 'form',
+          'class': 'form-group col-sm-12',
+          onSubmit: this.handleSubmit
+        }, _react2.default.createElement(StaticElement, {
+          label: 'DCCID',
+          text: this.state.data.dccid
+        }), subproject, psc, visit, _react2.default.createElement(ButtonElement, {
+          label: 'Create Time Point',
+          type: 'submit'
+        }))));
+      } else {
+        return _react2.default.createElement('div', null, _react2.default.createElement('div', null, _react2.default.createElement('h3', null, 'New time point successfully registered.'), _react2.default.createElement('a', { href: '/' + this.state.url.params.candID }, 'Click here to continue.')));
+      }
     }
   }]);
 
