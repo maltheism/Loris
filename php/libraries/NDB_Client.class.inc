@@ -111,6 +111,8 @@ class NDB_Client
         if ($reCAPTCHAPrivate && $reCAPTCHAPublic) {
             $CaptchaDomains ="www.google.com  www.gstatic.com";
         }
+        $googleAnalytics = 'https://www.google-analytics.com/';
+        $googleAnalyticsManager = 'https://www.googletagmanager.com/';
 
         // Content-Security policy for LORIS
         // 1. By default, only allow things that are self-hosted
@@ -126,9 +128,10 @@ class NDB_Client
         header(
             "Content-Security-Policy: "
             . "default-src 'self' 'unsafe-inline'; "
-            . "script-src 'self' 'unsafe-inline' 'unsafe-eval' $CaptchaDomains; "
+            . "connect-src $googleAnalyticsManager; "
+            . "script-src 'self' 'unsafe-inline' 'unsafe-eval' $googleAnalytics $googleAnalyticsManager $CaptchaDomains; "
             . "font-src 'self' data:; "
-            . "img-src 'self' data:; "
+            . "img-src 'self' $googleAnalytics data:; "
             . $config_additions
         );
         // start php session

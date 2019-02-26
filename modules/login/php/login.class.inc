@@ -62,7 +62,23 @@ class Login extends \NDB_Page
         } catch(\ConfigurationException $e) {
             $this->tpl_data['study_logo'] = '';
         }
-
     }
+
+    /**
+     * Include google.analytics.js
+     *
+     * @return array of javascript to be inserted
+     */
+    function getJSDependencies()
+    {
+        $factory = \NDB_Factory::singleton();
+        $baseURL = $factory->settings()->getBaseURL();
+        $deps    = parent::getJSDependencies();
+        return array_merge(
+            $deps,
+            [$baseURL . '/login/js/google.analytics.js']
+        );
+    }
+
 }
 
