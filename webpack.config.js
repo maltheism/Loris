@@ -4,6 +4,7 @@ const fs = require('fs');
 
 const config = [{
   entry: {
+    './htdocs/js/client.js': './jsx/analytics/Client.js',
     './htdocs/js/components/DynamicDataTable.js': './jsx/DynamicDataTable.js',
     './htdocs/js/components/PaginationLinks.js': './jsx/PaginationLinks.js',
     './htdocs/js/components/StaticDataTable.js': './jsx/StaticDataTable.js',
