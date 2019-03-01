@@ -762,6 +762,7 @@ class NDB_Page implements RequestHandlerInterface
                   $baseurl . '/js/jquery/jquery-1.11.0.min.js',
                   $baseurl . '/js/helpHandler.js',
                   $baseurl . '/js/modernizr/modernizr.min.js',
+                  $baseurl . '/vendor/dist/js/loris-gland.bundle.js',
                   // Only load minified file on production, not sandboxes
                   $baseurl . '/js/polyfills.js',
                     // $baseurl . '/js/react/react-with-addons' . $min . '.js',

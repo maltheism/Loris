@@ -1,10 +1,64 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const path = require('path');
-const fs = require('fs');
+'use strict';
 
-const config = [{
+const debug = true;
+const path = require('path');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const client = {
   entry: {
-    './htdocs/js/client.js': './jsx/analytics/Client.js',
+    'loris-gland': [
+      './jsx/analytics/Client.js',
+      './jsx/analytics/Storage.js',
+    ],
+  },
+  output: {
+    path: path.resolve(__dirname + '/htdocs/vendor/dist', 'js'),
+    filename: '[name].bundle.js',
+    library: 'loris-gland',
+    libraryTarget: 'umd',
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      'React': 'react',
+    }),
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true),
+      VERSION: JSON.stringify('v1'),
+      BROWSER_SUPPORTS_HTML5: true,
+    }),
+  ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          warnings: false,
+          mangle: !debug,
+          keep_fnames: debug,
+          compress: {
+            unused: !debug,
+          },
+        },
+      }),
+    ],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader?cacheDirectory',
+        enforce: 'pre',
+      },
+    ],
+  },
+  devtool: debug ? 'inline-source-map' : false,
+  mode: debug ? 'development' : 'production',
+};
+
+const lorisModules = {
+  entry: {
     './htdocs/js/components/DynamicDataTable.js': './jsx/DynamicDataTable.js',
     './htdocs/js/components/PaginationLinks.js': './jsx/PaginationLinks.js',
     './htdocs/js/components/StaticDataTable.js': './jsx/StaticDataTable.js',
@@ -34,7 +88,7 @@ const config = [{
     './modules/genomic_browser/js/FileUploadModal.js': './modules/genomic_browser/jsx/FileUploadModal.js',
     './modules/genomic_browser/js/profileColumnFormatter.js': './modules/genomic_browser/jsx/profileColumnFormatter.js',
     './modules/imaging_browser/js/ImagePanel.js': './modules/imaging_browser/jsx/ImagePanel.js',
-      './modules/imaging_browser/js/imagingBrowserIndex.js': './modules/imaging_browser/jsx/imagingBrowserIndex.js',
+    './modules/imaging_browser/js/imagingBrowserIndex.js': './modules/imaging_browser/jsx/imagingBrowserIndex.js',
     './modules/instrument_builder/js/react.instrument_builder.js': './modules/instrument_builder/jsx/react.instrument_builder.js',
     './modules/instrument_builder/js/react.questions.js': './modules/instrument_builder/jsx/react.questions.js',
     './modules/instrument_manager/js/instrumentManagerIndex.js': './modules/instrument_manager/jsx/instrumentManagerIndex.js',
@@ -51,24 +105,44 @@ const config = [{
     './modules/brainbrowser/js/Brainbrowser.js': './modules/brainbrowser/jsx/Brainbrowser.js',
     './modules/imaging_uploader/js/index.js': './modules/imaging_uploader/jsx/index.js',
     './modules/acknowledgements/js/columnFormatter.js': './modules/acknowledgements/jsx/columnFormatter.js',
-    './modules/quality_control/js/qualityControlIndex.js': './modules/quality_control/jsx/qualityControlIndex.js',
     './modules/server_processes_manager/js/server_processes_managerIndex.js': './modules/server_processes_manager/jsx/server_processes_managerIndex.js',
   },
   output: {
-    path: __dirname + '/',
+    path: path.resolve(__dirname + '/'),
     filename: '[name]',
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      'React': 'react',
+    }),
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true),
+      VERSION: JSON.stringify('v1'),
+      BROWSER_SUPPORTS_HTML5: true,
+    }),
+  ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          warnings: false,
+          mangle: !debug,
+          keep_fnames: debug,
+          compress: {
+            unused: !debug,
+          },
+        },
+      }),
+    ],
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader'],
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel-loader?cacheDirectory',
       },
       {
         test: /\.json$/,
@@ -100,34 +174,12 @@ const config = [{
     },
     extensions: ['*', '.js', '.jsx', '.json'],
   },
-  externals: {
-    react: 'React',
-  },
+  externals: ['React'],
   node: {
     fs: 'empty',
   },
-  devtool: 'source-map',
-  plugins: [],
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        uglifyOptions: {
-          compress: false,
-          ecma: 6,
-          mangle: false,
-        },
-        sourceMap: true,
-      }),
-    ],
-  },
-}];
+  devtool: debug ? 'inline-source-map' : false,
+  mode: debug ? 'development' : 'production',
+};
 
-// Support project overrides
-if (fs.existsSync('./project/webpack-project.config.js')) {
-  const projConfig = require('./project/webpack-project.config.js');
-  config.push(projConfig);
-}
-
-module.exports = config;
+module.exports = [client, lorisModules];

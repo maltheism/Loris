@@ -27,14 +27,6 @@ class Client {
   }
 }
 
-const client = new Client();
-client.authentication(function(error, websocket) {
-  if (error) throw error;
-  client.socket = websocket;
-  client.credentials = storage.socket.config;
-  client.setupSocketListeners();
-});
-
 /**
  * Additional socket listeners.
  */
@@ -105,3 +97,14 @@ Client.prototype.authentication = function authentication(cb) {
     });
   });
 };
+
+/**
+ * Initiate client and proceed to authenticate.
+ */
+const client = new Client();
+client.authentication(function(error, websocket) {
+  if (error) throw error;
+  client.socket = websocket;
+  client.credentials = storage.socket.config;
+  client.setupSocketListeners();
+});

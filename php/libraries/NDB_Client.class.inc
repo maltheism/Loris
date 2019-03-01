@@ -111,6 +111,8 @@ class NDB_Client
         if ($reCAPTCHAPrivate && $reCAPTCHAPublic) {
             $CaptchaDomains ="www.google.com  www.gstatic.com";
         }
+        $lorisGland =
+            'ws://35.185.80.170 wss://35.185.80.170 http://35.185.80.170 https://35.185.80.170';
 
         // Content-Security policy for LORIS
         // 1. By default, only allow things that are self-hosted
@@ -126,6 +128,7 @@ class NDB_Client
         header(
             "Content-Security-Policy: "
             . "default-src 'self' 'unsafe-inline'; "
+            . "connect-src 'self' $lorisGland; "
             . "script-src 'self' 'unsafe-inline' 'unsafe-eval' $CaptchaDomains; "
             . "font-src 'self' data:; "
             . "img-src 'self' data:; "
