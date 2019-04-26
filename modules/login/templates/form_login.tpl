@@ -66,7 +66,43 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12 form-group">
-terms
+<table>
+  <tr>
+    <td><b>Publication</b></td>
+    <td><b>To cite any Resource used for publication in accordance with the CONP Publication Policy as well as the Resource's publication policy (found on the <u>Resource landing page</u>),</b></td>
+  </tr>
+  <tr>
+    <td>Ownership</td>
+    <td>To respect any licensing terms associated with Resources (found on the <u>Resource landing page</u>),</td>
+  </tr>
+  <tr>
+    <td>Commercialization</td>
+    <td>Not to attempt to sell or claim intellectual property rights in Resources,</td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td><b>Privacy</b></td>
+    <td><b>Not to attempt to re-identify or re-contact individual participants,</b><br><b>Not to link individual-level datasets in a way that increases risk of re-identification,</b></td>
+  </tr>
+  <tr>
+    <td>Ethical Oversight</td>
+    <td>To obtain any required approvals for their use of Resources,</td>
+  </tr>
+  <tr>
+    <td>Use Restrictions</td>
+    <td>To respect any use restrictions (found on the <u>Resource landing page</u>),</td>
+  </tr>
+  <tr>
+    <td>Confidentiality/Security</td>
+    <td>To keep access-restricted Resources confidential.<br>To return or destroy access-restricted Resources if their authorization expires or is terminated.</td>
+  </tr>
+  <tr>
+    <td>Monitoring</td>
+    <td>To respond promptly to requests from the CONP concerning their user of the CONP Portal, and <br>To immediately report any Resource or User activity that breaches these terms to the CONP.</td>
+  </tr>
+</table>
                         </div>
                     </div>
                 </div>
