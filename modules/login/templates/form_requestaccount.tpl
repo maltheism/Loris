@@ -57,6 +57,11 @@
       <div class="form-group">
           {$form.tpaccept.html}
           {* checkbox's html method in LORISForm seems to automagically add the label *}
+          {if $form.tpaccept.error}
+            <span id="helpBlock" class="help-block">
+              <b class="text-danger">{$form.tpaccept.error}</b>
+            </span>
+          {/if}
       </div>
       <div class="form-group">
           {$form.radiologist.html}
