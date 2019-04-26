@@ -185,8 +185,6 @@ class RequestAccount extends \NDB_Form
 
             if ($_REQUEST['tpaccept'] == 'on') {
 
-echo $_REQUEST['tpaccept'];
-
             }
         }
 
