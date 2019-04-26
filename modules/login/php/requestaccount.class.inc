@@ -68,8 +68,7 @@ class RequestAccount extends \NDB_Form
             "Site",
             array("" => "Choose your site:") + \Utility::getSiteList()
         );
-        $this->addCheckbox("examiner", "Examiner role", array());
-        $this->addCheckbox("radiologist", "Radiologist", array());
+        $this->addCheckbox("tpaccept", " I accept the <a href='#' data-toggle='modal' data-target='#tModal'>terms</a> and <a href='#' data-toggle='modal' data-target='#pModal'>publication policy</a>.", array());
 
         // Get reCATPCHA keys
         $reCAPTCHAPrivate = $config->getSetting('reCAPTCHAPrivate');
@@ -111,6 +110,10 @@ class RequestAccount extends \NDB_Form
 
         if (empty($values['site'])) {
             $errors['site'] = "Please choose a site!";
+        }
+
+        if (empty($values['tpaccept'])) {
+            $errors['tpaccept'] = "Please accept the terms and policies!";
         }
 
         // I don't think this is required because insert uses prepared statements,
@@ -180,40 +183,10 @@ class RequestAccount extends \NDB_Form
                 )
             );
 
-            if ($_REQUEST['examiner'] == 'on') {
-                $rad = 0;
-                if ($_REQUEST['radiologist'] == 'on') {
-                    $rad = 1;
-                }
-                //insert in DB as inactive until account approved
-                $examinerID = $DB->pselect(
-                    "SELECT e.examinerID
-                 FROM examiners e
-                 WHERE e.full_name=:fn",
-                    array("fn" => $fullname)
-                );
+            if ($_REQUEST['tpaccept'] == 'on') {
 
-                // If examiner not in table add him
-                if (empty($examinerID)) {
-                    $DB->insert(
-                        'examiners',
-                        array(
-                         'full_name'   => $fullname,
-                         'radiologist' => $rad,
-                         'userID'      => $user_id,
-                        )
-                    );
-                    $examinerID = $DB->getLastInsertID();
-                    $DB->insert(
-                        'examiners_psc_rel',
-                        array(
-                         'examinerID'       => $examinerID,
-                         'centerID'         => $site,
-                         'active'           => 'Y',
-                         'pending_approval' => 'Y',
-                        )
-                    );
-                }
+echo $_REQUEST['tpaccept'];
+
             }
         }
 
