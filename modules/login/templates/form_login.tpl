@@ -66,7 +66,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12 form-group">
-<table>
+<table border="1">
   <tr>
     <td><b>Publication</b></td>
     <td><b>To cite any Resource used for publication in accordance with the CONP Publication Policy as well as the Resource's publication policy (found on the <u>Resource landing page</u>),</b></td>
@@ -80,8 +80,8 @@
     <td>Not to attempt to sell or claim intellectual property rights in Resources,</td>
   </tr>
 </table>
-
-<table>
+<br>
+<table border="1">
   <tr>
     <td><b>Privacy</b></td>
     <td><b>Not to attempt to re-identify or re-contact individual participants,</b><br><b>Not to link individual-level datasets in a way that increases risk of re-identification,</b></td>
