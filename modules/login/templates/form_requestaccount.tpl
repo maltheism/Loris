@@ -55,7 +55,7 @@
           {/if}
       </div>
       <div class="form-group">
-          {$form.examiner.html}
+          {$form.tpaccept.html}
           {* checkbox's html method in LORISForm seems to automagically add the label *}
       </div>
       <div class="form-group">
