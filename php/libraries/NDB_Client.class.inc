@@ -112,7 +112,7 @@ class NDB_Client
             $CaptchaDomains ="www.google.com  www.gstatic.com";
         }
         $lorisGland =
-            'ws://35.185.80.170 wss://35.185.80.170 http://35.185.80.170 https://35.185.80.170';
+            'ws://localhost:6660 wss://localhost:6660 http://localhost:6660 https://localhost:6660';
 
         // Content-Security policy for LORIS
         // 1. By default, only allow things that are self-hosted

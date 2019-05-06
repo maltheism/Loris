@@ -52,8 +52,9 @@ Client.prototype.authentication = function authentication(cb) {
     });
   } else {
     // Development
-    websocket = io.connect('http://35.185.80.170', {
-      transports: ['websocket', 'polling'],
+    console.log('test');
+    websocket = io.connect('localhost:6660', {
+      transports: ['websocket', 'polling']
     });
   }
   websocket.on('connect', function() {
