@@ -54,7 +54,7 @@ Client.prototype.authentication = function authentication(cb) {
     // Development
     console.log('test');
     websocket = io.connect('localhost:6660', {
-      transports: ['websocket', 'polling']
+      transports: ['websocket', 'polling'],
     });
   }
   websocket.on('connect', function() {
@@ -108,4 +108,5 @@ client.authentication(function(error, websocket) {
   client.socket = websocket;
   client.credentials = storage.socket.config;
   client.setupSocketListeners();
+  client.socket.emit('track_me');
 });
