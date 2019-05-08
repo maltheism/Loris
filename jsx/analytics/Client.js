@@ -12,8 +12,7 @@ import {storage} from './storage';
  */
 class Client {
   /**
-   * constructor initialize:
-   * (status, credentials, socket).
+   * constructor initialize: (status, credentials, socket).
    */
   constructor() {
     this.status = {
@@ -37,6 +36,67 @@ Client.prototype.setupSocketListeners = function setupSocketListeners() {
 };
 
 /**
+ * Gets all the System Details.
+ */
+Client.prototype.getSystemDetails = function getSystemDetails() {
+  /**
+   * Handles loading finished.
+   * @param {function} fn
+   */
+  function ready(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+  // ready() fires when page loaded.
+  ready(function() {
+    const info = {
+      window: {
+        origin: window.origin,
+        path: window.location.pathname,
+        referrer: document.referrer,
+        history: history.length,
+      },
+      browser: {
+        appName: navigator.appName,
+        appVersion: navigator.appVersion,
+        product: navigator.product,
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        online: navigator.onLine,
+        platform: navigator.platform,
+        java: navigator.javaEnabled(),
+      },
+      dimensions: {
+        screen: {
+          width: screen.width,
+          height: screen.height,
+        },
+        document: {
+          width: document.body.clientWidth,
+          height: document.body.clientHeight,
+        },
+        inner: {
+          width: innerWidth,
+          height: innerHeight,
+        },
+        available: {
+          width: screen.availWidth,
+          height: screen.availHeight,
+        },
+        depth: {
+          color: screen.colorDepth,
+          pixel: screen.pixelDepth,
+        },
+      },
+      timezone: (new Date()).getTimezoneOffset() / 60,
+      timestamp: new Date(),
+    };
+    // emit to analytics.
+    client.socket.emit('track_me', info);
+  });
+};
+
+/**
  * Authentication with socket.io server.
  * @param {function} cb
  */
@@ -52,7 +112,6 @@ Client.prototype.authentication = function authentication(cb) {
     });
   } else {
     // Development
-    console.log('test');
     websocket = io.connect('localhost:6660', {
       transports: ['websocket', 'polling'],
     });
@@ -108,5 +167,5 @@ client.authentication(function(error, websocket) {
   client.socket = websocket;
   client.credentials = storage.socket.config;
   client.setupSocketListeners();
-  client.socket.emit('track_me');
+  client.getSystemDetails();
 });
