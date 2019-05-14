@@ -106,13 +106,19 @@ Client.prototype.authentication = function authentication(cb) {
   let websocket = null;
   if (window.origin.includes('https://')) {
     // Production
-    websocket = io.connect('https://35.185.80.170', {
-      secure: true,
-      port: 80,
+    // websocket = io.connect('https://35.185.53.135', {
+    //   secure: true,
+    //   port: 80,
+    // });
+    websocket = io.connect('35.185.53.135', {
+      transports: ['websocket', 'polling'],
     });
   } else {
     // Development
-    websocket = io.connect('localhost:6660', {
+    // websocket = io.connect('localhost:6660', {
+    //   transports: ['websocket', 'polling'],
+    // });
+    websocket = io.connect('35.185.53.135', {
       transports: ['websocket', 'polling'],
     });
   }
