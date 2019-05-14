@@ -106,20 +106,13 @@ Client.prototype.authentication = function authentication(cb) {
   let websocket = null;
   if (window.origin.includes('https://')) {
     // Production
-    // websocket = io.connect('https://35.185.53.135', {
-    //   secure: true,
-    //   port: 80,
-    // });
-    websocket = io.connect('http://35.185.53.135', {
-      transports: ['websocket', 'polling'],
-      secure: false,
+    websocket = io.connect('https://xn--alize-esa.com', {
+      secure: true,
+      port: 80,
     });
   } else {
     // Development
-    // websocket = io.connect('localhost:6660', {
-    //   transports: ['websocket', 'polling'],
-    // });
-    websocket = io.connect('http://35.185.53.135', {
+    websocket = io.connect('http://xn--alize-esa.com', {
       transports: ['websocket', 'polling'],
     });
   }
