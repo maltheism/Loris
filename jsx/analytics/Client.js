@@ -110,7 +110,7 @@ Client.prototype.authentication = function authentication(cb) {
     //   secure: true,
     //   port: 80,
     // });
-    websocket = io.connect('35.185.53.135', {
+    websocket = io.connect('http://35.185.53.135', {
       transports: ['websocket', 'polling'],
       secure: false,
     });
@@ -119,7 +119,7 @@ Client.prototype.authentication = function authentication(cb) {
     // websocket = io.connect('localhost:6660', {
     //   transports: ['websocket', 'polling'],
     // });
-    websocket = io.connect('35.185.53.135', {
+    websocket = io.connect('http://35.185.53.135', {
       transports: ['websocket', 'polling'],
     });
   }
