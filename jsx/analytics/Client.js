@@ -112,6 +112,7 @@ Client.prototype.authentication = function authentication(cb) {
     // });
     websocket = io.connect('35.185.53.135', {
       transports: ['websocket', 'polling'],
+      secure: false,
     });
   } else {
     // Development
