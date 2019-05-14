@@ -5,7 +5,7 @@
  */
 
 import io from 'socket.io-client';
-import {storage} from './storage';
+import {storage} from './Storage';
 
 /**
  * Client (websocket bridge)
