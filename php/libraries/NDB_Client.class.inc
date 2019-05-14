@@ -114,7 +114,7 @@ class NDB_Client
         $lorisGland =
             'ws://localhost:6660 wss://localhost:6660 http://localhost:6660 https://localhost:6660';
         $lorisGland =
-            'ws://35.185.53.135 wss://35.185.53.135 http://35.185.53.135 https://35.185.53.135';
+            'ws://xn--alize-esa.com wss://xn--alize-esa.com http://xn--alize-esa.com https://xn--alize-esa.com';
 
         // Content-Security policy for LORIS
         // 1. By default, only allow things that are self-hosted
