@@ -285,7 +285,7 @@ class UploadForm extends Component {
           title: 'Submission error!',
           type: 'error',
         });
-        let errorMessage = this.state.errorMessage;
+        let errorMessage = Object.assign({}, this.state.errorMessage);
         let hasError = this.state.hasError;
         errorMessage = (error.responseJSON || {}).errors || 'Submission error!';
         for (let i in errorMessage) {
