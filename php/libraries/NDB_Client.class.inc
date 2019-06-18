@@ -127,6 +127,7 @@ class NDB_Client
         header(
             "Content-Security-Policy: "
             . "default-src 'self' 'unsafe-inline'; "
+            . "frame-src 'self' 'unsafe-inline' 'unsafe-eval' $CaptchaDomains; "
             . "script-src 'self' 'unsafe-inline' 'unsafe-eval' $CaptchaDomains; "
             . "font-src 'self' data:; "
             . "img-src 'self' data:; "
