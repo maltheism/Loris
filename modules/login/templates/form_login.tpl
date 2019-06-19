@@ -29,7 +29,8 @@
           </form>
           <div class="help-links">
             <a href="{$baseurl}/login/password-reset/">Forgot your password?</a><br/>
-            <a href="{$baseurl}/login/request-account/">Request Account</a>
+            <a href="{$baseurl}/login/request-account/">Request Account</a><br/>
+            <a href="{$baseurl}/contact/">Contact</a>
           </div>
           <div class="help-text">
             A WebGL-compatible browser is required for full functionality (Mozilla Firefox, Google Chrome)
