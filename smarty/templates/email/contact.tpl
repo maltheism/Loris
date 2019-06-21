@@ -1,4 +1,4 @@
-Subject: Lost Password - {$study}
+Subject: Request - {$study}
 
 Request from {$name} {$email}:
 
