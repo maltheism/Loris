@@ -266,8 +266,8 @@ class Module extends \LORIS\Router\PrefixRouter implements RequestHandlerInterfa
             $pagename = explode("/", $path)[0];
         }
 
+        $user = $request->getAttribute("user") ?? new \LORIS\AnonymousUser();
         try {
-            $user = $request->getAttribute("user") ?? new \LORIS\AnonymousUser();
             $page = $this->loadPage($pagename);
             // FIXME: Hack required for breadcrumbs. This should be removed,
             // but some tests depend on it.
@@ -277,7 +277,6 @@ class Module extends \LORIS\Router\PrefixRouter implements RequestHandlerInterfa
                 $_REQUEST['subtest'] = $pagename;
             }
 
-            $user = $request->getAttribute("user") ?? new \LORIS\AnonymousUser();
             if ($page->_hasAccess($user) !== true) {
                 return (new \LORIS\Middleware\PageDecorationMiddleware(
                     $user
@@ -310,28 +309,28 @@ class Module extends \LORIS\Router\PrefixRouter implements RequestHandlerInterfa
              * as their more generic parent class which reduces precision.
              */
         } catch (\DatabaseException $e) {
-            error_log($e);
+            error_log($e->getMessage());
             return $this->responseStatus500(
                 $request,
                 $user,
                 self::GENERIC_500_ERROR
             );
         } catch (\ConfigurationException $e) {
-            error_log($e);
+            error_log($e->getMessage());
             return $this->responseStatus500(
                 $request,
                 $user,
                 self::CONFIGURATION_ERROR
             );
         } catch (\LorisException $e) {
-            error_log($e);
+            error_log($e->getMessage());
             return $this->responseStatus500(
                 $request,
                 $user,
                 self::GENERIC_500_ERROR
             );
         } catch (\Exception $e) {
-            error_log($e);
+            error_log($e->getMessage());
             return $this->responseStatus500(
                 $request,
                 $user,

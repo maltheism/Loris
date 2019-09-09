@@ -63,34 +63,35 @@ class Stats_Demographic extends \NDB_Form
     /**
      * RenderStatsTable function
      *
-     * @param string $sectionHeader    the value of sectionHeader
-     * @param string $tableHeader      the value of tableHeader
-     * @param string $subcats          the value of subcats
-     * @param string $visits           the value of visits
-     * @param string $dropdownName     the value of dropdownName
-     * @param string $dropdownOpt      the value of dropdownOpt
-     * @param string $dropdownSelected the value of dropdownSelected
-     * @param array  $centers          the value of centers
-     * @param array  $data             the value of data
-     * @param string $subsection       the value of subsection=''
-     * @param string $disclamer        the value of disclamer=''
-     * @param string $projectID        the value of projectID is null
+     * @param string  $sectionHeader    the value of sectionHeader
+     * @param string  $tableHeader      the value of tableHeader
+     * @param array   $subcats          the value of subcats
+     * @param ?array  $visits           the value of visits
+     * @param string  $dropdownName     the value of dropdownName
+     * @param string  $dropdownOpt      the value of dropdownOpt
+     * @param string  $dropdownSelected the value of dropdownSelected
+     * @param array   $centers          the value of centers
+     * @param array   $data             the value of data
+     * @param string  $subsection       the value of subsection=''
+     * @param string  $disclamer        the value of disclamer=''
+     * @param ?string $projectID        the value of projectID is null
      *
      * @return string
      */
-    function renderStatsTable($sectionHeader,
+    function renderStatsTable(
+        $sectionHeader,
         $tableHeader,
-        $subcats,
-        $visits,
+        array $subcats,
+        ?array $visits,
         $dropdownName,
         $dropdownOpt,
         $dropdownSelected,
         $centers,
-        $data,
+        array $data,
         $subsection='',
         $disclamer='',
         $projectID=null
-    ) {
+    ): string {
         // This line replaces the empty $projectID string with null
         // `$projectID ?? null` would retain empty strings.
         $projectID = empty($projectID) ? null : $projectID;
@@ -116,11 +117,13 @@ class Stats_Demographic extends \NDB_Form
             $subcat  = $row['Subcat'];
             $center  = $row['CenterID'];
 
-            if (in_array($vl, $visits)
+            if (in_array($vl, $visits ?? array())
                 && in_array($subcat, $subcats)
                 && $this->_inCenter($center, $centers)
             ) {
                 $C = 'C' . $center;
+                // Ensure $tpl_data['data'] is not null before continuing
+                $tpl_data['data'] = $tpl_data['data'] ?? array();
                 $tpl_data['data'][$subproj][$vl][$subcat] += $row['val'];
                 $tpl_data['data'][$subproj][$vl]['total'] += $row['val'];
                 $tpl_data['data'][$subproj][$subcat]      += $row['val'];
@@ -154,10 +157,8 @@ class Stats_Demographic extends \NDB_Form
     function setup()
     {
         parent::setup();
-        $db          = \Database::singleton();
-        $config      = \NDB_Config::singleton();
-        $useProjects = $config->getSetting('useProjects');
-        $this->tpl_data['useProjects'] = $useProjects;
+        $visits = \Utility::getExistingVisitLabels();
+        $db     = \Database::singleton();
         //This boolean is for optional use by project if the demographics table
         // queries any information from the mri_parameter_form table
         $this->tpl_data['mri_table_exists'] = true;
@@ -189,17 +190,17 @@ class Stats_Demographic extends \NDB_Form
         }
 
         //SUBPROJECTS
-        $suproject_query = '';
-        // Only search for subprojects if $currentProject is a positive int.
-        if (is_numeric($currentProject) && intval($currentProject) >= 0) {
+        $subprojectQuery = '';
+        // Only search for subprojects if $demographicProject is a positive int.
+        if (is_numeric($demographicProject) && intval($demographicProject) >= 0) {
             $subprojList ="";
-            $subprojects = \Utility::getSubprojectsForProject($currentProject);
+            $subprojects = \Utility::getSubprojectsForProject($demographicProject);
             foreach ($subprojects as $key=>$val) {
                 $subprojList .= $key.",";
             }
             $subprojList = substr($subprojList, 0, -1);
             if (!empty($subprojList)) {
-                $suproject_query ="AND s.SubprojectID IN ($subprojList)";
+                $subprojectQuery ="AND s.SubprojectID IN ($subprojList)";
             }
         }
 
@@ -257,8 +258,8 @@ class Stats_Demographic extends \NDB_Form
                           AND s.CenterID <> '1'
                           AND c.Entity_type != 'Scanner'
                           AND c.Active = 'Y'
-                          $Param_Project
-                          $Param_Site
+                          $paramProject
+                          $paramSite
                       GROUP BY s.subprojectid",
             $this->params ?? array()
         );
@@ -286,8 +287,8 @@ class Stats_Demographic extends \NDB_Form
                           AND c.Active='Y'
                           AND (ps.participant_status=1
                                OR ps.participant_status IS NULL)
-                          $Param_Project
-                          $Param_Site
+                          $paramProject
+                          $paramSite
                       GROUP BY s.subprojectid",
             $this->params ?? array()
         );
@@ -314,8 +315,8 @@ class Stats_Demographic extends \NDB_Form
                           AND c.Entity_type != 'Scanner'
                           AND c.Active='Y'
                           AND ps.participant_status=5
-                          $Param_Project
-                          $Param_Site
+                          $paramProject
+                          $paramSite
                       GROUP BY s.subprojectid",
             $this->params ?? array()
         );
@@ -341,8 +342,8 @@ class Stats_Demographic extends \NDB_Form
                           AND (ps.participant_status=1 OR
                                ps.participant_status IS NULL)
                           AND c.Sex='Male'
-                          $Param_Project
-                          $Param_Site
+                          $paramProject
+                          $paramSite
                       GROUP BY s.subprojectid",
             $this->params ?? array()
         );
@@ -372,8 +373,8 @@ class Stats_Demographic extends \NDB_Form
                           AND (ps.participant_status=1
                                OR ps.participant_status IS NULL)
                           AND c.Sex='Female'
-                          $Param_Project
-                          $Param_Site
+                          $paramProject
+                          $paramSite
                       GROUP BY s.subprojectid",
             $this->params ?? array()
         );
@@ -404,8 +405,8 @@ class Stats_Demographic extends \NDB_Form
                           AND (ps.participant_status=1
                           OR ps.participant_status IS NULL)
                           AND c.Active='Y'
-                          $Param_Project
-                          $Param_Site) 
+                          $paramProject
+                          $paramSite) 
                                 as res
               GROUP BY rowid",
             $this->params ?? array()
@@ -462,7 +463,7 @@ class Stats_Demographic extends \NDB_Form
                 WHERE s.Active='Y' 
                     AND c.RegistrationCenterID <> '1'
                     AND s.CenterID <> '1'
-                    $Param_Project
+                    $paramProject
                     AND f.CommentID NOT LIKE 'DDE%'
                     AND (f.Data_entry IS NULL OR f.Data_entry <> 'Complete')
                 GROUP BY c.RegistrationCenterID, SubprojectID, VLabel, Subcat

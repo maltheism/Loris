@@ -63,11 +63,7 @@ class Stats_Behavioural extends \NDB_Form
     {
         parent::setup();
 
-        $DB          =& \Database::singleton();
-        $config      = \NDB_Config::singleton();
-        $useProjects = $config->getSetting("useProjects");
-        $this->tpl_data['useProjects'] = $useProjects;
-        $subprojList ="";
+        $DB =& \Database::singleton();
 
         $centers = $DB->pselect(
             "SELECT CONCAT('C', CenterID) as ID,
@@ -182,20 +178,22 @@ class Stats_Behavioural extends \NDB_Form
                     $c['all']['complete'] = $row['val'];
                 }
             }
-            if ($c[$vl]['total'] != 0) {
-                if (isset($c[$vl]['complete'])) {
-                    $c[$vl]['percent']
-                        = floor($c[$vl]['complete'] / $c[$vl]['total']*100);
-                } else {
-                    $c[$vl]['percent'] = 0;
+            if (!empty($c) && is_array($c)) {
+                if ($c[$vl]['total'] != 0) {
+                    if (isset($c[$vl]['complete'])) {
+                        $c[$vl]['percent']
+                            = floor($c[$vl]['complete'] / $c[$vl]['total']*100);
+                    } else {
+                        $c[$vl]['percent'] = 0;
+                    }
                 }
-            }
-            if ($c['all']['total'] != 0) {
-                if (isset($c['all']['complete'])) {
-                    $c['all']['percent']
-                        = floor($c['all']['complete'] / $c['all']['total']*100);
-                } else {
-                    $c['all']['percent'] = 0;
+                if ($c['all']['total'] != 0) {
+                    if (isset($c['all']['complete'])) {
+                        $c['all']['percent']
+                            = floor($c['all']['complete'] / $c['all']['total']*100);
+                    } else {
+                        $c['all']['percent'] = 0;
+                    }
                 }
             }
         }
@@ -246,20 +244,22 @@ class Stats_Behavioural extends \NDB_Form
                     $c['all']['complete'] = $row['val'];
                 }
             }
-            if ($c[$vl]['total'] != 0) {
-                if (isset($c[$vl]['complete'])) {
-                    $c[$vl]['percent']
-                        = floor($c[$vl]['complete'] / $c[$vl]['total']*100);
-                } else {
-                    $c[$vl]['percent'] = 0;
+            if (!empty($c) && is_array($c)) {
+                if ($c[$vl]['total'] != 0 && !is_null($c[$vl])) {
+                    if (isset($c[$vl]['complete'])) {
+                        $c[$vl]['percent']
+                            = floor($c[$vl]['complete'] / $c[$vl]['total']*100);
+                    } else {
+                        $c[$vl]['percent'] = 0;
+                    }
                 }
-            }
-            if ($c['all']['total'] != 0) {
-                if (isset($c['all']['complete'])) {
-                    $c['all']['percent']
-                        = floor($c['all']['complete'] / $c['all']['total']*100);
-                } else {
-                    $c['all']['percent'] = 0;
+                if ($c['all']['total'] != 0) {
+                    if (isset($c['all']['complete'])) {
+                        $c['all']['percent']
+                            = floor($c['all']['complete'] / $c['all']['total']*100);
+                    } else {
+                        $c['all']['percent'] = 0;
+                    }
                 }
             }
         }

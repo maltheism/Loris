@@ -69,11 +69,23 @@ class Create_Timepoint extends \NDB_Form
      */
     function _process($values)
     {
+        // convert site entered to a \Site object
+        $user = \User::singleton();
+
+        $user_list_of_sites = $user->getCenterIDs();
+        $num_sites          = count($user_list_of_sites);
+        if ($num_sites == 1) {
+            $site = \Site::singleton($user_list_of_sites[0]);
+        } else if ($num_sites > 1) {
+            $site = \Site::singleton(intval($values['psc']));
+        }
+
+        assert(isset($site) && $site !== null);
         \TimePoint::createNew(
-            $this->identifier,
+            \Candidate::singleton($this->identifier),
             $values['subprojectID'],
-            $values['visitLabel'],
-            $values['psc']
+            $values['visitLabel'] ?? null,
+            $site
         );
 
         $this->tpl_data['success'] = true;
@@ -120,23 +132,17 @@ class Create_Timepoint extends \NDB_Form
         $sp_labelOptions = array(null => '');
         $subprojList     = null;
         //List of valid subprojects for a given project
-        if ($config->getSetting('useProjects') === 'true') {
-            // If projects enabled, loop through and add valid subprojects only
-            $subprojList = $candidate->getValidSubprojects();
-            if (empty($subprojList)) {
-                $this->form->errors['subprojectID'] = "No subprojects have been 
-                defined for the project this candidate is affiliated with. 
-                If you are an administrator, please use the Configuration module to 
-                add new subprojects and associate them with projects.";
+        $subprojList = $candidate->getValidSubprojects();
+        if (empty($subprojList)) {
+            $this->form->errors['subprojectID'] = "No subprojects have been 
+            defined for the project this candidate is affiliated with. 
+            If you are an administrator, please use the Configuration module to 
+            add new subprojects and associate them with projects.";
+        }
+        foreach ($allSubprojects as $subprojectID => $title) {
+            if (in_array($subprojectID, $subprojList)) {
+                $sp_labelOptions[$subprojectID] = $title;
             }
-            foreach ($allSubprojects as $subprojectID => $title) {
-                if (in_array($subprojectID, $subprojList)) {
-                    $sp_labelOptions[$subprojectID] = $title;
-                }
-            }
-        } else {
-            // If projects disabled, add all subprojects
-            $sp_labelOptions += $allSubprojects;
         }
 
         $attributes = array(
@@ -228,9 +234,12 @@ class Create_Timepoint extends \NDB_Form
 
         // validate site entered
         $site = $val['psc'] ?? '';
-        $user_list_of_sites = $user->getData('CenterIDs');
+        $user_list_of_sites = $user->getStudySites();
         $num_sites          = count($user_list_of_sites);
-        if ($num_sites > 1 && (empty($site) || !$user->hasCenter($site))) {
+        if ($num_sites == 0) {
+            $errors['psc']
+                = "You must be affiliated with a site to create a timepoint.";
+        } else if ($num_sites > 1 && (empty($site) || !$user->hasCenter($site))) {
             $errors['psc'] = "Site must be selected from the available dropdown.";
         }
 
