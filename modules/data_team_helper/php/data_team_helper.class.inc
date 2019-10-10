@@ -23,7 +23,7 @@ namespace LORIS\data_team_helper;
  * @license  http://www.gnu.org/licenses/gpl-3.0.txt GPLv3
  * @link     https://www.github.com/aces/Loris
  */
-class Data_Team_Helper extends \NDB_Form
+class Data_Team_Helper extends \NDB_Page
 {
 
     /**
@@ -834,7 +834,7 @@ class Data_Team_Helper extends \NDB_Form
         return array_merge(
             $deps,
             array(
-             $baseURL . "/data_team_helper/js/data_team.js",
+             $baseURL . '/data_team_helper/js/dataTeamHelperIndex.js',
             )
         );
     }
@@ -852,7 +852,7 @@ class Data_Team_Helper extends \NDB_Form
         $deps    = parent::getCSSDependencies();
         return array_merge(
             $deps,
-            [$baseURL . "/data_team_helper/css/data_team_helper.css"]
+            [$baseURL . '/data_team_helper/css/data_team_helper.css']
         );
     }
 }
