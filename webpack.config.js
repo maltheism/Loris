@@ -2,7 +2,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
-//
+////
 
 const config = [{
   entry: {
