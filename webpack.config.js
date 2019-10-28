@@ -2,6 +2,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
 
+//
+
 const config = [{
   entry: {
     './htdocs/js/components/DynamicDataTable.js': './jsx/DynamicDataTable.js',
