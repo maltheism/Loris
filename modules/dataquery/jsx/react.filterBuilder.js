@@ -7,6 +7,7 @@
  */
 
 import React, {Component} from 'react';
+import Modal from "jsx/Modal";
 
 /*
  *  The following component is used for displaying operator for the group component
@@ -568,12 +569,32 @@ class FilterGroup extends Component {
 class FilterBuilder extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showModalCSV: false,
+    };
+    this.openModalCSV = this.openModalCSV.bind(this);
+    this.closeModalCSV = this.closeModalCSV.bind(this);
+  }
+
+  openModalCSV(e) {
+    e.preventDefault();
+    this.setState({showModalCSV: true});
+  }
+
+  closeModalCSV() {
+    this.setState({showModalCSV: false});
   }
 
   render() {
     return (
       <div>
+        <Modal
+          title='Define Candidates by Uploading CSV'
+          show={this.state.showModalCSV}
+          onClose={this.closeModalCSV}
+        >
+          test
+        </Modal>
         <h1 className='col-xs-12'>Filter</h1>
         <div className='col-xs-12'>
           <div className='well well-primary'>
@@ -584,6 +605,10 @@ class FilterBuilder extends Component {
             />
           </div>
         </div>
+        <ButtonElement label='Upload CSV'
+                       columnSize=''
+                       onUserInput={this.openModalCSV}
+        />
       </div>
     );
   }
