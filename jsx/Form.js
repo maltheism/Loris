@@ -1551,19 +1551,32 @@ class ButtonElement extends Component {
   }
 
   render() {
-    return (
-      <div className="row form-group">
-        <div className={this.props.columnSize}>
+    const container = !this.props.removeRow
+      ? (<div className="row form-group">
+          <div className={this.props.columnSize}>
+            <button
+              name={this.props.name}
+              type={this.props.type}
+              className={this.props.buttonClass}
+              onClick={this.handleClick}
+            >
+              {this.props.label}
+            </button>
+          </div>
+        </div>)
+      : (<div className={this.props.columnSize}>
           <button
             name={this.props.name}
             type={this.props.type}
+            style={this.props.buttonStyle}
             className={this.props.buttonClass}
             onClick={this.handleClick}
           >
             {this.props.label}
           </button>
-        </div>
-      </div>
+        </div>);
+    return (
+      container
     );
   }
 }
@@ -1572,12 +1585,15 @@ ButtonElement.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   type: PropTypes.string,
+  removeRow: PropTypes.bool,
   onUserInput: PropTypes.func,
+  buttonStyle: PropTypes.object,
 };
 
 ButtonElement.defaultProps = {
   label: 'Submit',
   type: 'submit',
+  removeRow: false,
   buttonClass: 'btn btn-primary',
   columnSize: 'col-sm-9 col-sm-offset-3',
   onUserInput: function() {

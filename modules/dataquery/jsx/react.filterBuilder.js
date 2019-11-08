@@ -593,7 +593,24 @@ class FilterBuilder extends Component {
           show={this.state.showModalCSV}
           onClose={this.closeModalCSV}
         >
-          test
+          <div className={'row'}>
+            <ButtonElement label='PSCID'
+                           removeRow={true}
+                           buttonStyle={{
+                             width: '100%'
+                           }}
+                           columnSize='col-xs-6'
+                           onUserInput={this.closeModalCSV}
+            />
+            <ButtonElement label='DCCID'
+                           removeRow={true}
+                           buttonStyle={{
+                             width: '100%'
+                           }}
+                           columnSize='col-xs-6'
+                           onUserInput={this.closeModalCSV}
+            />
+          </div>
         </Modal>
         <h1 className='col-xs-12'>Filter</h1>
         <div className='col-xs-12'>
