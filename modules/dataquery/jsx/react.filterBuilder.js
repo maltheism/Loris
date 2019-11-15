@@ -585,6 +585,11 @@ class FilterBuilder extends Component {
     this.setState({showModalCSV: false});
   }
 
+  defineCSVCandidates(e) {
+    console.log(e.target.value);
+    this.closeModalCSV();
+  }
+
   render() {
     return (
       <div>
