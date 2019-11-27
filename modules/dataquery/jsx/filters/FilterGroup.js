@@ -164,7 +164,7 @@ class FilterGroup extends Component {
           className='btn btn-danger btn-sm pull-right'
           onClick={this.props.deleteGroup.bind(this, this.props.index)}
         >
-          <span className='glyphicon glyphicon-remove'></span> Delete Group
+          <span className='glyphicon glyphicon-remove'/> Delete Group
         </button>
       );
     }
@@ -181,12 +181,12 @@ class FilterGroup extends Component {
                 <button className='btn btn-primary btn-sm pull-right'
                         onClick={this.addChild.bind(this, 'group')}
                 >
-                  <span className='glyphicon glyphicon-add'></span> Add Group
+                  <span className='glyphicon glyphicon-add'/> Add Group
                 </button>
                 <button className='btn btn-primary btn-sm pull-right'
                         onClick={this.addChild.bind(this, 'rule')}
                 >
-                  <span className='glyphicon glyphicon-add'></span> Add Rule
+                  <span className='glyphicon glyphicon-add'/> Add Rule
                 </button>
               </div>
             </div>

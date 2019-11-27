@@ -550,10 +550,19 @@ class DataQueryApp extends Component {
   fieldChange(fieldName, category, downloadable) {
     // Used to add and remove fields from the current query being built
 
+    console.log('~~~~~fieldChange~');
+    console.log('fieldName:');
+    console.log(fieldName);
+    console.log('category:');
+    console.log(category);
+    console.log('downloadable:');
+    console.log(downloadable);
+
     this.setState((state) => {
       let selectedFields = state.selectedFields,
-        fields = state.fields.slice(0);
+          fields = state.fields.slice(0);
       if (!selectedFields[category]) {
+        console.log(1);
         // The given category has no selected fields, add the category to the selectedFields
         selectedFields[category] = {};
         // Add all visits to the given field for the given category
@@ -572,6 +581,7 @@ class DataQueryApp extends Component {
           state.downloadableFields[category + ',' + fieldName] = true;
         }
       } else if (selectedFields[category][fieldName]) {
+        console.log(2);
         // Remove the field from the selectedFields
         for (let key in selectedFields[category][fieldName]) {
           // Decrement the count of field's visits, delete visit if count is 1
@@ -598,6 +608,7 @@ class DataQueryApp extends Component {
           delete state.downloadableFields[category + ',' + fieldName];
         }
       } else {
+        console.log(3);
         // The category already has fields but not the desired one, add it
         if (!selectedFields[category][fieldName]) {
           selectedFields[category][fieldName] = {};
@@ -617,6 +628,10 @@ class DataQueryApp extends Component {
           state.downloadableFields[category + ',' + fieldName] = true;
         }
       }
+      console.log(4);
+      console.log(selectedFields);
+      console.log(fields);
+      console.log(4);
       return {
         selectedFields: selectedFields,
         fields: fields

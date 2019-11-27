@@ -24,7 +24,11 @@ const FieldItem = (props) => {
   let downloadIcon = '';
   let multiselect;
 
+  console.log('CHECK!!!');
+  console.log('props.selected:');
+  console.log(props.selected);
   if (props.selected) {
+    console.log('1');
     // If field is selected, add active class and visits
     classList += ' active';
     multiselect = Object.keys(props.Visits).map((visit) => {

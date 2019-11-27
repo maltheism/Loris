@@ -12,6 +12,11 @@ class FieldList extends Component {
   }
 
   onFieldClick(fieldName, downloadable) {
+    console.log('~~~~onFieldClick');
+    console.log('fieldName:');
+    console.log(fieldName);
+    console.log('downloadable:');
+    console.log(downloadable);
     // Wrapper function used to update field
     this.props.onFieldSelect(fieldName, this.props.category, downloadable);
   }
@@ -74,7 +79,7 @@ class FieldList extends Component {
           Visits={this.props.Visits}
           selectedVisits={selectedFields}
           fieldVisitSelect={this.props.fieldVisitSelect}
-      />);
+        />);
       if (fields.length > rowsPerPage) {
         break;
       }
