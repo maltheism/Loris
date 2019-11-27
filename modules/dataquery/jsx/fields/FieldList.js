@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
 /*
- *  Used for displaying the list of available fields
- *  for the selected category
+ * Used for displaying the list of available
+ * fields for the selected category
  */
 class FieldList extends Component {
   constructor(props) {
@@ -36,7 +36,9 @@ class FieldList extends Component {
       desc = items[i].value.Description;
       type = items[i].value.Type || 'varchar(255)';
 
-      if (fieldName.toLowerCase().indexOf(filter) == -1 && desc.toLowerCase().indexOf(filter) == -1) {
+      if (fieldName.toLowerCase().indexOf(filter) === -1
+        && desc.toLowerCase().indexOf(filter) === -1)
+      {
         continue;
       }
 
@@ -59,17 +61,19 @@ class FieldList extends Component {
         selectedFields = {}
       }
 
-      fields.push(<FieldItem key={fieldName}
-                             FieldName={fieldName}
-                             Category={this.props.category}
-                             Description={desc}
-                             ValueType={type}
-                             onClick={this.onFieldClick.bind(this, fieldName, isFile)}
-                             selected={selected}
-                             downloadable={isFile}
-                             Visits={this.props.Visits}
-                             selectedVisits={selectedFields}
-                             fieldVisitSelect={this.props.fieldVisitSelect}
+      fields.push(
+        <FieldItem
+          key={fieldName}
+          FieldName={fieldName}
+          Category={this.props.category}
+          Description={desc}
+          ValueType={type}
+          onClick={this.onFieldClick.bind(this, fieldName, isFile)}
+          selected={selected}
+          downloadable={isFile}
+          Visits={this.props.Visits}
+          selectedVisits={selectedFields}
+          fieldVisitSelect={this.props.fieldVisitSelect}
       />);
       if (fields.length > rowsPerPage) {
         break;
@@ -79,7 +83,12 @@ class FieldList extends Component {
     return (
       <div className='list-group col-md-9 col-sm-12'>
         {fields}
-        <PaginationLinks Total={items.length} Active={this.props.PageNumber} onChangePage={this.props.changePage} RowsPerPage={rowsPerPage}/>
+        <PaginationLinks
+          Total={items.length}
+          Active={this.props.PageNumber}
+          onChangePage={this.props.changePage}
+          RowsPerPage={rowsPerPage}
+        />
       </div>
     );
   }
