@@ -98,69 +98,71 @@
                         <div class="col-xs-12 form-group">
 <table border="1">
   <tr>
-    <td><b>Publication</b></td>
-    <td><b>To cite any Resource used for publication in accordance with the CONP Publication Policy as well as the Resource's publication policy (found on the <u>Resource landing page</u>),</b></td>
+    <td><b>Publication:</b></td>
+    <td>
+      <ul>
+        <li>If I publish <i>abstracts</i> using data from PREVENT-AD, I agree to the following:</li>
+      </ul>
+       <i>"I will cite PREVENT-AD as the source of data in the abstract if space allows"</i>
+       <ul>
+         <li>If I publish <i>manuscripts</i> using data from PREVENT-AD, I agree to the following:</li>
+       </ul>
+       <i>"I will state the source of data and cite the primary publication of PREVENT-AD in the methods section of my manuscripts by including language similar to the following: 'Data used in preparation of this article were obtained from the Pre-symptomatic Evaluation of Novel or Experimental Treatments for Alzheimer's Disease (PREVENT-AD) program. (Breitner et al., 2016)'."</i>
+    </td>
   </tr>
   <tr>
-    <td>Ownership</td>
-    <td>To respect any licensing terms associated with Resources (found on the <u>Resource landing page</u>),</td>
+    <td>Commercialization:</td>
+    <td>
+      <ul>
+        <li>I will not attempt to sell or claim intellectual property rights in the PREVENT-AD dataset</li>
+      </ul>
+    </td>
   </tr>
   <tr>
-    <td>Commercialization</td>
-    <td>Not to attempt to sell or claim intellectual property rights in Resources,</td>
+    <td><b>Privacy:</b></td>
+    <td>
+      <ul>
+        <li>I will not attempt to re-identify or re-contact individual participants,</li>
+        <li>In particular, I will not (remove: to) link the data to other datasets if that could lead to their re-identification</li>
+      </ul>
+    </td>
   </tr>
 </table>
 <br>
 <table border="1">
   <tr>
-    <td><b>Privacy</b></td>
-    <td><b>Not to attempt to re-identify or re-contact individual participants,</b><br><b>Not to link individual-level datasets in a way that increases risk of re-identification,</b></td>
+    <td>Ethical Oversight:</td>
+    <td>
+      <ul>
+        <li>I will obtain any required approvals for the use of the PREVENT-AD dataset</li>
+      </ul>
+    </td>
   </tr>
   <tr>
-    <td>Ethical Oversight</td>
-    <td>To obtain any required approvals for their use of Resources,</td>
+    <td>Use restriction:</td>
+    <td>
+      <ul>
+        <li>This open PREVENT-AD dataset must be used for ‘neurosciences research’ as stipulated in the consent form.</li>
+      </ul>
+    </td>
   </tr>
   <tr>
-    <td>Use Restrictions</td>
-    <td>To respect any use restrictions (found on the <u>Resource landing page</u>),</td>
+    <td>Confidentiality:</td>
+    <td>
+      <ul>
+        <li>Sharing of this dataset must be done through this portal. Do not redistribute the data yourself. Redirect potential users to this portal so they can register and agree to these terms.</li>
+      </ul>
+    </td>
   </tr>
   <tr>
-    <td>Confidentiality/Security</td>
-    <td>To keep access-restricted Resources confidential.<br>To return or destroy access-restricted Resources if their authorization expires or is terminated.</td>
-  </tr>
-  <tr>
-    <td>Monitoring</td>
-    <td>To respond promptly to requests from the CONP concerning their user of the CONP Portal, and <br>To immediately report any Resource or User activity that breaches these terms to the CONP.</td>
+    <td>Monitoring:</td>
+    <td>
+      <ul>
+        <li>I will respond to requests from PREVENT-AD, if any. I will immediately report to PREVENT-AD activity that breaches these terms (remove: if any).</li>
+      </ul>
+    </td>
   </tr>
 </table>
-                        </div>
-                    </div>
-                </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="pModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="border-radius: 7px">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title" id="myModalLabel">Publication Policy</h3>
-            </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-12 form-group">
-<div class="policy">
-  <ul>
-   <li> If I publish abstracts using data from PREVENT-AD, I agree to the following:</li>
-  </ul>
-  <i>"I will cite PREVENT-AD as the source of data in the abstract if space allows"</i>
-  <p></p>
-  <ul> 
-    <li>If I publish manuscripts using data from PREVENT-AD, I agree to the following:</li> 
-  </ul>  
-  <i>"I will state the source of data and cite the primary publication of PREVENT-AD in the methods section of my manuscripts by including language similar to the following: 'Data used in preparation of this article were obtained from the Pre-symptomatic Evaluation of Novel or Experimental Treatments for Alzheimer's Disease (PREVENT-AD) program. (Breitner et al., 2016)'."</i>
-</div>
                         </div>
                     </div>
                 </div>
