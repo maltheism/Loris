@@ -68,7 +68,7 @@ class RequestAccount extends \NDB_Form
             "Site",
             array("" => "Choose your site:") + \Utility::getSiteList()
         );
-        $this->addCheckbox("tpaccept", " I accept the <a href='#' data-toggle='modal' data-target='#tModal'>terms</a> and <a href='#' data-toggle='modal' data-target='#pModal'>publication policy</a>.", array());
+        $this->addCheckbox("tpaccept", " I accept the <a href='#' data-toggle='modal' data-target='#tModal'>terms</a>.", array());
 
         // Get reCATPCHA keys
         $reCAPTCHAPrivate = $config->getSetting('reCAPTCHAPrivate');
