@@ -123,7 +123,7 @@
     <td>
       <ul>
         <li>I will not attempt to re-identify or re-contact individual participants,</li>
-        <li>In particular, I will not (remove: to) link the data to other datasets if that could lead to their re-identification</li>
+        <li>In particular, I will not link the data to other datasets if that could lead to their re-identification</li>
       </ul>
     </td>
   </tr>
@@ -158,7 +158,7 @@
     <td>Monitoring:</td>
     <td>
       <ul>
-        <li>I will respond to requests from PREVENT-AD, if any. I will immediately report to PREVENT-AD activity that breaches these terms (remove: if any).</li>
+        <li>I will respond to requests from PREVENT-AD, if any. I will immediately report to PREVENT-AD activity that breaches these terms.</li>
       </ul>
     </td>
   </tr>
