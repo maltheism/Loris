@@ -681,47 +681,100 @@ class DataQueryApp extends Component {
         // keep track of the number of requests waiting for a response
         semaphore++;
         sectionedSessions = JSON.stringify(sessionInfo);
-        $.ajax({
-          type: 'POST',
-          url: loris.BaseURL + '/AjaxHelper.php?Module=dataquery&script=retrieveCategoryDocs.php',
-          data: {
-            DocType: category,
-            Sessions: sectionedSessions
+
+        fetch(
+          window.location.origin
+          + '/dataquery/View/categorydocs',
+          {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: JSON.stringify({
+              DocType: category,
+              Sessions: sectionedSessions
+            }),
           },
-          dataType: 'text',
-          success: (data) => {
-            if (data) {
-              let i, row, rows, identifier,
-                sessiondata = this.state.sessiondata;
-              data = JSON.parse(data);
-              rows = data.rows;
-              for (i = 0; i < rows.length; i += 1) {
-                /*
-                 * each row is a JSON object of the
-                 * form:
-                 * {
-                 *  "key" : [category, pscid, vl],
-                 *  "value" : [pscid, vl],
-                 *  "doc": {
-                 *      Meta: { stuff }
-                 *      data: { "FieldName" : "Value", .. }
-                 * }
-                 */
-                row = rows[i];
-                identifier = row.value;
-                if (!sessiondata.hasOwnProperty(identifier)) {
-                  sessiondata[identifier] = {}
-                }
-
-                sessiondata[identifier][row.key[0]] = row.doc;
-
-              }
-              this.setState({'sessiondata': sessiondata});
-            }
-            semaphore--;
-            ajaxComplete();
+        ).then((resp) => resp.json()
+        ).then((data) => {
+          if (data.error) {
+            throw data.error;
           }
+          if (data) {
+            let i, row, rows, identifier,
+              sessiondata = this.state.sessiondata;
+            data = JSON.parse(data);
+            rows = data.rows;
+            for (i = 0; i < rows.length; i += 1) {
+              /*
+               * each row is a JSON object of the
+               * form:
+               * {
+               *  "key" : [category, pscid, vl],
+               *  "value" : [pscid, vl],
+               *  "doc": {
+               *      Meta: { stuff }
+               *      data: { "FieldName" : "Value", .. }
+               * }
+               */
+              row = rows[i];
+              identifier = row.value;
+              if (!sessiondata.hasOwnProperty(identifier)) {
+                sessiondata[identifier] = {}
+              }
+
+              sessiondata[identifier][row.key[0]] = row.doc;
+
+            }
+            this.setState({'sessiondata': sessiondata});
+          }
+          semaphore--;
+          ajaxComplete();
+        }).catch((error) => {
+          console.error(error);
         });
+
+        // $.ajax({
+        //   type: 'POST',
+        //   url: loris.BaseURL + '/AjaxHelper.php?Module=dataquery&script=retrieveCategoryDocs.php',
+        //   data: {
+        //     DocType: category,
+        //     Sessions: sectionedSessions
+        //   },
+        //   dataType: 'text',
+        //   success: (data) => {
+        //     if (data) {
+        //       console.log('data is ');
+        //       console.log(data);
+        //       let i, row, rows, identifier,
+        //         sessiondata = this.state.sessiondata;
+        //       data = JSON.parse(data);
+        //       rows = data.rows;
+        //       for (i = 0; i < rows.length; i += 1) {
+        //         /*
+        //          * each row is a JSON object of the
+        //          * form:
+        //          * {
+        //          *  "key" : [category, pscid, vl],
+        //          *  "value" : [pscid, vl],
+        //          *  "doc": {
+        //          *      Meta: { stuff }
+        //          *      data: { "FieldName" : "Value", .. }
+        //          * }
+        //          */
+        //         row = rows[i];
+        //         identifier = row.value;
+        //         if (!sessiondata.hasOwnProperty(identifier)) {
+        //           sessiondata[identifier] = {}
+        //         }
+        //
+        //         sessiondata[identifier][row.key[0]] = row.doc;
+        //
+        //       }
+        //       this.setState({'sessiondata': sessiondata});
+        //     }
+        //     semaphore--;
+        //     ajaxComplete();
+        //   }
+        // });
       }
     }
   }

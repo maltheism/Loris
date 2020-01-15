@@ -49,6 +49,7 @@ $results     = $cdb->queryView(
     ),
     true
 );
+
 $keys        = null;
 $cdb         = null;
 $client      = null;

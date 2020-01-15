@@ -37,10 +37,12 @@ class View extends \NDB_Page
      */
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        // Ensure GET request.
+        // Ensure GET or POST request.
         switch ($request->getMethod()) {
         case 'GET':
             return $this->_handleGET($request);
+        case 'POST':
+            return $this->_handlePOST($request);
         default:
             return new \LORIS\Http\Response\MethodNotAllowed(
                 $this->allowedMethods()
@@ -76,6 +78,35 @@ class View extends \NDB_Page
             return new \LORIS\Http\Response\JsonResponse(
                 $values
             );
+        }
+    }
+
+    /**
+     * Handle POSTs for the DataQueryTool.
+     *
+     * @param ServerRequestInterface $request The incoming PSR7 request.
+     *
+     * @return ResponseInterface The outgoing PSR7 response
+     */
+    private function _handlePOST(ServerRequestInterface $request) : ResponseInterface
+    {
+        // Parse POST request body.
+        $values = json_decode((string) $request->getBody(), true);
+
+        // Retrieve 'type' of request.
+        $type = substr(
+            $_REQUEST['lorispath'],
+            strpos($_REQUEST['lorispath'], '/View/') + strlen('/View/')
+        );
+
+        // Process the 'type' of request.
+        switch ($type) {
+            case 'categorydocs':
+                return $this->_categorydocs($request);
+            default:
+                return new \LORIS\Http\Response\JsonResponse(
+                    $values
+                );
         }
     }
 
@@ -302,6 +333,49 @@ class View extends \NDB_Page
                 )
             );
         }
+
+        // Return Query results to the user.
+        return new \LORIS\Http\Response\JsonResponse(
+            $results
+        );
+    }
+
+    /**
+     * Access the categorydocs of the DataQueryTool.
+     *
+     * @param ServerRequestInterface $request The incoming PSR7 request.
+     *
+     * @return ResponseInterface The outgoing PSR7 response
+     */
+    private function _categorydocs(ServerRequestInterface $request) : ResponseInterface
+    {
+        // Parse POST request body.
+        $values = json_decode((string) $request->getBody(), true);
+
+        // Start Connecting to CouchDB
+        $cdb = \NDB_Factory::singleton()->couchDB();
+
+        $category    = $values['DocType'];
+        $sessions    = json_decode($values['Sessions']);
+        $keys        = array_map(
+            function ($row) use ($category) {
+                return array_merge(array($category), $row);
+            },
+            $sessions
+        );
+        $results     = $cdb->queryView(
+            "DQG-2.0",
+            "instruments",
+            array(
+                "reduce"       => "false",
+                "include_docs" => "true",
+                "keys"         => $keys,
+            ),
+            false
+        );
+        $keys        = null;
+        $cdb         = null;
+        $client      = null;
 
         // Return Query results to the user.
         return new \LORIS\Http\Response\JsonResponse(
