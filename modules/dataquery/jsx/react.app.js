@@ -297,6 +297,9 @@ class DataQueryApp extends Component {
 
   loadFilterRule(rule) {
     // Used to load in a filter rule
+    console.log('INSIDE loadFilterRule()');
+    console.log('[0] rule is:');
+    console.log(rule);
 
     let script;
     if (!rule.type) {
@@ -305,10 +308,15 @@ class DataQueryApp extends Component {
 
     // Get given fields of the instrument for the rule.
     // This call is made synchronously
+    console.log(JSON.stringify({category: rule.instrument}));
     $.ajax({
       url: loris.BaseURL + '/AjaxHelper.php?Module=dataquery&script=datadictionary.php',
       success: (data) => {
+        console.log('datadictionary.php data:');
+        console.log(data);
         rule.fields = data;
+        console.log('[1] rule is ');
+        console.log(rule);
       },
       async: false,
       data: {category: rule.instrument},
@@ -318,7 +326,20 @@ class DataQueryApp extends Component {
     // Find the rules selected field's data type
     for (let i = 0; i < rule.fields.length; i++) {
       if (rule.fields[i].key[1] === rule.field) {
+        console.log('[2] rule is: ');
+        console.log(rule);
+        console.log('rule.fields[i].key[1]: ');
+        console.log(rule.fields[i].key[1]);
+        console.log('rule.field is:');
+        console.log(rule.field);
+
+        console.log('rule.fieldType is:');
+        console.log(rule.fields[i].value.Type);
         rule.fieldType = rule.fields[i].value.Type;
+
+        console.log('CHECK rule is:');
+        console.log(rule);
+
         break;
       }
     }
@@ -349,6 +370,10 @@ class DataQueryApp extends Component {
       default:
         break;
     }
+
+    console.log('script is: ');
+    console.log(script);
+
     $.ajax({
       url: loris.BaseURL + '/AjaxHelper.php?Module=dataquery&script=' + script,
       success: (data) => {
