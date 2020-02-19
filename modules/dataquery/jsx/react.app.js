@@ -455,6 +455,8 @@ class DataQueryApp extends Component {
       }
     }
     group.session = getSessions(group);
+    console.log('[CHECK] groups is: ');
+    console.log(group);
     return group;
   }
 
