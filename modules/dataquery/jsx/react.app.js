@@ -413,8 +413,14 @@ class DataQueryApp extends Component {
         console.log('[check] rule.candidates is:');
         console.log(rule.candidates);
         if (rule.visit === 'All') {
+          console.log('rule.visit === \'All\'');
+          console.log('Object.keys(allCandiates) is:');
+          console.log(Object.keys(allCandiates));
+          console.log('rule.session is');
+          console.log(rule.session);
           rule.session = Object.keys(allCandiates);
         } else {
+          console.log('[check] else');
           if (allSessions[rule.visit]) {
             rule.session = allSessions[rule.visit];
           } else {
