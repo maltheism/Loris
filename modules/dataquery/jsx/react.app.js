@@ -383,14 +383,24 @@ class DataQueryApp extends Component {
         // Loop through data and divide into individual visits with unique PSCIDs
         // storing a master list of unique PSCIDs
         for (i = 0; i < data.length; i++) {
+          console.log('allSessions is:');
+          console.log(allSessions);
           if (!allSessions[data[i][1]]) {
+            console.log('Inside !allSessions[data[i][1]]');
             allSessions[data[i][1]] = [];
+            console.log('allSessions[data[i][1]] is:');
+            console.log(allSessions[data[i][1]]);
           }
           allSessions[data[i][1]].push(data[i][0]);
+          console.log('allSessions[data[i][1]].push(data[i][0]); is:');
+          console.log(allSessions[data[i][1]].push(data[i][0]));
           if (!allCandiates[data[i][0]]) {
+            console.log('Inside !allCandiates[data[i][0]]');
             allCandiates[data[i][0]] = []
           }
           allCandiates[data[i][0]].push(data[i][1]);
+          console.log('allCandiates[data[i][0]].push(data[i][1]); is');
+          console.log(allCandiates[data[i][0]].push(data[i][1]));
         }
         rule.candidates = {
           allCandiates: allCandiates,
