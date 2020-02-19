@@ -382,6 +382,10 @@ class DataQueryApp extends Component {
           allCandiates = {};
         // Loop through data and divide into individual visits with unique PSCIDs
         // storing a master list of unique PSCIDs
+
+        console.log('[check] data is:');
+        console.log(data);
+
         for (i = 0; i < data.length; i++) {
           console.log('allSessions is:');
           console.log(allSessions);
@@ -406,6 +410,8 @@ class DataQueryApp extends Component {
           allCandiates: allCandiates,
           allSessions: allSessions
         };
+        console.log('[check] rule.candidates is:');
+        console.log(rule.candidates);
         if (rule.visit === 'All') {
           rule.session = Object.keys(allCandiates);
         } else {
