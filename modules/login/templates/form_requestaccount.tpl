@@ -91,11 +91,21 @@
         <div class="modal-content" style="border-radius: 7px">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title" id="myModalLabel">Terms</h3>
+                <h3 class="modal-title" id="myModalLabel">Open PREVENT-AD Terms of Use</h3>
             </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12 form-group">
+
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 7px;
+}
+</style>
 <table border="1">
   <tr>
     <td><b>Publication:</b></td>
@@ -111,7 +121,7 @@
     </td>
   </tr>
   <tr>
-    <td>Commercialization:</td>
+    <td><b>Commercialization:</b></td>
     <td>
       <ul>
         <li>I will not attempt to sell or claim intellectual property rights in the PREVENT-AD dataset</li>
@@ -131,7 +141,7 @@
 <br>
 <table border="1">
   <tr>
-    <td>Ethical Oversight:</td>
+    <td><b>Ethical Oversight:</b></td>
     <td>
       <ul>
         <li>I will obtain any required approvals for the use of the PREVENT-AD dataset</li>
@@ -139,7 +149,7 @@
     </td>
   </tr>
   <tr>
-    <td>Use restriction:</td>
+    <td><b>Use restriction:</b></td>
     <td>
       <ul>
         <li>This open PREVENT-AD dataset must be used for ‘neurosciences research’ as stipulated in the consent form.</li>
@@ -147,7 +157,7 @@
     </td>
   </tr>
   <tr>
-    <td>Confidentiality:</td>
+    <td><b>Confidentiality:</b></td>
     <td>
       <ul>
         <li>Sharing of this dataset must be done through this portal. Do not redistribute the data yourself. Redirect potential users to this portal so they can register and agree to these terms.</li>
@@ -155,7 +165,7 @@
     </td>
   </tr>
   <tr>
-    <td>Monitoring:</td>
+    <td><b>Monitoring:</b></td>
     <td>
       <ul>
         <li>I will respond to requests from PREVENT-AD, if any. I will immediately report to PREVENT-AD activity that breaches these terms.</li>
