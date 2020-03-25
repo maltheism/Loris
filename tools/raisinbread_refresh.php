@@ -28,13 +28,7 @@
  * import Raisinbread data if the user has properly set up a MySQL configuration
  * file and provides the name of their LORIS database.
  *
- * PHP Version 7
- *
- * @category Main
- * @package  Loris
- * @author   John Saigle <john.saigle@mcin.ca>
- * @license  http://www.gnu.org/licenses/gpl-3.0.txt GPLv3
- * @link     https://www.github.com/aces/Loris-Trunk/
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt GPLv3
  */
 
 $info = <<<INFO
@@ -117,11 +111,11 @@ if ($status != 0) {
         || empty($password)
     ) {
         die(
-            printWarning(
-                "Could not connect to database. One of the settings: "
-                . "`host`, `database`, `username` or `password` "
-                . " are missing from your project's configuration file."
-            )
+        printWarning(
+            "Could not connect to database. One of the settings: "
+            . "`host`, `database`, `username` or `password` "
+            . " are missing from your project's configuration file."
+        )
         );
     }
 
@@ -136,10 +130,10 @@ if ($status != 0) {
     exec($mysqlCommand . ' -e "show tables;" 1>/dev/null 2>&1', $output, $status);
     if ($status != 0) {
         die(
-            printWarning(
-                "Could not connect to database. This is most likely due to "
-                . "invalid settings in your project's configuration file."
-            )
+        printWarning(
+            "Could not connect to database. This is most likely due to "
+            . "invalid settings in your project's configuration file."
+        )
         );
     }
 }
@@ -165,6 +159,7 @@ if (count($tables) > 0) {
     echo "Do you want to delete them now? (y/N)" . PHP_EOL;
     $input = trim(fgets(STDIN));
     if (mb_strtolower($input) === 'y') {
+        echo 'drop';
         dropRemainingTables($tables);
     }
 }
@@ -188,6 +183,23 @@ printHeader('Importing Raisinbread data...');
 $rbData = glob(__DIR__ . "/../raisinbread/RB_files/*.sql");
 
 array_walk($rbData, 'runPatch');
+
+// Copy Raisinbread instrument files to project/instruments/. This is done using
+// a closure to apply PHP's copy() function to all files in raisinbread/instruemnts/
+// that are required for scoring instruments
+printHeader('Copying Rasinbread instrument files to project/instruments/...');
+array_map(
+    function ($file) {
+        copy($file, __DIR__ . '/../project/instruments/' . basename($file));
+    },
+    array_merge(
+        glob(__DIR__ . "/../raisinbread/instruments/*.class.inc"),
+        glob(__DIR__ . "/../raisinbread/instruments/*.linst"),
+        glob(__DIR__ . "/../raisinbread/instruments/*.score"),
+        glob(__DIR__ . "/../raisinbread/instruments/*.rules")
+    ),
+);
+
 
 // Restore config settings if they were successfully found before.
 $configSettings = [
