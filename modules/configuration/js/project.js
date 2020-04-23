@@ -20,9 +20,12 @@ $(document).ready(function() {
               }, 1000);
             } else {
               var projectDiv = document.getElementById(`#project${ProjectID}`);
+              var oldName = projectDiv.innerText;
               projectDiv.innerText = Name;
               var projectHeader = document.getElementById(`project${ProjectID}`);
-              projectHeader.children[0].innerText = Name + projectHeader.children[0].innerText.substring(Name.length);
+              projectHeader.children[0].innerText = Name + projectHeader.children[0].innerText.substring(
+                oldName.length
+              );
             }
           }
         }

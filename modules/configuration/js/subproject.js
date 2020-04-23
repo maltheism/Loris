@@ -29,9 +29,23 @@ $(document).ready(function() {
                         .css({ 'color': 'green'})
                         .fadeIn(500)
                         .delay(1000);
+                      if (subprojectID === 'new') {
                         setTimeout(function(){
-                            location.reload();
+                          location.reload();
                         }, 1000);
+                      } else {
+                        var projectDiv = document.getElementById(`#subproject${subprojectID}`);
+                        var Name = projectDiv.innerText;
+                        projectDiv.innerText = title;
+                        var projectHeader = document.getElementById(`subproject${subprojectID}`);
+                        console.log('projectHeader.children[0].innerText')
+                        console.log(projectHeader.children[0].innerText);
+                        console.log('title is');
+                        console.log(title);
+                        projectHeader.children[0].innerText = title + projectHeader.children[0].innerText.substring(
+                          Name.length
+                        );
+                      }
                     },
                     "error" : function(data) {
                         $(form.find(".saveStatus"))
