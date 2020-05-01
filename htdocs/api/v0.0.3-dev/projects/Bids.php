@@ -113,7 +113,7 @@ class Bids extends \Loris\API\APIBase
              FROM bids_export_files bef
              LEFT JOIN session s   ON (bef.SessionID = s.ID)
              LEFT JOIN candidate c USING (CandID)
-             WHERE c.Active      = 'Y'
+             WHERE c.Active          = 'Y'
                AND bef.BIDSFileLevel = 'session'
                AND bef.FileType      = 'tsv' ",
             array()
@@ -152,7 +152,7 @@ class Bids extends \Loris\API\APIBase
              LEFT JOIN candidate c USING (CandID)
              WHERE c.Active           = 'Y'
                 AND bef.BIDSFileLevel = 'image'
-                AND bef.FileType          = 'nii'
+                AND bef.FileType      = 'nii'
                   ",
             array()
         );
