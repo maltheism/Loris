@@ -155,17 +155,17 @@ will return:
      "CandID"    : {candid},
      "Visit"     : {visit},
      "Filename"  : {filename.mnc},
-     "OutputType": {output_type},
-     "Subfolder" : {bids_subfolder_type}  // anat, func, asl...
    },
    "Files" : [
      {
-       "nifti": "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/nifti",
-       "json" : "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/json" 
+       "Subfolder": {bids_subfolder_type},  // anat, func, asl...
+       "NiftiLink": "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/nifti",
+       "JsonLink" : "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/json" 
      },
      {
-       "nifti": "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/nifti",
-       "json" : "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/json" 
+       "Subfolder": {bids_subfolder_type},  // anat, func, asl...
+       "NiftiLink": "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/nifti",
+       "JsonLink" : "/candidates/{candid}/{visit}/images/{filename.mnc}/bids/json" 
      },
      ...
 }
