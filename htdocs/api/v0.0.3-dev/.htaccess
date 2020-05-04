@@ -46,6 +46,7 @@ RewriteRule ^candidates/([0-9]+)/([a-zA-Z0-9_.]+)/images/([a-zA-Z0-9_.-]+)$ cand
 RewriteRule ^candidates/([0-9]+)/([a-zA-Z0-9_.]+)/bidsfiles$ candidates/visits/BidsFiles.php?CandID=$1&VisitLabel=$2&PrintFiles=true [L]
 RewriteRule ^candidates/([0-9]+)/([a-zA-Z0-9_.]+)/bidsfiles/([a-zA-Z0-9_.\-]+)$ candidates/visits/bidsfiles/BidsFile.php?CandID=$1&VisitLabel=$2&Filename=$3&PrintFileData=true [L]
 RewriteRule ^candidates/([0-9]+)/([a-zA-Z0-9_.]+)/images/([a-zA-Z0-9_.-]+)/bids$ candidates/visits/images/Bids.php?CandID=$1&VisitLabel=$2&Filename=$3&PrintFiles=true [L]
+RewriteRule ^candidates/([0-9]+)/([a-zA-Z0-9_.]+)/images/([a-zA-Z0-9_.-]+)/bids/([a-zA-Z0-9_.-]+)$ candidates/visits/images/bidsfiles/BidsFile.php?CandID=$1&VisitLabel=$2&Filename=$3&BidsFilename=$4&PrintFileData=true [L]
 
 
 ## DICOMs API related URLs
