@@ -184,7 +184,7 @@ class Bids extends \Loris\API\APIBase
                         "/candidates/$candid/$session/images/$minc_name/bids/$file_name.bvec";
                 }
 
-                if (strpos('_task-', $file_name)) {
+                if (preg_match('/_task-/', $file_name)) {
                     $final_array_to_return['EventLink'] =
                         "/candidates/$candid/$session/images/$minc_name/bids/$file_name-events.txt";
                 }
