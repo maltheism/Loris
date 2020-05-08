@@ -139,39 +139,6 @@ class Visit extends \Loris\API\Candidates\Candidate
             }
             $this->JSON['Stages'] = $stages;
         }
-
-        $bids_session_tsv_file = $this->DB->pselectOne(
-            "SELECT
-               bef.FilePath
-             FROM bids_export_files bef
-             LEFT JOIN session s   ON (bef.SessionID = s.ID)
-             WHERE s.ID              = :Sessionid
-               AND bef.BIDSFileLevel = 'session'
-               AND bef.FileType      = 'tsv' ",
-            array(
-                'Sessionid' => $this->Timepoint->getData("SessionID")
-            )
-        );
-
-        $bids_session_json_file = $this->DB->pselectOne(
-            "SELECT
-               bef.FilePath
-             FROM bids_export_files bef
-             LEFT JOIN session s   ON (bef.SessionID = s.ID)
-             WHERE s.ID              = :Sessionid
-               AND bef.BIDSFileLevel = 'session'
-               AND bef.FileType      = 'json' ",
-            array(
-                'Sessionid' => $this->Timepoint->getData("SessionID")
-            )
-        );
-
-        $this->JSON['BidsFiles'] = [
-            'TsvLink'  => "/candidates/$this->CandID/$this->VisitLabel/bidsfiles/"
-                            . basename($bids_session_tsv_file),
-            'JsonLink' => "/candidates/$this->CandID/$this->VisitLabel/bidsfiles/"
-                            . basename($bids_session_json_file),
-        ];
     }
 
     /**

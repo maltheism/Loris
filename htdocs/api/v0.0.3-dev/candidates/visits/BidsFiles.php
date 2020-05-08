@@ -80,20 +80,41 @@ class BidsFiles extends \Loris\API\Candidates\Candidate\Visit
     {
         $factory = \NDB_Factory::singleton();
         $DB      = $factory->database();
-        $rows    = $DB->pselect(
-            "SELECT 
-                    SUBSTRING_INDEX(FilePath, '/', -1) as Filename
-                FROM bids_export_files bef 
-                    JOIN session s ON (s.ID=bef.SessionID)
-                    JOIN candidate c ON (s.CandID=c.CandID)
-                WHERE s.Visit_label=:VL AND c.CandID=:CID 
-                    AND c.Active='Y' AND s.Active='Y'",
-            [
-                'VL'  => $this->VisitLabel,
-                'CID' => $this->CandID,
-            ]
+
+        $bids_session_tsv_file = $this->DB->pselectOne(
+            "SELECT
+               bef.FilePath
+             FROM bids_export_files bef
+             LEFT JOIN session s   ON (bef.SessionID = s.ID)
+             WHERE s.ID              = :Sessionid
+               AND bef.BIDSFileLevel = 'session'
+               AND bef.FileType      = 'tsv' ",
+            array(
+                'Sessionid' => $this->Timepoint->getData("SessionID")
+            )
         );
-        return $rows;
+
+        $bids_session_json_file = $this->DB->pselectOne(
+            "SELECT
+               bef.FilePath
+             FROM bids_export_files bef
+             LEFT JOIN session s   ON (bef.SessionID = s.ID)
+             WHERE s.ID              = :Sessionid
+               AND bef.BIDSFileLevel = 'session'
+               AND bef.FileType      = 'json' ",
+            array(
+                'Sessionid' => $this->Timepoint->getData("SessionID")
+            )
+        );
+
+        $files_array = [
+            'TsvLink'  => "/candidates/$this->CandID/$this->VisitLabel/bidsfiles/"
+                . basename($bids_session_tsv_file),
+            'JsonLink' => "/candidates/$this->CandID/$this->VisitLabel/bidsfiles/"
+                . basename($bids_session_json_file),
+        ];
+
+        return $files_array;
     }
 
 }

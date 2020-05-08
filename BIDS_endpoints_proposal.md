@@ -111,7 +111,7 @@ api/v0.0.3-dev/projects/loris/bids/participants.json
 
 #### 3.1. modify the visit endpoint to add bids_session_files
 
-`api/v0.0.3-dev/candidates/{candid}/{visit}/` 
+`api/v0.0.3-dev/candidates/{candid}/{visit}/bidsfiles` 
 
 will return:
 ```json
@@ -119,12 +119,8 @@ will return:
   "Meta": {
     "CandID"    : {candid},
     "Visit"     : {visit},
-    "Site"      : {site},
-    "Battery"   : {battery},
-    "Age_at_MRI": {age_at_mri}
   },
-  "Stages":[],
-  "BidsFiles": {
+  "Files": {
     "TsvLink" : "api/v0.0.3-dev/candidates/{candid}/{visit}/bidsfiles/sub-{candid}_ses-{visit}_scans.tsv",
     "JsonLink": "api/v0.0.3-dev/candidates/{candid}/{visit}/bidsfiles/sub-{candid}_ses-{visit}_scans.json"
   }
