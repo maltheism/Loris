@@ -145,11 +145,13 @@ class Bids extends \Loris\API\APIBase
                s.Visit_label,
                bef.ModalityType,
                bef.FilePath,
-               f.File
+               f.File,
+               mst.Scan_type as LorisScanType
              FROM bids_export_files bef
-             LEFT JOIN files f     USING (FileID)
-             LEFT JOIN session s   ON (f.SessionID = s.ID)
-             LEFT JOIN candidate c USING (CandID)
+             LEFT JOIN files f           USING (FileID)
+             LEFT JOIN mri_scan_type mst ON (mst.ID=f.AcquisitionProtocolID) 
+             LEFT JOIN session s         ON (f.SessionID = s.ID)
+             LEFT JOIN candidate c       USING (CandID)
              WHERE c.Active           = 'Y'
                 AND bef.BIDSFileLevel = 'image'
                 AND bef.FileType      = 'nii'
@@ -169,12 +171,13 @@ class Bids extends \Loris\API\APIBase
                 $json_link   = "/candidates/$candid/$session/images/$minc_name/bids/$file_name.json";
 
                 $final_array_to_return = array(
-                    'Candidate'  => $candid,
-                    'PSCID'      => $pscid,
-                    'Visit'      => $session,
-                    'Subfolder'  => $subfolder,
-                    'NiftiLink'  => $nii_link,
-                    'JsonLink'   => $json_link,
+                    'Candidate'     => $candid,
+                    'PSCID'         => $pscid,
+                    'Visit'         => $session,
+                    'LorisScanType' => $item['LorisScanType'],
+                    'Subfolder'     => $subfolder,
+                    'NiftiLink'     => $nii_link,
+                    'JsonLink'      => $json_link,
                 );
 
                 if ($subfolder == 'dwi') {
