@@ -17,10 +17,10 @@
         "phpunit/dbunit": "3.0.*",
         "facebook/webdriver" : "dev-master",
         "phpmd/phpmd": "^2.6",
-        "phan/phan": "0.12.x"
+        "phan/phan": ">=2.3.0"
     },
     "scripts": {
-      "pre-install-cmd": "mkdir -p project/libraries"
+        "pre-install-cmd": "mkdir -p project/libraries"
     },
     "autoload" : {
         "psr-4": {
