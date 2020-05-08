@@ -88,20 +88,20 @@ class Bids extends \Loris\API\APIBase
     public function handleGET()
     {
         $dataset_description_file = [
-            'Link' =>  'api/v0.0.3-dev/projects/loris/bids/dataset_description.json'
+            'Link' =>  '/projects/loris/bids/dataset_description.json'
         ];
 
         $readme_file = [
-            'Link' => 'api/v0.0.3-dev/projects/loris/bids/README'
+            'Link' => '/projects/loris/bids/README'
         ];
 
         $bids_validator_config_file = [
-            'Link' => 'api/v0.0.3-dev/projects/loris/bids/.bids-validator-config.json'
+            'Link' => '/projects/loris/bids/.bids-validator-config.json'
         ];
 
         $participants_files = [
-            'TsvLink'  => 'api/v0.0.3-dev/projects/loris/bids/participants.tsv',
-            'JsonLink' => 'api/v0.0.3-dev/projects/loris/bids/participants.json'
+            'TsvLink'  => '/projects/loris/bids/participants.tsv',
+            'JsonLink' => '/projects/loris/bids/participants.json'
         ];
 
         $session_results = $this->DB->pselect(
