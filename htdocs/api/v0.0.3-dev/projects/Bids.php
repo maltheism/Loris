@@ -34,18 +34,16 @@ class Bids extends \Loris\API\APIBase
     /**
      * Create a Bids request handler
      *
-     * @param string $method The HTTP request method of the request
-     * @param array  $data   The data that was POSTed to the request
+     * @param string $method      The HTTP request method of the request
+     * @param string $projectName The data that was POSTed to the request
      */
-    public function __construct($method, $data=null)
+    public function __construct($method, $projectName)
     {
 
         $this->AllowedMethods = array('GET');
         $this->AutoHandleRequestDelegation = false;
 
         parent::__construct($method);
-
-        $projectName = $data['project_name'];
 
         try {
             $this->_project = $this->Factory->project($projectName);
@@ -205,10 +203,10 @@ class Bids extends \Loris\API\APIBase
     }
 }
 
-$input = null;
-switch ($_SERVER['REQUEST_METHOD']) {
-    case 'GET':
-        $input = $_GET;
-        break;
+if (isset($_REQUEST['PrintFiles'])) {
+    $obj = new Bids(
+        $_SERVER['REQUEST_METHOD'],
+        $_REQUEST['project_name']
+    );
+    print $obj->toJSONString();
 }
-print (new Bids($_SERVER['REQUEST_METHOD'], $input))->toJSONString();
