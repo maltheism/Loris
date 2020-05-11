@@ -30,8 +30,9 @@ class BIDSFile extends \Loris\API\Projects\Bids
     private $_project;
 
     /**
-     * @param string $method     The method of the HTTP request
-     * @param string $Filename   The file name to be retrieved
+     * @param string $method      The method of the HTTP request
+     * @param string $projectName The name of the project
+     * @param string $Filename    The file name to be retrieved
      */
     public function __construct($method, $projectName, $Filename)
     {
@@ -44,7 +45,7 @@ class BIDSFile extends \Loris\API\Projects\Bids
         }
         $this->Filename = $Filename;
 
-        parent::__construct($method, array('project_name' => $projectName));
+        parent::__construct($method, $projectName);
 
         $results = $this->getDatabaseDir();
         if (true) {
