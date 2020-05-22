@@ -108,6 +108,7 @@ class Imaging_Browser extends \NDB_Menu_Filter
             ELSE ''
             END";
 
+        $case_desc = array();
         foreach ($scan_id_types as $id => $type) {
             $pass[$id]          = $type . 'pass';
             $qc[$id]            = $type . 'QC';
