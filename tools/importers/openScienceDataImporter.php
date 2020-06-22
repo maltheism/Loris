@@ -124,7 +124,7 @@ if ($skippedCount > 0) {
 }
 
 // Write the report to file.
-$path = $config->getSetting('base') . 'project/data_import/';
+$path = '/var/www/loris/project/data_import/';
 if (!is_dir($path)) {
     mkdir($path);
 }
