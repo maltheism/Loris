@@ -61,13 +61,13 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>li>a:focus,
 .navbar-default .navbar-nav>li>a:active{
-  background-color: #fdde6c;
+  background-color: #fcdc9f;
 }
 
 /* Submenu items*/
 .navbar-nav>li>.dropdown-menu>li>a:hover,
 .navbar-nav>li>.dropdown-menu>li>a:focus{
-  background-color: #fdde6c;
+  background-color: #fcdc9f;
 }
 
 .panel-primary>.panel-heading {
@@ -321,7 +321,7 @@ div.navbar div.container div.navbar-brand {
   background: inherit;
 }
 .ellipsis:hover .dropdown-menu {
-display: block;
+    display: block;
 }
 
 /** The Spacing **/
