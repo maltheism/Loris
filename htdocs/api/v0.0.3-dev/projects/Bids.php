@@ -34,18 +34,16 @@ class Bids extends \Loris\API\APIBase
     /**
      * Create a Bids request handler
      *
-     * @param string $method The HTTP request method of the request
-     * @param array  $data   The data that was POSTed to the request
+     * @param string $method      The HTTP request method of the request
+     * @param string $projectName The data that was POSTed to the request
      */
-    public function __construct($method, $data=null)
+    public function __construct($method, $projectName)
     {
 
         $this->AllowedMethods = array('GET');
         $this->AutoHandleRequestDelegation = false;
 
         parent::__construct($method);
-
-        $projectName = $data['project_name'];
 
         try {
             $this->_project = $this->Factory->project($projectName);
@@ -145,11 +143,13 @@ class Bids extends \Loris\API\APIBase
                s.Visit_label,
                bef.ModalityType,
                bef.FilePath,
-               f.File
+               f.File,
+               mst.Scan_type as LorisScanType
              FROM bids_export_files bef
-             LEFT JOIN files f     USING (FileID)
-             LEFT JOIN session s   ON (f.SessionID = s.ID)
-             LEFT JOIN candidate c USING (CandID)
+             LEFT JOIN files f           USING (FileID)
+             LEFT JOIN mri_scan_type mst ON (mst.ID=f.AcquisitionProtocolID) 
+             LEFT JOIN session s         ON (f.SessionID = s.ID)
+             LEFT JOIN candidate c       USING (CandID)
              WHERE c.Active           = 'Y'
                 AND bef.BIDSFileLevel = 'image'
                 AND bef.FileType      = 'nii'
@@ -169,12 +169,13 @@ class Bids extends \Loris\API\APIBase
                 $json_link   = "/candidates/$candid/$session/images/$minc_name/bids/$file_name.json";
 
                 $final_array_to_return = array(
-                    'Candidate'  => $candid,
-                    'PSCID'      => $pscid,
-                    'Visit'      => $session,
-                    'Subfolder'  => $subfolder,
-                    'NiftiLink'  => $nii_link,
-                    'JsonLink'   => $json_link,
+                    'Candidate'     => $candid,
+                    'PSCID'         => $pscid,
+                    'Visit'         => $session,
+                    'LorisScanType' => $item['LorisScanType'],
+                    'Subfolder'     => $subfolder,
+                    'NiftiLink'     => $nii_link,
+                    'JsonLink'      => $json_link,
                 );
 
                 if ($subfolder == 'dwi') {
@@ -184,9 +185,10 @@ class Bids extends \Loris\API\APIBase
                         "/candidates/$candid/$session/images/$minc_name/bids/$file_name.bvec";
                 }
 
-                if (strpos('_task-', $file_name)) {
+                if (preg_match('/_task-retrieval/', $file_name)
+                    || preg_match('/_task-encoding/', $file_name)) {
                     $final_array_to_return['EventLink'] =
-                        "/candidates/$candid/$session/images/$minc_name/bids/$file_name-events.txt";
+                        "/candidates/$candid/$session/images/$minc_name/bids/$file_name"."_events.txt";
                 }
 
                 return $final_array_to_return;
@@ -205,10 +207,10 @@ class Bids extends \Loris\API\APIBase
     }
 }
 
-$input = null;
-switch ($_SERVER['REQUEST_METHOD']) {
-    case 'GET':
-        $input = $_GET;
-        break;
+if (isset($_REQUEST['PrintFiles'])) {
+    $obj = new Bids(
+        $_SERVER['REQUEST_METHOD'],
+        $_REQUEST['project_name']
+    );
+    print $obj->toJSONString();
 }
-print (new Bids($_SERVER['REQUEST_METHOD'], $input))->toJSONString();
