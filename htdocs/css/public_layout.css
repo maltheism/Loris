@@ -48,7 +48,9 @@ h1, h2, h3, h4 {
   background-color: #0d5f3a;
   padding: 5px 0;
 }
-
+.button.btn-info.has-spinner {
+  background-color: #0d5f3a !important;
+}
 .flex-wrapper {
   display: flex;
   align-items: center;
