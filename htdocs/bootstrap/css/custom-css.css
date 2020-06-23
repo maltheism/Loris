@@ -108,6 +108,10 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 .btn-info {
     background-color: #0d5f3a !important;
 }
+.btn-primary[disabled] {
+    background-color: #609762 !important;
+    border-color: #609762 !important;
+}
 
 /*
  *	Making the table header font colour white
