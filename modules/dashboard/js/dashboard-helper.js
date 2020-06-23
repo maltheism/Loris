@@ -11,7 +11,7 @@ var siteColours = [
 ];
 
 // Colours for the recruitment bar chart: breakdown by gender
-var genderColours = ['#2FA4E7', '#1C70B6'];
+var genderColours = ['#609762', '#0d5f3a'];
 
 $(document).ready(function () {
     "use strict";
@@ -335,7 +335,7 @@ $.ajax({
         }
       },
       color: {
-        pattern: ['#2FA4E7']
+        pattern: ['#609762']
       },
       legend: {
         show: false,
