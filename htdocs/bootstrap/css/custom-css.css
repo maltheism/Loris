@@ -96,6 +96,18 @@ Note: other colors are currenly inherited from Bootstrap default color palette
     background-color: #0d5f3a !important;
 }
 
+.button.btn-info.has-spinner {
+    background-color: #0d5f3a !important;
+}
+.btn-info:hover {
+    background-color: #0d5f3a !important;
+}
+.btn-info:active {
+    background-color: #0d5f3a !important;
+}
+.btn-info {
+    background-color: #0d5f3a !important;
+}
 
 /*
  *	Making the table header font colour white
