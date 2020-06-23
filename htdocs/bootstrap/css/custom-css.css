@@ -23,21 +23,21 @@ Note: other colors are currenly inherited from Bootstrap default color palette
     margin-top: 0;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
-    background-color: #e6c30b;
+    background-color: #0d5f3a;
 }
 .navbar-nav>li>.dropdown-menu>li>a {
     color: white;
 }
 .navbar-default {
-    background-color: #e6c30b;
-    border-color: #cab154;
+    background-color: #0d5f3a;
+    border-color: #609762;
 }
 .navbar-collapse {
-    background-color: #e6c30b;
-    border-color: #989b26;
+    background-color: #0d5f3a;
+    border-color: #609762;
 }
 #sidebar-wrapper {
-    background-color: #e6c30b !important;
+    background-color: #0d5f3a !important;
 }
 
 .navbar-default a {
@@ -53,7 +53,7 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 /* Loris logo */
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  background-color: #fdde6c;
+  background-color: #609762;
 }
 
 /* Menu items */
@@ -61,32 +61,32 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>li>a:focus,
 .navbar-default .navbar-nav>li>a:active{
-  background-color: #e6c30b;
+  background-color: #609762;
 }
 
 /* Submenu items*/
 .navbar-nav>li>.dropdown-menu>li>a:hover,
 .navbar-nav>li>.dropdown-menu>li>a:focus{
-  background-color: #fcdc9f;
+  background-color: #609762;
 }
 
 .panel-primary>.panel-heading {
-    background-color: #e6c30b !important;
+    background-color: #0d5f3a !important;
 }
 
 .table>thead>tr.info>th {
-    background-color: #e6c30b;
+    background-color: #0d5f3a;
 }
 .table>thead>tr>th.info {
-    background-color: #e6c30b;
+    background-color: #0d5f3a;
 }
 .pagination>.active>a {
-    background-color: #e6c30b;
-    border-color: #e6c30b;
+    background-color: #0d5f3a;
+    border-color: #0d5f3a;
 }
 .pagination>.active>a:hover {
-    background-color: #e6c30b;
-    border-color: #e6c30b;
+    background-color: #0d5f3a;
+    border-color: #0d5f3a;
 }
 
 /*
@@ -215,7 +215,7 @@ ul#navlist {
  *  Styling for modals
  */
 .modal-header {
-    background-color: #e6c30b;
+    background-color: #0d5f3a;
     color: white;
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
@@ -266,8 +266,8 @@ div.navbar div.container div.navbar-brand {
  */
 .no-result-found-panel {
     color: #FFFFFF;
-    background-color: #e6c30b;
-    border-color: #e6c30b;
+    background-color: #0d5f3a;
+    border-color: #0d5f3a;
 }
 
 /*
@@ -276,7 +276,7 @@ div.navbar div.container div.navbar-brand {
 
 .btn-breadcrumb {
   width: 100%;
-  background-color: #e6c30b;
+  background-color: #0d5f3a;
   border-radius: 4px;
   margin-bottom: 20px;
 }
@@ -344,32 +344,32 @@ div.navbar div.container div.navbar-brand {
 
 /** Primary button **/
 .btn-breadcrumb .btn.btn-primary:not(:last-child):after {
-  border-left: 10px solid #fdde6c;
+  border-left: 10px solid #609762;
   -webkit-transition: border-color 0.2s ease-in; /* Safari */
   transition: border-color 0.2s ease-in;
-    background-color: #e6c30b;
+    background-color: #0d5f3a;
 }
 .btn-breadcrumb .btn.btn-primary:not(:last-child):before {
-  border-left: 10px solid #fdde6c;
+  border-left: 10px solid #609762;
   -webkit-transition: border-color 0.2s ease-in; /* Safari */
   transition: border-color 0.2s ease-in;
-    background-color: #e6c30b;
+    background-color: #0d5f3a;
 }
 .btn-breadcrumb .btn.btn-primary:hover:not(:last-child):after {
-  border-left: 10px solid #fdde6c;
-    background-color: #e6c30b;
+  border-left: 10px solid #609762;
+    background-color: #0d5f3a;
 }
 .btn-breadcrumb .btn.btn-primary:hover:not(:last-child):before {
-  border-left: 10px solid #fdde6c;
-    background-color: #e6c30b;
+  border-left: 10px solid #609762;
+    background-color: #0d5f3a;
 }
 .btn-primary:hover {
-    background-color: #f3e690;
-    border-color: #e6c30b;
+    background-color: #609762;
+    border-color: #0d5f3a;
 }
 .btn-primary {
-    background-color: #e6c30b;
-    border-color: #e6c30b;
+    background-color: #609762;
+    border-color: #0d5f3a;
 }
 
 a.btn.btn-primary {
