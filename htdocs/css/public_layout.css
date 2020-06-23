@@ -45,7 +45,7 @@ h1, h2, h3, h4 {
 
 .header {
   height: 100px;
-  background-color: #fdde6c;
+  background-color: #e6c30b;
   padding: 5px 0;
 }
 
@@ -136,7 +136,7 @@ h1, h2, h3, h4 {
 .footer {
   font-size: 12px;
   text-align: center;
-  background-color: #fdde6c;
+  background-color: #e6c30b;
   color: #f8f8f8;
   height: 60px;
   padding: 15px;

@@ -23,21 +23,21 @@ Note: other colors are currenly inherited from Bootstrap default color palette
     margin-top: 0;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .navbar-nav>li>.dropdown-menu>li>a {
     color: white;
 }
 .navbar-default {
-    background-color: #fdde6c;
+    background-color: #e6c30b;
     border-color: #cab154;
 }
 .navbar-collapse {
-    background-color: #fdde6c;
+    background-color: #e6c30b;
     border-color: #989b26;
 }
 #sidebar-wrapper {
-    background-color: #fdde6c !important;
+    background-color: #e6c30b !important;
 }
 
 .navbar-default a {
@@ -61,7 +61,7 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>li>a:focus,
 .navbar-default .navbar-nav>li>a:active{
-  background-color: #fcdc9f;
+  background-color: #e6c30b;
 }
 
 /* Submenu items*/
@@ -71,22 +71,22 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 }
 
 .panel-primary>.panel-heading {
-    background-color: #fdde6c !important;
+    background-color: #e6c30b !important;
 }
 
 .table>thead>tr.info>th {
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .table>thead>tr>th.info {
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .pagination>.active>a {
-    background-color: #fdde6c;
-    border-color: #fdde6c;
+    background-color: #e6c30b;
+    border-color: #e6c30b;
 }
 .pagination>.active>a:hover {
-    background-color: #f6d354;
-    border-color: #f6d354;
+    background-color: #e6c30b;
+    border-color: #e6c30b;
 }
 
 /*
@@ -215,7 +215,7 @@ ul#navlist {
  *  Styling for modals
  */
 .modal-header {
-    background-color: #fdde6c;
+    background-color: #e6c30b;
     color: white;
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
@@ -266,8 +266,8 @@ div.navbar div.container div.navbar-brand {
  */
 .no-result-found-panel {
     color: #FFFFFF;
-    background-color: #f6d354;
-    border-color: #f6d354;
+    background-color: #e6c30b;
+    border-color: #e6c30b;
 }
 
 /*
@@ -276,7 +276,7 @@ div.navbar div.container div.navbar-brand {
 
 .btn-breadcrumb {
   width: 100%;
-  background-color: #fdde6c;
+  background-color: #e6c30b;
   border-radius: 4px;
   margin-bottom: 20px;
 }
@@ -347,29 +347,29 @@ div.navbar div.container div.navbar-brand {
   border-left: 10px solid #fdde6c;
   -webkit-transition: border-color 0.2s ease-in; /* Safari */
   transition: border-color 0.2s ease-in;
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .btn-breadcrumb .btn.btn-primary:not(:last-child):before {
   border-left: 10px solid #fdde6c;
   -webkit-transition: border-color 0.2s ease-in; /* Safari */
   transition: border-color 0.2s ease-in;
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .btn-breadcrumb .btn.btn-primary:hover:not(:last-child):after {
   border-left: 10px solid #fdde6c;
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .btn-breadcrumb .btn.btn-primary:hover:not(:last-child):before {
   border-left: 10px solid #fdde6c;
-    background-color: #fdde6c;
+    background-color: #e6c30b;
 }
 .btn-primary:hover {
     background-color: #f3e690;
-    border-color: #f3e690;
+    border-color: #e6c30b;
 }
 .btn-primary {
-    background-color: #fada5f;
-    border-color: #fada5f;
+    background-color: #e6c30b;
+    border-color: #e6c30b;
 }
 
 a.btn.btn-primary {
