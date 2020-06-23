@@ -89,11 +89,11 @@ Note: other colors are currenly inherited from Bootstrap default color palette
     border-color: #0d5f3a;
 }
 
-.nav-pills>li.active>a {
-    background-color: #0d5f3a;
-}
 .nav-pills>li.active>a:hover {
     background-color: #609762;
+}
+.nav-pills>li.active>a {
+    background-color: #0d5f3a !important;
 }
 
 
