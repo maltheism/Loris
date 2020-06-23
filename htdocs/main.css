@@ -54,7 +54,7 @@ em {
 
 /* anchor tags */
 a, a:link, a:visited {
-	color: #064785; 
+	color: #064785;
 	text-decoration: none;
  	}
 a:active {
@@ -144,7 +144,7 @@ table.list th, table.tbl th, table.std th  {
     }
 table.list th, table.tbl th, table.std th {
 /*    border-color: #D1D1CD;*/
-	background-color: #064785; 
+	background-color: #064785;
 	color: #fff;
     }
 table.exclusion th {
@@ -170,7 +170,7 @@ table.hideable th {
         border-radius: 10px;
         -webkit-border-radius: 4px;
         -moz-border-radius: 4px;
-}        
+}
 table.list td, table.tbl td {
 	background-color: #fff;
     }
@@ -278,7 +278,7 @@ table.fancytable th, table.listColorCoded th {
   padding: 0.3em;
   border-right:2px groove silver;
   border-bottom:1px groove #999999;
-} 
+}
 table.fancytable th a, table.fancytable th, table.listColorCoded th a, table.listColorCoded th {
     color: white;
 
@@ -310,7 +310,7 @@ table.fancytable caption, table.listColorCoded caption {
    font-size:13.5px;
    font-family:Verdana,sans-serif;
    color:white;
-   background-color:#064785;
+   background-color:#fdde6c;
    margin-top: 3px;
    border-style:ridge;
    border-color:#FFFFFF;
@@ -390,7 +390,7 @@ table.data {
     background: #F5F6CE; /*rgb(217, 217, 119); */
 }
 .data tr td.complete.total {
-    background: #CEF6CE; 
+    background: #CEF6CE;
     font-weight: bold;
 }
 .data tr td.incomplete.total {
@@ -414,7 +414,7 @@ table.data {
 .controlPanel li {
     list-style-position:inside;
     list-style-type: none;
-    white-space: nowrap; 
+    white-space: nowrap;
     margin-top: 4px;
 }
 .controlPanel {
@@ -423,10 +423,10 @@ table.data {
     margin-top: 5px;
 }
 .header {
-background:#064785;
+background:#e1e43b;
 }
 .loginheader {
-background: #064785;
+background: #e1e43b;
 color: #fff;
 padding-top: 3px;
 font-size: 130%;
@@ -446,7 +446,7 @@ width:110%;
     vertical-align: bottom;
 }
 .LoginBackground {
-background-repeat: no-repeat; 
+background-repeat: no-repeat;
 background-position: 55% 250px;
 }
 .MainFooter {
@@ -513,7 +513,7 @@ td.sidenav {
     /*border-right: solid #08245B 2px;*/
     position: relative;
     border-right: solid #6183b3 2px;
-    
+
 }
 
 .navigationBar {
@@ -533,7 +533,7 @@ td.sidenav {
 	color: #fff !important;
 }
 .navigationButtons.active, .controlPanel li:hover {
-    background: #47F !important; 
+    background: #807352 !important;
     /* background: green; */
 }
 .navigationButtons {
@@ -564,7 +564,7 @@ td.sidenav {
     opacity: 0.5;
 }
 .navigationButtons a:active {
-    background-color: #9a5; 
+    background-color: #9a5;
 }
 h2.statsH2 {
 	color: #000;
@@ -602,7 +602,7 @@ margin-left: 119px;
 #hide {
 display:none;
 }
-.profileSelector {                
+.profileSelector {
 width: 250px;
 border: 1px solid #000;
 padding: 0;
@@ -641,7 +641,7 @@ top:800px;
 height: 3em;
 width: 100%;
 font-size: 14px;
-font-color #000000: 
+font-color #000000:
 color: #000;
 text-align: center;
 vertical-align: bottom;
