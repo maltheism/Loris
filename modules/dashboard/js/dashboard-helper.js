@@ -5,7 +5,7 @@ var scanLineChart, recruitmentPieChart, recruitmentBarChart, recruitmentLineChar
 
 // Colours for all charts broken down by only by site
 var siteColours = [
-    '#F0CC00', '#27328C', '#2DC3D0', '#4AE8C2', '#D90074', '#7900DB', '#FF8000',
+    '#F0CC00', '#0d5f3a', '#609762', '#4AE8C2', '#D90074', '#7900DB', '#FF8000',
     '#0FB500', '#CC0000', '#DB9CFF', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2',
     '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5'
 ];
