@@ -89,6 +89,14 @@ Note: other colors are currenly inherited from Bootstrap default color palette
     border-color: #0d5f3a;
 }
 
+.nav-pills>li.active>a {
+    background-color: #0d5f3a;
+}
+.nav-pills>li.active>a:hover {
+    background-color: #609762;
+}
+
+
 /*
  *	Making the table header font colour white
  */
@@ -344,13 +352,13 @@ div.navbar div.container div.navbar-brand {
 
 /** Primary button **/
 .btn-breadcrumb .btn.btn-primary:not(:last-child):after {
-  border-left: 10px solid #609762;
+  border-left: 10px solid #0d5f3a;
   -webkit-transition: border-color 0.2s ease-in; /* Safari */
   transition: border-color 0.2s ease-in;
     background-color: #0d5f3a;
 }
 .btn-breadcrumb .btn.btn-primary:not(:last-child):before {
-  border-left: 10px solid #609762;
+  border-left: 10px solid #fff;
   -webkit-transition: border-color 0.2s ease-in; /* Safari */
   transition: border-color 0.2s ease-in;
     background-color: #0d5f3a;
