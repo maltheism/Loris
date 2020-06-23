@@ -75,10 +75,10 @@ Note: other colors are currenly inherited from Bootstrap default color palette
 }
 
 .table>thead>tr.info>th {
-    background-color: #0d5f3a;
+    background-color: #609762;
 }
 .table>thead>tr>th.info {
-    background-color: #0d5f3a;
+    background-color: #609762;
 }
 .pagination>.active>a {
     background-color: #0d5f3a;
@@ -368,8 +368,8 @@ div.navbar div.container div.navbar-brand {
     border-color: #0d5f3a;
 }
 .btn-primary {
-    background-color: #609762;
-    border-color: #0d5f3a;
+    background-color: #0d5f3a;
+    border-color: #609762;
 }
 
 a.btn.btn-primary {
