@@ -66,6 +66,8 @@ database (PR #5260)
 - Fix special character double escaping in instruments (PR #6223)
 
 ### Modules 
+- The dataquery module has a new feature of importing a CSV file (containing either PSCID or DCCID) and for filtering the population by the demographic field.
+
 #### Candidate Profile
 - New module created to provide dashboard of a single candidate's data across all
   modules. (Various PRs)

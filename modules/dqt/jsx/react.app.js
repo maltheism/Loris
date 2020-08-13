@@ -91,6 +91,7 @@ class DataQueryApp extends Component {
     this.navigationClicked = this.navigationClicked.bind(this);
     this.getSideBarVisibleStatus = this.getSideBarVisibleStatus.bind(this);
     this.displayVisualizedData = this.displayVisualizedData.bind(this);
+    this.importCSV = this.importCSV.bind(this);
   }
 
   /**
@@ -394,6 +395,33 @@ class DataQueryApp extends Component {
     }
     group.session = getSessions(group);
     return group;
+  }
+
+  /**
+   * Import the CSV from the user.
+   *
+   * @param {array} data
+   */
+  importCSV(data) {
+    data.importCSV = true;
+    this.loadImportedCSV(null, data);
+  }
+
+  /**
+   * Load the imported CSV from the user.
+   *
+   * @param {array} fields
+   * @param {array} filter
+   */
+  loadImportedCSV(fields, filter) {
+    this.setState({
+      fields: [],
+      selectedFields: [],
+      filter: filter,
+      alertLoaded: true,
+      alertSaved: false,
+      loading: false,
+    });
   }
 
   /**
@@ -1185,6 +1213,7 @@ class DataQueryApp extends Component {
             Visits={this.props.Visits}
             Loading={this.state.loading}
             Active={this.state.ActiveTab === 'DefineFilters'}
+            importCSV={this.importCSV}
           />
         )}
       />
