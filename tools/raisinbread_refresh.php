@@ -169,6 +169,11 @@ printHeader('Creating LORIS core tables...');
 $coreTables = glob(__DIR__ . "/../SQL/0000-*.sql");
 array_walk($coreTables, 'runPatch');
 
+// Source LORIS New_patches
+printHeader('Sourcing latest SQL patches...');
+$newPatches = glob(__DIR__ . "/../SQL/New_patches/*.sql");
+array_walk($newPatches, 'runPatch');
+
 // Create instrument tables
 printHeader('Creating instrument tables...');
 
