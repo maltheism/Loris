@@ -26,6 +26,8 @@ requesting a new account and will be displayed in the User Accounts module (PR #
 #### Bug Fixes
 - *Add item here*
 ### Modules
+#### DQT
+- The dataquery module has been completely redesigned. (PR #6908)
 #### Help Editor
 - Cleaned up the deprecated column `Parent Topic` (PR #7025)
 #### Issue Tracker
@@ -66,7 +68,6 @@ database (PR #5260)
 - Fix special character double escaping in instruments (PR #6223)
 
 ### Modules 
-- The dataquery module has a new feature of importing a CSV file (containing either PSCID or DCCID) and for filtering the population by the demographic field.
 
 #### Candidate Profile
 - New module created to provide dashboard of a single candidate's data across all
