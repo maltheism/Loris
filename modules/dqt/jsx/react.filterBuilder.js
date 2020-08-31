@@ -717,7 +717,7 @@ class FilterBuilder extends Component {
       + '/dqt/View/csv',
       {
         credentials: 'same-origin',
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify(results),
       }
     ).then((resp) => resp.json()
