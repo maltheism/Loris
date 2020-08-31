@@ -714,7 +714,7 @@ class FilterBuilder extends Component {
     };
     fetch(
       window.location.origin
-      + '/dqt/View/csv',
+      + '/dqt/View',
       {
         credentials: 'same-origin',
         method: 'POST',
