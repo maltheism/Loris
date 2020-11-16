@@ -100,8 +100,8 @@ class DataReleases extends \Loris\API\APIBase
             $files_path_list = array_map(
                 function ($item) {
                     return array(
-                        'File' => $item,
-                        'Link' => 'data_releases/' . $item['file_name'],
+                        'File' => $item['file_name'],
+                        'Link' => 'projects/loris/data_releases/' . $item['file_name'],
                     );
                 },
                 $files_list
