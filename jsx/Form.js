@@ -561,28 +561,16 @@ class SelectElement extends Component {
         newOptions[options[key]] = key;
       }
       optionList = Object.keys(newOptions).sort().map(function(option) {
-        let isDisabled = (newOptions[option] in disabledOptions);
         return (
-          <option
-            value={newOptions[option]}
-            key={newOptions[option]}
-            disabled={isDisabled}
-          >
+          <option value={newOptions[option]} key={newOptions[option]}>
             {option}
           </option>
         );
       });
     } else {
       optionList = Object.keys(options).map(function(option) {
-        let isDisabled = (option in disabledOptions);
         return (
-          <option
-            value={option}
-            key={option}
-            disabled={isDisabled}
-          >
-            {options[option]}
-          </option>
+          <option value={option} key={option}>{options[option]}</option>
         );
       });
     }
