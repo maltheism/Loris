@@ -253,8 +253,6 @@
                         </div>
             </div>
 
-
-            <!-- </div> -->
 	</div>
 
             {else}
@@ -303,36 +301,6 @@
         </form>
         {/if}
 
-        <a id="login-modal-button" href="#" data-toggle="modal" data-target="#login-modal" style="display: none;">Login</a>
-
-        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        Login to Your Account
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <font color="red" align="middle" id="login-modal-error" style="display: none;">
-                                    Incorrect username or password
-                                </font>
-                            </div>
-                            <div class="form-group col-xs-12">
-                                <input id="modal-username" name="username" class="form-control" type="text" value="" placeholder="User">
-                            </div>
-                            <div class="form-group col-xs-12">
-                                <input id="modal-password" name="password" class="form-control" type="password" placeholder="Password">
-                            </div>
-                            <div class="form-group col-xs-12">
-                                <input class="btn btn-primary col-xs-12" id="modal-login" name="login" type="submit" value="Login">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <!-- Terms Modal -->
         <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
           aria-labelledby="modalCenterTitle" aria-hidden="true">
@@ -350,7 +318,7 @@
                       to obtain required ethics, legal, or other approvals before using C-BIG Materials/Data.
                     </li>
                     <li>
-                      to respect any restrictions and conditions on use of C-BIG Materials/Data based on: 
+                      to respect any restrictions and conditions on use of C-BIG Materials/Data based on:
                       <ol>
                         <li>participant consents,</li>
                         <li>ethics approvals, and</li>
@@ -361,7 +329,7 @@
                       to ensure that Registered Access Data are not distributed to those who have not registered with the C-BIG Repository in accordance with section 9.5.2 of the C-BIG Framework, and to establish appropriate security safeguards.
                     </li>
                     <li>
-                      to ensure that Controlled Access Materials/Data are not distributed to anyone who does not have prior permission from the C-BIG Tissue and Data Committee to have access to that Controlled Access Materials/Data, and to establish appropriate security safeguards. 
+                      to ensure that Controlled Access Materials/Data are not distributed to anyone who does not have prior permission from the C-BIG Tissue and Data Committee to have access to that Controlled Access Materials/Data, and to establish appropriate security safeguards.
                     </li>
                     <li>
                       to report any breach of these terms by myself or others to the C-BIG Repository in a timely manner.
@@ -409,7 +377,7 @@
                       <strong>Affordability and Accessibility</strong> – I acknowledge that the C-BIG Repository’s mission is to accelerate the creation of diagnostics and therapies that are affordable and accessible for patients with neurological diseases. I will attempt to further this mission by advocating for any product or service developed based on C-BIG Materials/Data to be distributed widely and at an affordable price.
                     </li>
                     <li>
-                      <strong>Credit Sharing</strong> – I acknowledge that all stakeholders in science, including researchers and research participants, deserve recognition for their contributions and will acknowledge those contributions by using best acknowledgement and citation practices.  
+                      <strong>Credit Sharing</strong> – I acknowledge that all stakeholders in science, including researchers and research participants, deserve recognition for their contributions and will acknowledge those contributions by using best acknowledgement and citation practices.
                     </li>
                     <li>
                       <strong>Recontribution</strong> – I acknowledge that, as part of my obligation to the Research Participants who contributed C-BIG Materials/Data, I will recontribute any results I generate using those materials and data to the C-BIG Repository.
@@ -435,7 +403,7 @@
           if (!termsAccepted) {
             $('#termsModal').modal('show')
           }
-        
+
           $(function () {
             $('#btnAcceptTerms').on('click', function (event) {
               document.cookie = "termsAccepted=true;max-age=31536000";

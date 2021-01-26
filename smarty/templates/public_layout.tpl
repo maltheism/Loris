@@ -6,8 +6,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{$study_title}</title>
   <link rel="stylesheet" href="{$baseurl}/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="{$baseurl}/css/public_layout.css">
@@ -23,6 +21,7 @@
   {section name=cssfile loop=$cssfiles}
     <link rel="stylesheet" href="{$cssfiles[cssfile]}">
   {/section}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 </head>
 <body>
   <header class="header">
@@ -45,11 +44,18 @@
     </div>
   </header>
 
-  <section class="main-content">
-    {$workspace}
-  </section>
+  <div id="wrap">
+{*    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="nav-left"></nav>*}
+    <div id="page" class="container-fluid">
+      <div class="page-content inset" style="padding: 20px;">
+        <section class="lorisworkspace">
+          {$workspace}
+        </section>
+      </div>
+    </div>
+  </div>
 
-  <footer class="footer">
+  <footer class="footer" style="bottom: 0; width: 100%">
     Powered by <a href="http://www.loris.ca/" target="_blank">LORIS</a>
     | GPL-3.0 &copy; {$currentyear} <br/>
     Developed at
