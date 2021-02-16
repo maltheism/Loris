@@ -765,7 +765,9 @@ class DataQueryApp extends Component {
                  */
                 row = rows[i];
                 identifier = row.value;
-                sessiondata[identifier] = {};
+                if (!sessiondata[identifier]) {
+                  sessiondata[identifier] = {};
+                }
                 sessiondata[identifier][row.key[0]] = row.doc;
               }
               this.setState({'sessiondata': sessiondata});
