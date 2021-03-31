@@ -58,7 +58,7 @@ class ConsentStatus extends Component {
             success: (data) => {
                 let formData = {};
                 let consents = data.consents;
-                for (const [cStatus] of Object.entries(consents)) {
+                for (let [cStatus] of Object.entries(consents)) {
                     let cDate = cStatus + '_date';
                     let cDate2 = cStatus + '_date2';
                     let cWithdrawal = cStatus + '_withdrawal';
@@ -93,7 +93,7 @@ class ConsentStatus extends Component {
     setFormData(formElement, value) {
         let formData = this.state.formData;
         formData[formElement] = value;
-        for (const [consent] of Object.entries(this.state.Data.consents)) {
+        for (let [consent] of Object.entries(this.state.Data.consents)) {
             const oldConsent = this.state.Data.consentStatuses[consent];
             const newConsent = this.state.formData[consent];
             // Clear withdrawal date if consent status changes from no
@@ -130,9 +130,7 @@ class ConsentStatus extends Component {
             mm = '0' + mm;
         }
         today = yyyy + '-' + mm + '-' + dd;
-        for (const [consentStatus] of Object.entries(
-          this.state.Data.consents
-        )) {
+        for (let [consentStatus] of Object.entries(this.state.Data.consents)) {
             let label = this.state.Data.consents[consentStatus];
 
             let consentDate = consentStatus + '_date';

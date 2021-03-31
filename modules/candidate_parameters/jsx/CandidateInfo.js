@@ -134,10 +134,12 @@ class CandidateInfo extends Component {
     let specifyOther = null;
     let otherDisabled = true;
     let otherRequired = false;
-    for (const key of this.state.Data.caveatReasonOptions) {
-      if (this.state.Data.caveatReasonOptions[key] === 'Other') {
-        reasonKey = key;
-        break;
+    if (this.state.Data.caveatReasonOptions !== undefined) {
+      for (let [key] of Object.entries(this.state.Data.caveatReasonOptions)) {
+        if (this.state.Data.caveatReasonOptions[key] === 'Other') {
+          reasonKey = key;
+          break;
+        }
       }
     }
 
@@ -168,60 +170,62 @@ class CandidateInfo extends Component {
     }
     let extraParameterFields = [];
     let extraParameters = this.state.Data.extra_parameters;
-    for (const key2 of extraParameters) {
-      let paramTypeID = extraParameters[key2].ParameterTypeID;
-      let name = paramTypeID;
-      let value = this.state.formData[paramTypeID];
+    if (extraParameters !== undefined) {
+      for (let [key2] of Object.entries(extraParameters)) {
+        let paramTypeID = extraParameters[key2].ParameterTypeID;
+        let name = paramTypeID;
+        let value = this.state.formData[paramTypeID];
 
-      switch (extraParameters[key2].Type.substring(0, 3)) {
-        case 'enu':
-          let types = extraParameters[key2].Type.substring(5);
-          types = types.slice(0, -1);
-          types = types.replace(/'/g, '');
-          types = types.split(',');
-          let selectOptions = {};
-          for (const key3 of types) {
-            selectOptions[types[key3]] = types[key3];
-          }
+        switch (extraParameters[key2].Type.substring(0, 3)) {
+          case 'enu':
+            let types = extraParameters[key2].Type.substring(5);
+            types = types.slice(0, -1);
+            types = types.replace(/'/g, '');
+            types = types.split(',');
+            let selectOptions = {};
+            for (let [key3] of Object.entries(types)) {
+              selectOptions[types[key3]] = types[key3];
+            }
 
-          extraParameterFields.push(
-            <SelectElement
-              label={extraParameters[key2].Description}
-              name={name}
-              options={selectOptions}
-              value={value}
-              onUserInput={this.setFormData}
-              ref={name}
-              disabled={disabled}
-              key={key2}
-            />
-          );
-          break;
-        case 'dat':
-          extraParameterFields.push(
-            <DateElement
-              label={extraParameters[key2].Description}
-              name={name}
-              value={value}
-              onUserInput={this.setFormData}
-              ref={name}
-              disabled={disabled}
-              key={key2}
-            />
-          );
-          break;
-        default:
-          extraParameterFields.push(
-            <TextareaElement
-              label={extraParameters[key2].Description}
-              name={name}
-              value={value}
-              onUserInput={this.setFormData}
-              ref={name}
-              disabled={disabled}
-              key={key2}
-            />
-          );
+            extraParameterFields.push(
+              <SelectElement
+                label={extraParameters[key2].Description}
+                name={name}
+                options={selectOptions}
+                value={value}
+                onUserInput={this.setFormData}
+                ref={name}
+                disabled={disabled}
+                key={key2}
+              />
+            );
+            break;
+          case 'dat':
+            extraParameterFields.push(
+              <DateElement
+                label={extraParameters[key2].Description}
+                name={name}
+                value={value}
+                onUserInput={this.setFormData}
+                ref={name}
+                disabled={disabled}
+                key={key2}
+              />
+            );
+            break;
+          default:
+            extraParameterFields.push(
+              <TextareaElement
+                label={extraParameters[key2].Description}
+                name={name}
+                value={value}
+                onUserInput={this.setFormData}
+                ref={name}
+                disabled={disabled}
+                key={key2}
+              />
+            );
+        }
       }
     }
 
@@ -295,7 +299,7 @@ class CandidateInfo extends Component {
     // Set form data and upload the media file
     let self = this;
     let formData = new FormData();
-    for (const [key] of Object.entries(myFormData)) {
+    for (let [key] of Object.entries(myFormData)) {
       if (myFormData[key] !== '') {
         formData.append(key, myFormData[key]);
       }

@@ -206,7 +206,7 @@ class ProbandInfo extends Component {
     }
     let extraParameterFields = [];
     let extraParameters = this.state.Data.extra_parameters;
-    for (const [key2] of Object.entries(extraParameters)) {
+    for (let [key2] of Object.entries(extraParameters)) {
       let paramTypeID = extraParameters[key2].ParameterTypeID;
       let name = paramTypeID;
       let value = this.state.formData[paramTypeID];
@@ -218,7 +218,7 @@ class ProbandInfo extends Component {
           types = types.replace(/'/g, '');
           types = types.split(',');
           let selectOptions = {};
-          for (const key3 of types) {
+          for (let [key3] of Object.entries(types)) {
             selectOptions[types[key3]] = types[key3];
           }
 

@@ -137,7 +137,7 @@ class FamilyInfo extends Component {
     let familyMembers = this.state.familyMembers;
     let familyMembersHTML = [];
 
-    for (const key of familyMembers) {
+    for (let [key] of Object.entries(familyMembers)) {
       let candID = familyMembers[key].FamilyCandID;
       let relationship = familyMembers[key].Relationship_type;
       let link = '?candID=' + candID + '&identifier=' + candID;
@@ -244,7 +244,7 @@ class FamilyInfo extends Component {
     let familyMembers = this.state.familyMembers;
     let familyMember = {};
 
-    for (const [key] of Object.entries(myFormData)) {
+    for (let [key] of Object.entries(myFormData)) {
       if (myFormData[key] !== '') {
         familyMember[key] = myFormData[key];
         formData.append(key, myFormData[key]);
@@ -339,7 +339,7 @@ class FamilyInfo extends Component {
     let myFormData = this.state.formData;
     let self = this;
     let formData = new FormData();
-    for (const [key] of Object.entries(myFormData)) {
+    for (let [key] of Object.entries(myFormData)) {
       if (myFormData[key] !== '') {
         formData.append(key, myFormData[key]);
       }
