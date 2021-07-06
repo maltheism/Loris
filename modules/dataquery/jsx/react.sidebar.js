@@ -117,6 +117,9 @@ class FieldsSidebar extends Component {
 FieldsSidebar.propTypes = {
   Fields: PropTypes.array,
   Criteria: PropTypes.object,
+  Name: PropTypes.string,
+  children: PropTypes.element,
+  resetQuery: PropTypes.func,
 };
 
 FieldsSidebar.defaultProps = {
