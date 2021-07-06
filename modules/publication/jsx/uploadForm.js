@@ -279,7 +279,7 @@ class PublicationUploadForm extends React.Component {
     );
   }
 }
-PublicationUploadForm.propTyhpes = {
+PublicationUploadForm.propTypes = {
   DataURL: PropTypes.string,
   action: PropTypes.string,
   editMode: PropTypes.bool,
