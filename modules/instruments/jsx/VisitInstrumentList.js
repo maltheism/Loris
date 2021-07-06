@@ -296,6 +296,7 @@ VisitInstrumentList.propTypes = {
   BaseURL: PropTypes.string,
   Candidate: PropTypes.object,
   Visit: PropTypes.object,
+  VisitMap: PropTypes.object,
 };
 
 export default VisitInstrumentList;
