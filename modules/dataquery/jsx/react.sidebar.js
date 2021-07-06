@@ -60,7 +60,10 @@ class Sidebar extends Component {
     );
   }
 }
-
+Sidebar.propTypes = {
+  Name: PropTypes.string,
+  children: PropTypes.element,
+};
 
 /**
  * FieldsSidebar component
